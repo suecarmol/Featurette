@@ -14,6 +14,7 @@ class User(db.Model):
         return '<User %r>' % (self.username)
 
 class FeatureRequest(db.Model):
+    __tablename__='feature_requests'
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(100))
     description = db.Column(db.String(255))
@@ -26,12 +27,14 @@ class FeatureRequest(db.Model):
     updated_at = db.Column(db.DateTime(timezone=True), onupdate=func.now())
 
 class Client(db.Model):
+    __tablename__='clients'
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100))
     created_at = db.Column(db.DateTime(timezone=True), server_default=func.now())
     updated_at = db.Column(db.DateTime(timezone=True), onupdate=func.now())
 
-class ProductAre(db.Model):
+class ProductArea(db.Model):
+    __tablename__='product_area'
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100))
     created_at = db.Column(db.DateTime(timezone=True), server_default=func.now())

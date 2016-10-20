@@ -36,11 +36,12 @@
             <div class="field">
                 <label>Additional Information</label>
                 <div class="fields">
-                    <div class="twelve wide field">
-                        <input type="text" name="target_date"
+                    <div class="six wide field">
+                        <input id="target-date" type="text" class="flatpickr"
+                            data-enable-time="false" name="target_date"
                             placeholder="Target Date">
                     </div>
-                    <div class="four wide field">
+                    <div class="ten wide field">
                         <select class="ui fluid dropdown">
                             <option value="">Product Area</option>
                             <option value="1">PA 1</option>
@@ -57,6 +58,6 @@
                 <input type="text" name="ticket_url"
                     placeholder="Ticket URL">
             </div>
-            <div class="ui violet button" tabindex="0">Submit Order</div>
+            <div class="ui violet button" tabindex="0">Submit Feature Request</div>
         </form>
     {% endblock %}
