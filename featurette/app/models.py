@@ -19,10 +19,10 @@ class FeatureRequest(db.Model):
     title = db.Column(db.String(100))
     description = db.Column(db.String(255))
     #TODO: create foreign key
-    client_id = db.Column(db.Integer)
+    client_id = db.Column(db.Integer, db.ForeignKey('Client.id'))
     client_priority = db.Column(db.Integer)
     #TODO: create foreign key
-    product_area = db.Column(db.Integer)
+    product_area = db.Column(db.Integer, db.ForeignKey('ProductArea.id'))
     created_at = db.Column(db.DateTime(timezone=True), server_default=func.now())
     updated_at = db.Column(db.DateTime(timezone=True), onupdate=func.now())
 
@@ -32,10 +32,12 @@ class Client(db.Model):
     name = db.Column(db.String(100))
     created_at = db.Column(db.DateTime(timezone=True), server_default=func.now())
     updated_at = db.Column(db.DateTime(timezone=True), onupdate=func.now())
+    feature_requests = db.relationship('FeatureRequest', lazy='dynamic')
 
 class ProductArea(db.Model):
-    __tablename__='product_area'
+    __tablename__='product_areas'
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100))
     created_at = db.Column(db.DateTime(timezone=True), server_default=func.now())
     updated_at = db.Column(db.DateTime(timezone=True), onupdate=func.now())
+    feature_requests = db.relationship('FeatureRequest', lazy='dynamic')
