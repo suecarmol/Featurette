@@ -1,63 +1,11 @@
 {% extends "menu_bar.html" %}
+    {% block head %}
+        
+    {% endblock %}
     {% block content %}
-        <form class="ui form">
-            <h3 class="ui dividing header">Feature Request</h3>
-            <div class="field">
-                <label>General Information</label>
-                <div class="fields">
-                    <div class="four wide field">
-                        <input type="text" name="request_title"
-                            placeholder="Request Title">
-                    </div>
-                    <div class="twelve wide field">
-                        <input type="text" name="request_description"
-                            placeholder="Description">
-                    </div>
-                </div>
-            </div>
-            <div class="two fields">
-                <div class="field">
-                    <label>Client</label>
-                    <select class="ui fluid dropdown">
-                        <option value="">Client</option>
-                        <option value="1">Client A</option>
-                        <option value="2">Client B</option>
-                        <option value="3">Client C</option>
-                        <option value="4">Client D</option>
-                        <option value="5">Client E</option>
-                    </select>
-                </div>
-                <div class="field">
-                    <label>Priority</label>
-                    <input type="number" name="client_priority"
-                        placeholder="Client Priority">
-                </div>
-            </div>
-            <div class="field">
-                <label>Additional Information</label>
-                <div class="fields">
-                    <div class="six wide field">
-                        <input id="target-date" type="text" class="flatpickr"
-                            data-enable-time="false" name="target_date"
-                            placeholder="Target Date">
-                    </div>
-                    <div class="ten wide field">
-                        <select class="ui fluid dropdown">
-                            <option value="">Product Area</option>
-                            <option value="1">PA 1</option>
-                            <option value="2">PA 2</option>
-                            <option value="3">PA 3</option>
-                            <option value="4">PA 4</option>
-                            <option value="5">PA 5</option>
-                        </select>
-                    </div>
-                </div>
-            </div>
-            <div class="field">
-                <label>URL</label>
-                <input type="text" name="ticket_url"
-                    placeholder="Ticket URL">
-            </div>
-            <div class="ui violet button" tabindex="0">Submit Feature Request</div>
-        </form>
+        <button class="ui right floated button violet">
+            <i class="plus icon"></i>
+            Add Feature Request
+        </button>
+
     {% endblock %}

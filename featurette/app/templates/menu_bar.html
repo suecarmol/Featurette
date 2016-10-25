@@ -3,26 +3,31 @@
         <title>Featurette</title>
         <link rel="stylesheet" type="text/css" href="static/semantic.min.css">
         <link rel="stylesheet" type="text/css" href="static/flatpickr.min.css">
+        <script src="static/jquery-3.1.1.min.js"></script>
         <script src="static/semantic.min.js"></script>
         <script src="static/flatpickr.min.js"></script>
+        {% block head %}{% endblock %}
     </head>
     <body>
         <div class="ui secondary pointing menu">
             <a class="item">
                 <img src="/static/images/coding.png">
             </a>
-            <a class="item active">
+            <a id="home" class="item active" href="/">
                 Home
             </a>
-            <a class="item">
-            Messages
+            <a id="users" class="item" href="/users">
+                Users
             </a>
-            <a class="item">
-            Friends
+            <a id="clients" class="item" href="/clients">
+                Clients
+            </a>
+            <a id="product_areas" class="item" href="/productAreas">
+                Product Areas
             </a>
             <div class="right menu">
             <a class="ui item">
-              Logout
+                Logout
             </a>
         </div>
         </div>
