@@ -1,0 +1,13 @@
+{% extends "menu_bar.html" %}
+    {% block head %}
+        {{ super() }}
+        <script src="static/productAreas.js"></script>
+    {% endblock %}
+    {% block content %}
+        <h3> Product Areas </h3>
+        <a class="ui right floated button violet" href="/addProductArea">
+            <i class="plus icon"></i>
+            Add Product Area
+        </a>
+
+    {% endblock %}

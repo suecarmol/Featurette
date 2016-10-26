@@ -14,8 +14,8 @@ def addFeature():
 def users():
     return render_template('users.html')
 
-@app.route('/users/add')
-@app.route('/user/add')
+@app.route('/addUser')
+@app.route('/addUsers')
 def addUsers():
     return render_template('addUser.html')
 
@@ -23,8 +23,8 @@ def addUsers():
 def clients():
     return render_template('clients.html')
 
-@app.route('/clients/add')
-@app.route('/client/add')
+@app.route('/addClients')
+@app.route('/addClient')
 def AddClient():
     return render_template('addClient.html')
 
@@ -32,7 +32,7 @@ def AddClient():
 def productAreas():
     return render_template('productAreas.html')
 
-@app.route('/productAreas/add')
-@app.route('/productArea/add')
+@app.route('/addProductAreas')
+@app.route('/addProductArea')
 def addProductArea():
     return render_template('addProductArea.html')

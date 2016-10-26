@@ -1,0 +1,28 @@
+{% extends "menu_bar.html" %}
+    {% block head %}
+        {{ super() }}
+        <script src="static/users.js"></script>
+        <script src="static/addUser.js"></script>
+    {% endblock %}
+    {% block content %}
+        <form class="ui form segment">
+            <h3 class="ui dividing header">User</h3>
+            <div class="field">
+                <label>Username</label>
+                <input type="text" name="username" placeholder="Username">
+            </div>
+            <div class="field">
+                <label>Email</label>
+                <input type="email" name="email" placeholder="Email">
+            </div>
+            <div class="field">
+                <label>Password</label>
+                <input type="password" name="password" placeholder="Password">
+            </div>
+            <button class="ui violet button" tabindex="0" type="submit">
+                Create User
+            </button>
+            <div class="ui error message">
+            </div>
+        </form>
+    {% endblock %}

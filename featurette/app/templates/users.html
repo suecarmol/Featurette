@@ -1,11 +1,12 @@
 {% extends "menu_bar.html" %}
     {% block head %}
+        {{ super() }}
         <script src="static/users.js"></script>
     {% endblock %}
     {% block content %}
-        <button class="ui right floated button violet">
+        <h3> Users </h3>
+        <a class="ui right floated button violet" href="/addUser">
             <i class="add user icon"></i>
             Add User
-        </button>
-
-    {% endblock %}
+        </a>
+    {% endblock content %}

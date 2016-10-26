@@ -1,0 +1,20 @@
+{% extends "menu_bar.html" %}
+    {% block head %}
+        {{ super() }}
+        <script src="static/productAreas.js"></script>
+        <script src="static/addProductArea.js"></script>
+    {% endblock %}
+    {% block content %}
+        <form class="ui form segment">
+            <h3 class="ui dividing header">Product Area</h3>
+            <div class="field">
+                <label>Name</label>
+                <input type="text" name="product_area_name" placeholder="Name">
+            </div>
+            <button class="ui violet button" tabindex="0" type="submit">
+                Create Product Area
+            </button>
+            <div class="ui error message">
+            </div>
+        </form>
+    {% endblock %}
