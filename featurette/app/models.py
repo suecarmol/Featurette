@@ -9,10 +9,11 @@ class User(db.Model):
     password = db.Column(db.String(255))
     created_at = db.Column(db.DateTime(timezone=True), server_default=func.now())
     updated_at = db.Column(db.DateTime(timezone=True), onupdate=func.now())
-    feature_requests = db.relationship('FeatureRequest', lazy='dynamic')
 
-    def __repr__(self):
-        return '<User %r>' % (self.username)
+    def __init__(self):
+        self.username = username
+        self.email = email
+        self.password = password
 
 class Client(db.Model):
     __tablename__='clients'
@@ -20,7 +21,9 @@ class Client(db.Model):
     name = db.Column(db.String(100))
     created_at = db.Column(db.DateTime(timezone=True), server_default=func.now())
     updated_at = db.Column(db.DateTime(timezone=True), onupdate=func.now())
-    feature_requests = db.relationship('FeatureRequest', lazy='dynamic')
+
+    def __init__(self):
+        self.name = name
 
 class ProductArea(db.Model):
     __tablename__='product_areas'
@@ -28,7 +31,9 @@ class ProductArea(db.Model):
     name = db.Column(db.String(100))
     created_at = db.Column(db.DateTime(timezone=True), server_default=func.now())
     updated_at = db.Column(db.DateTime(timezone=True), onupdate=func.now())
-    feature_requests = db.relationship('FeatureRequest', lazy='dynamic')
+
+    def __init__(self):
+        self.name = name
 
 class FeatureRequest(db.Model):
     __tablename__='feature_requests'
@@ -42,3 +47,15 @@ class FeatureRequest(db.Model):
     date_finished = db.Column(db.DateTime(timezone=True))
     created_at = db.Column(db.DateTime(timezone=True), server_default=func.now())
     updated_at = db.Column(db.DateTime(timezone=True), onupdate=func.now())
+    client = db.relationship('Client', foreign_keys=client_id)
+    product_area_id = db.relationship('ProductArea', foreign_keys=product_area_id)
+    user = db.relationship('User', foreign_keys=user_id)
+
+    def __init__(self):
+        self.title = title
+        self.description = description
+        self.client_id = client_id
+        self.client_priority = client_priority
+        self.product_area_id = product_area_id
+        self.user_id = user_id
+        self.date_finished = null

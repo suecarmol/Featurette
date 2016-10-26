@@ -1,10 +1,12 @@
 from app import app
 from flask import render_template
+from models import User, ProductArea, Client, FeatureRequest
 
 @app.route('/')
 @app.route('/index')
 def index():
-    return render_template('index.html')
+    feature_requests = FeatureRequest.query.all()
+    return render_template('index.html', feature_requests)
 
 @app.route('/addFeature')
 def addFeature():
@@ -12,7 +14,8 @@ def addFeature():
 
 @app.route('/users')
 def users():
-    return render_template('users.html')
+    users = User.query.all()
+    return render_template('users.html', users)
 
 @app.route('/addUser')
 @app.route('/addUsers')
@@ -21,7 +24,8 @@ def addUsers():
 
 @app.route('/clients')
 def clients():
-    return render_template('clients.html')
+    clients = Client.query.all()
+    return render_template('clients.html', clients)
 
 @app.route('/addClients')
 @app.route('/addClient')
@@ -30,7 +34,8 @@ def AddClient():
 
 @app.route('/productAreas')
 def productAreas():
-    return render_template('productAreas.html')
+    product_areas = ProductArea.query.all()
+    return render_template('productAreas.html', product_areas)
 
 @app.route('/addProductAreas')
 @app.route('/addProductArea')
