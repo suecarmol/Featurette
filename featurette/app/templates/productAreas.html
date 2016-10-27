@@ -4,10 +4,31 @@
         <script src="static/productAreas.js"></script>
     {% endblock %}
     {% block content %}
-        <h3> Product Areas </h3>
-        <a class="ui right floated button violet" href="/addProductArea">
-            <i class="plus icon"></i>
-            Add Product Area
-        </a>
 
+        <h2> Product Areas </h2>
+
+        <table class="ui celled padded violet table">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for product_area in product_areas %}
+                    <tr>
+                        <td>{{ product_area.name }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+            <tfoot class="full-width">
+                <tr>
+                    <th colspan="1">
+                        <a class="ui right floated button violet" href="/addProductArea">
+                            <i class="plus icon"></i>
+                            Add Product Area
+                        </a>
+                    </th>
+                </tr>
+            </tfoot>
+        </table>                
     {% endblock %}

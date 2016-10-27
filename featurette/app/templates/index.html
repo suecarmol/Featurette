@@ -4,13 +4,8 @@
         <script src="static/index.js"></script>
     {% endblock %}
     {% block content %}
-        <h3> Feature Requests </h3>
-        <a class="ui right floated button violet" href="/addFeature">
-            <i class="plus icon"></i>
-            Add Feature Request
-        </a>
-
-        {# a comment #}
+    
+        <h2> Feature Requests </h2>
 
         <table class="ui celled padded violet table">
           <thead>
@@ -18,7 +13,8 @@
             <th>Description</th>
             <th>Client</th>
             <th>Client Priority</th>
-            <th>Comments</th>
+            <th>Product Area</th>
+            <th>Created By</th>
           </tr></thead>
           <tbody>
           {% for feature_request in feature_requests %}
@@ -32,12 +28,23 @@
                   <td>
                       {{ feature_request.client_id }}
                   </td>
-                  <td class="right aligned">
-                    {{feature_request.client_priority}}
+                  <td>
+                    {{ feature_request.client_priority }}
                   </td>
-                  <td>Creatine supplementation is the reference compound for increasing muscular creatine levels; there is variability in this increase, however, with some nonresponders.</td>
+                  <td> {{ feature_request.product_area_id }}</td>
+                  <td> {{ feature_request.user_id }}</td>
                 </tr>
             {% endfor %}
           </tbody>
+          <tfoot class="full-width">
+               <tr>
+                 <th colspan="6">
+                   <a class="ui right floated button violet" href="/addFeature">
+                       <i class="plus icon"></i>
+                       Add Feature Request
+                   </a>
+                 </th>
+               </tr>
+           </tfoot>
         </table>
     {% endblock %}

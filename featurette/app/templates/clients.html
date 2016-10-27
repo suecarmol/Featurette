@@ -4,10 +4,32 @@
         <script src="static/clients.js"></script>
     {% endblock %}
     {% block content %}
-        <h3> Clients </h3>
-        <a class="ui right floated button violet" href="/addClient">
-            <i class="add user icon"></i>
-            Add Client
-        </a>
 
+        <h2> Clients </h2>
+
+        <table class="ui celled padded violet table">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for client in clients %}
+                    <tr>
+                        <td> {{ client.name }}
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+            <tfoot class="full-width">
+                <tr>
+                    <th colspan="1">
+                        <a class="ui right floated button violet" href="/addClient">
+                            <i class="add user icon"></i>
+                            Add Client
+                        </a>
+                    </th>
+                </tr>
+            </tfoot>
+        </table>
     {% endblock %}
