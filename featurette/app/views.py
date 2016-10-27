@@ -6,7 +6,7 @@ from models import User, ProductArea, Client, FeatureRequest
 @app.route('/index')
 def index():
     feature_requests = FeatureRequest.query.all()
-    return render_template('index.html', feature_requests)
+    return render_template('index.html', feature_requests=feature_requests)
 
 @app.route('/addFeature')
 def addFeature():
@@ -15,7 +15,7 @@ def addFeature():
 @app.route('/users')
 def users():
     users = User.query.all()
-    return render_template('users.html', users)
+    return render_template('users.html', users=users)
 
 @app.route('/addUser')
 @app.route('/addUsers')
@@ -25,7 +25,7 @@ def addUsers():
 @app.route('/clients')
 def clients():
     clients = Client.query.all()
-    return render_template('clients.html', clients)
+    return render_template('clients.html', clients=clients)
 
 @app.route('/addClients')
 @app.route('/addClient')
@@ -35,7 +35,7 @@ def AddClient():
 @app.route('/productAreas')
 def productAreas():
     product_areas = ProductArea.query.all()
-    return render_template('productAreas.html', product_areas)
+    return render_template('productAreas.html', product_areas=product_areas)
 
 @app.route('/addProductAreas')
 @app.route('/addProductArea')

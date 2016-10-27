@@ -10,4 +10,34 @@
             Add Feature Request
         </a>
 
+        {# a comment #}
+
+        <table class="ui celled padded violet table">
+          <thead>
+            <tr><th class="single line">Title</th>
+            <th>Description</th>
+            <th>Client</th>
+            <th>Client Priority</th>
+            <th>Comments</th>
+          </tr></thead>
+          <tbody>
+          {% for feature_request in feature_requests %}
+                <tr>
+                  <td>
+                    <h2 class="ui center aligned header">{{ feature_request.title }}</h2>
+                  </td>
+                  <td class="single line">
+                    {{feature_request.description}}
+                  </td>
+                  <td>
+                      {{ feature_request.client_id }}
+                  </td>
+                  <td class="right aligned">
+                    {{feature_request.client_priority}}
+                  </td>
+                  <td>Creatine supplementation is the reference compound for increasing muscular creatine levels; there is variability in this increase, however, with some nonresponders.</td>
+                </tr>
+            {% endfor %}
+          </tbody>
+        </table>
     {% endblock %}
