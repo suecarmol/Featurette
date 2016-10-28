@@ -43,16 +43,27 @@
                         </td>
                         <td> {{ feature_request.user_id }} </td>
                         <td class="single line">
-                            <button class="ui icon violet button">
-                                <i class="edit icon"></i>
-                            </button>
-                            {#TODO: disable button if date_finished is not null#}
-                            <button class="ui icon green button">
-                                <i class="check icon"></i>
-                            </button>
-                            <button class="ui icon red button">
-                                <i class="delete icon"></i>
-                            </button>
+                            <form action="/editFeature" method="POST">
+                                <button class="ui icon violet button" value="{{feature_request.id}}"
+                                    name="edit_feature_request">
+                                    <i class="edit icon"></i>
+                                </button>
+                            </form>
+                            {% if feature_request.date_finished == None %}
+                                <button class="ui icon green button">
+                                    <i class="check icon"></i>
+                                </button>
+                            {%else%}
+                                <button class="ui icon green button disabled">
+                                    <i class="check icon"></i>
+                                </button>
+                            {% endif %}
+                            <form action="/deleteFeature" method="POST">
+                                <button class="ui icon red button" value="{{feature_request.id}}"
+                                    name="feature_request_id">
+                                    <i class="delete icon"></i>
+                                </button>
+                            </form>
                         </td>
                     </tr>
                 {% endfor %}

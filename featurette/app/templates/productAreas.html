@@ -19,12 +19,18 @@
                     <tr>
                         <td>{{ product_area.name }}</td>
                         <td class="single line">
-                            <button class="ui icon violet button">
-                                <i class="edit icon"></i>
-                            </button>
-                            <button class="ui icon red button">
-                                <i class="delete icon"></i>
-                            </button>
+                            <form action="/editProductArea" method="GET">
+                                <button class="ui icon violet button" name="product_area_id"
+                                    value="{{ product_area.id }}">
+                                    <i class="edit icon"></i>
+                                </button>
+                            </form>
+                            <form action="/deleteProductArea" method="POST">
+                                <button class="ui icon red button" type="submit"
+                                    name="product_area_id" value="{{ product_area.id }}">
+                                    <i class="delete icon"></i>
+                                </button>
+                            </form>
                         </td>
                     </tr>
                 {% endfor %}

@@ -24,9 +24,12 @@
                             <button class="ui icon violet button">
                                 <i class="edit icon"></i>
                             </button>
-                            <button class="ui icon red button">
-                                <i class="delete icon"></i>
-                            </button>
+                            <form action="/deleteClient" method="POST">
+                                <button class="ui icon red button" name="client_id"
+                                    value="{{ client.id }}">
+                                    <i class="delete icon"></i>
+                                </button>
+                            </form>
                         </td>
                     </tr>
                 {% endfor %}
