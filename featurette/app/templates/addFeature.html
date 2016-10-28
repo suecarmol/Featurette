@@ -6,7 +6,7 @@
         <script src="static/addFeature.js"></script>
     {% endblock %}
     {% block content %}
-        <form class="ui form segment">
+        <form class="ui form segment" action="/addFeature" method="POST">
             <h3 class="ui dividing header">Feature Request</h3>
             <div class="field">
                 <label>Title</label>
@@ -22,11 +22,9 @@
                 <label>Client</label>
                 <select class="ui fluid dropdown" name="client">
                     <option value="">Client</option>
-                    <option value="1">Client A</option>
-                    <option value="2">Client B</option>
-                    <option value="3">Client C</option>
-                    <option value="4">Client D</option>
-                    <option value="5">Client E</option>
+                    {% for client in clients %}
+                        <option value="{{client.id}}"> {{client.name}} </option>
+                    {% endfor %}
                 </select>
             </div>
             <div class="field">
@@ -44,11 +42,9 @@
                 <label>Product Area</label>
                 <select class="ui fluid dropdown" name="product_area">
                     <option value="">Product Area</option>
-                    <option value="1">PA 1</option>
-                    <option value="2">PA 2</option>
-                    <option value="3">PA 3</option>
-                    <option value="4">PA 4</option>
-                    <option value="5">PA 5</option>
+                    {% for product_area in product_areas %}
+                        <option value="{{ product_area.id }}"> {{ product_area.name }} </option>
+                    {% endfor %}
                 </select>
             </div>
             <div class="field">

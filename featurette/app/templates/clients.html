@@ -11,19 +11,29 @@
             <thead>
                 <tr>
                     <th>Name</th>
+                    <th>Actions</th>
                 </tr>
             </thead>
             <tbody>
                 {% for client in clients %}
                     <tr>
-                        <td> {{ client.name }}
+                        <td>
+                            {{ client.name }}
+                        </td>
+                        <td class="single line">
+                            <button class="ui icon violet button">
+                                <i class="edit icon"></i>
+                            </button>
+                            <button class="ui icon red button">
+                                <i class="delete icon"></i>
+                            </button>
                         </td>
                     </tr>
                 {% endfor %}
             </tbody>
             <tfoot class="full-width">
                 <tr>
-                    <th colspan="1">
+                    <th colspan="2">
                         <a class="ui right floated button violet" href="/addClient">
                             <i class="add user icon"></i>
                             Add Client
