@@ -21,10 +21,10 @@ CREATE TABLE `product_areas`(id int auto_increment primary key, name
 CREATE TABLE `feature_requests`(id int auto_increment primary key,
     title varchar(100), description varchar(200), client_id int,
     client_priority int, product_area_id int, target_date timestamp DEFAULT
-    CURRENT_TIMESTAMP, user_id int, date_finished timestamp null, created_at timestamp
-    DEFAULT CURRENT_TIMESTAMP, updated_at timestamp DEFAULT CURRENT_TIMESTAMP,
-    foreign key(client_id) references clients(id),
-    foreign key(product_area_id) references product_areas(id),
+    CURRENT_TIMESTAMP, user_id int, ticket_url varchar(100),date_finished
+    timestamp null, created_at timestamp DEFAULT CURRENT_TIMESTAMP, updated_at
+    timestamp DEFAULT CURRENT_TIMESTAMP, foreign key(client_id) references
+    clients(id), foreign key(product_area_id) references product_areas(id),
     foreign key(user_id) references users(id));
 
 INSERT INTO `users`(username, email, password, created_at, updated_at)
@@ -44,11 +44,13 @@ INSERT INTO `product_areas`(name, created_at, updated_at) VALUES
     ('Buisness Intelligence', NOW(), NOW());
 
 INSERT INTO `feature_requests`(title, description, client_id,
-    client_priority, product_area_id, target_date, user_id, date_finished,
+    client_priority, product_area_id, target_date, user_id, ticket_url, date_finished,
     created_at, updated_at) VALUES ('Request 1', 'Change document templates',
-    1, 1, 2, '2016-12-12', 1, null, NOW(), NOW()), ('Request 2',
-    'Change chart library to modernize app look', 2, 1, 3, '2016-11-08', 4, null,
-    NOW(), NOW()), ('Request 3', 'Use new datepicker in billing document',
-    3, 1, 1, '2017-03-02', 3, null, NOW(), NOW()), ('Request 4', 'Update claims form',
-    4, 1, 4, '2017-01-09', 1, null, NOW(), NOW()), ('Request 5', 'Change landing page to infinite scroll',
-    4, 1, 2, '2017-06-08', 2, null, NOW(), NOW());
+    1, 1, 2, '2016-12-12', 1, 'www.google.com', null, NOW(), NOW()), ('Request 2',
+    'Change chart library to modernize app look', 2, 1, 3, '2016-11-08', 4,
+    'www.twitter.com', null, NOW(), NOW()), ('Request 3',
+    'Use new datepicker in billing document', 3, 1, 1, '2017-03-02', 3,
+    'www.nytimes.com', null, NOW(), NOW()), ('Request 4', 'Update claims form',
+    4, 1, 4, '2017-01-09', 1, 'www.wired.com', null, NOW(), NOW()),('Request 5',
+    'Change landing page to infinite scroll', 4, 1, 2, '2017-06-08', 2,
+    'www.thenextweb.com',null, NOW(), NOW());

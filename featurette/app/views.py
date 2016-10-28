@@ -21,8 +21,9 @@ def addFeature():
         target_date = request.form['target_date']
         product_area_id = request.form['product_area']
         user_id = u'2'
+        ticket_url = request.form['ticket_url']
         date_finished = None
-        feature_request = FeatureRequest(title, description, client_id, client_priority, target_date, product_area_id, user_id, date_finished)
+        feature_request = FeatureRequest(title, description, client_id, client_priority, product_area_id, user_id, target_date, ticket_url, date_finished)
         db.session.add(feature_request)
         db.session.commit()
         return redirect('/')

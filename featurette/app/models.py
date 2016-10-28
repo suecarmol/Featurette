@@ -50,8 +50,9 @@ class FeatureRequest(db.Model):
     client_id = db.Column(db.Integer, db.ForeignKey('clients.id'))
     client_priority = db.Column(db.Integer)
     product_area_id = db.Column(db.Integer, db.ForeignKey('product_areas.id'))
-    target_date = db.Column(db.DateTime(timezone=True))
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    target_date = db.Column(db.DateTime(timezone=True))
+    ticket_url = db.Column(db.String(100))
     date_finished = db.Column(db.DateTime(timezone=True))
     created_at = db.Column(db.DateTime(timezone=True), server_default=func.now())
     updated_at = db.Column(db.DateTime(timezone=True), onupdate=func.now())
@@ -61,12 +62,13 @@ class FeatureRequest(db.Model):
     user = db.relationship('User', foreign_keys=user_id)
 
     def __init__(self, title, description, client_id, client_priority,
-                product_area_id, target_date, user_id, date_finished):
+                product_area_id, user_id, target_date, ticket_url, date_finished):
         self.title = title
         self.description = description
         self.client_id = client_id
         self.client_priority = client_priority
         self.product_area_id = product_area_id
-        self.target_date = target_date
         self.user_id = user_id
+        self.target_date = target_date
+        self.ticket_url = ticket_url
         self.date_finished = date_finished

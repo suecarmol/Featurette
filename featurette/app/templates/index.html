@@ -16,6 +16,7 @@
                     <th>Client Priority</th>
                     <th>Product Area</th>
                     <th>Target Date</th>
+                    <th>Ticket URL</th>
                     <th>Created By</th>
                     <th>Actions</th>
                 </tr>
@@ -35,6 +36,11 @@
                         <td class="single line">
                             {{ feature_request.target_date.strftime('%b %d, %Y') }}
                         </td>
+                        <td>
+                            <a href="{{ 'http://'+feature_request.ticket_url }}">
+                                {{ feature_request.ticket_url }}
+                            </a>
+                        </td>
                         <td> {{ feature_request.user_id }} </td>
                         <td class="single line">
                             <button class="ui icon violet button">
@@ -53,7 +59,7 @@
             </tbody>
             <tfoot class="full-width">
                 <tr>
-                    <th colspan="8">
+                    <th colspan="9">
                         <a class="ui right floated button violet" href="/addFeature">
                             <i class="plus icon"></i>
                             Add Feature Request
