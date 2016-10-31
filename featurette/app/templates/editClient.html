@@ -1,0 +1,24 @@
+{% extends "menu_bar.html" %}
+    {% block head %}
+        {{ super() }}
+        <script src="static/clients.js"></script>
+        <script src="static/addClient.js"></script>
+    {% endblock %}
+    {% block content %}
+        <form class="ui form segment" action="/editClient" method="POST">
+            <h3 class="ui dividing header">Edit Client</h3>
+            <div class="field">
+                <label>Name</label>
+                <input type="text" name="client_name" value="{{ client.name }}">
+            </div>
+            <input hidden="true" name="client_id" value="{{ client.id }}">
+            <button class="ui violet button" tabindex="0" type="submit">
+                Save Changes
+            </button>
+            <a href="/clients" class="ui red button" tabindex="0" type="submit">
+                Cancel
+            </a>
+            <div class="ui error message">
+            </div>
+        </form>
+    {% endblock %}

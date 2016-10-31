@@ -21,9 +21,12 @@
                         <td> {{ user.username }} </td>
                         <td> {{ user.email }} </td>
                         <td class="single line">
-                            <button class="ui icon violet button">
-                                <i class="edit icon"></i>
-                            </button>
+                            <form action="/editUser" method="GET">
+                                <button class="ui icon violet button" name="user_id"
+                                    value="{{ user.id }}">
+                                    <i class="edit icon"></i>
+                                </button>
+                            </form>
                             <form action="/deleteUser" method="POST">
                                 <button class="ui icon red button" name="user_id"
                                     value="{{ user.id }}">

@@ -21,9 +21,12 @@
                             {{ client.name }}
                         </td>
                         <td class="single line">
-                            <button class="ui icon violet button">
-                                <i class="edit icon"></i>
-                            </button>
+                            <form action="/editClient" method="GET">
+                                <button class="ui icon violet button" name="client_id"
+                                    value="{{ client.id }}">
+                                    <i class="edit icon"></i>
+                                </button>
+                            </form>
                             <form action="/deleteClient" method="POST">
                                 <button class="ui icon red button" name="client_id"
                                     value="{{ client.id }}">

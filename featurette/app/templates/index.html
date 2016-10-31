@@ -30,9 +30,9 @@
                             </h4>
                         </td>
                         <td> {{feature_request.description}} </td>
-                        <td> {{ feature_request.client_id }} </td>
+                        <td> {{ feature_request.client.name }} </td>
                         <td> {{ feature_request.client_priority }} </td>
-                        <td> {{ feature_request.product_area_id }} </td>
+                        <td> {{ feature_request.product_area.name }} </td>
                         <td class="single line">
                             {{ feature_request.target_date.strftime('%b %d, %Y') }}
                         </td>
@@ -41,9 +41,9 @@
                                 {{ feature_request.ticket_url }}
                             </a>
                         </td>
-                        <td> {{ feature_request.user_id }} </td>
+                        <td> {{ feature_request.user.username }} </td>
                         <td class="single line">
-                            <form action="/editFeature" method="POST">
+                            <form action="/editFeature" method="GET">
                                 <button class="ui icon violet button" value="{{feature_request.id}}"
                                     name="edit_feature_request">
                                     <i class="edit icon"></i>

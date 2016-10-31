@@ -5,12 +5,13 @@
         <script src="static/addProductArea.js"></script>
     {% endblock %}
     {% block content %}
-        <form class="ui form segment" action="/addProductArea" method="POST">
+        <form class="ui form segment" action="/editProductArea" method="POST">
             <h3 class="ui dividing header">Edit Product Area</h3>
             <div class="field">
                 <label>Name</label>
                 <input type="text" name="product_area_name" value="{{ product_area.name }}">
             </div>
+            <input hidden="true" name="product_area_id" value="{{ product_area.id }}">
             <button class="ui violet button" tabindex="0" type="submit">
                 Save Changes
             </button>
