@@ -1,5 +1,6 @@
-from app import app, bcrypt
-from flask import render_template, request, redirect
+from app import app, bcrypt, login_manager
+from flask import render_template, request, redirect, flash, url_for
+from flask_login import login_required, current_user, login_user, logout_user
 from models import User, ProductArea, Client, FeatureRequest, db
 from datetime import datetime
 
@@ -8,26 +9,45 @@ def login():
     if request.method == 'POST':
         email = request.form['email']
         password = request.form['password']
-        user = User.query.filter(email=email)
-        print user
+        user = User.query.filter_by(email=email).first()
         if user:
-            print 'User exists'
-            if crypt.check_password_hash(user.password, bcrypt.generate_password_hash(password)):
-                print 'Success'
+            if bcrypt.check_password_hash(user.password, password) == True:
+                user.authenticated = True
+                db.session.commit()
+                login_user(user, remember=True)
                 return redirect('/')
+            else:
+                errors='Email or password are incorrect'
+                return render_template('login.html', errors=errors)
+        else:
+            errors = 'User does not exist'
+            return render_template('login.html', errors=errors)
     else:
         return render_template('login.html')
 
+@login_manager.user_loader
+def user_loader(user_id):
+    return User.query.get(user_id)
+
+@app.route('/logout', methods=['GET'])
+@login_required
+def logout():
+    user = current_user
+    user.authenticated = False
+    db.session.commit()
+    logout_user()
+    return render_template('login.html')
+
 @app.route('/')
 @app.route('/index')
+@login_required
 def index():
     feature_requests = FeatureRequest.query.all()
     return render_template('index.html', feature_requests=feature_requests)
 
 @app.route('/addFeature', methods=['GET','POST'])
+@login_required
 def addFeature():
-    #TODO: insert id of user that is logged in
-    #TODO: add algorithm to change priorities per client if priority exists
     if request.method == 'POST':
 
         title = request.form['request_title']
@@ -36,7 +56,8 @@ def addFeature():
         client_priority = request.form['client_priority']
         target_date = request.form['target_date']
         product_area_id = request.form['product_area']
-        user_id = u'2'
+        user = current_user
+        user_id = current_user.id
         ticket_url = request.form['ticket_url']
         date_finished = None
 
@@ -54,7 +75,7 @@ def addFeature():
             product_areas=product_areas)
 
 @app.route('/editFeature', methods=['POST', 'GET'])
-@app.route('/editFeatures', methods=['POST', 'GET'])
+@login_required
 def editFeature():
     if request.method == 'GET':
         feature_request_id = request.args['edit_feature_request']
@@ -73,6 +94,7 @@ def editFeature():
         target_date = request.form['target_date']
         product_area_id = request.form['product_area']
         ticket_url = request.form['ticket_url']
+        user = current_user
 
         checkPriorities(client_id, new_client_priority)
 
@@ -83,6 +105,7 @@ def editFeature():
         feature_request.target_date = target_date
         feature_request.product_area_id = product_area_id
         feature_request.ticket_url = ticket_url
+        feature_request.user_id = user.id
         db.session.commit()
         return redirect('/')
 
@@ -99,6 +122,7 @@ def checkPriorities(client_id, new_client_priority):
             feature_priority.client_priority = feature_priority.client_priority + 1
 
 @app.route('/finishFeature', methods=['POST'])
+@login_required
 def finishFeature():
     feature_request_id = request.form['feature_request_id']
     feature_request = FeatureRequest.query.get(feature_request_id)
@@ -109,6 +133,7 @@ def finishFeature():
 
 @app.route('/deleteFeature', methods=['POST'])
 @app.route('/deleteFeatures', methods=['POST'])
+@login_required
 def deleteFeature():
     feature_request_id = request.form['feature_request_id']
     feature_request = FeatureRequest.query.get(feature_request_id)
@@ -117,12 +142,14 @@ def deleteFeature():
     return redirect('/')
 
 @app.route('/users')
+@login_required
 def users():
     users = User.query.all()
     return render_template('users.html', users=users)
 
 @app.route('/addUser', methods=['GET', 'POST'])
 @app.route('/addUsers', methods=['GET', 'POST'])
+@login_required
 def addUsers():
     if request.method == 'POST':
         username = request.form['username']
@@ -138,6 +165,7 @@ def addUsers():
 
 @app.route('/editUser', methods=['POST', 'GET'])
 @app.route('/editUsers', methods=['POST', 'GET'])
+@login_required
 def editUser():
     if request.method == 'GET':
         user_id = request.args['user_id']
@@ -157,6 +185,7 @@ def editUser():
 
 @app.route('/deleteUser', methods=['POST'])
 @app.route('/deleteUsers', methods=['POST'])
+@login_required
 def deleteUser():
     user_id = request.form['user_id']
     user = User.query.get(user_id)
@@ -165,12 +194,14 @@ def deleteUser():
     return redirect('/users')
 
 @app.route('/clients')
+@login_required
 def clients():
     clients = Client.query.all()
     return render_template('clients.html', clients=clients)
 
 @app.route('/addClients', methods=['GET', 'POST'])
 @app.route('/addClient', methods=['GET', 'POST'])
+@login_required
 def addClient():
     if request.method == 'POST':
         client_name = request.form['client_name']
@@ -183,6 +214,7 @@ def addClient():
 
 @app.route('/editClient', methods=['POST', 'GET'])
 @app.route('/editClients', methods=['POST', 'GET'])
+@login_required
 def editClient():
     if request.method == 'GET':
         client_id = request.args['client_id']
@@ -198,6 +230,7 @@ def editClient():
 
 @app.route('/deleteClient', methods=['POST'])
 @app.route('/deleteClients', methods=['POST'])
+@login_required
 def deleteClient():
     client_id = request.form['client_id']
     client = Client.query.get(client_id)
@@ -212,6 +245,7 @@ def productAreas():
 
 @app.route('/addProductAreas', methods=['GET', 'POST'])
 @app.route('/addProductArea', methods=['GET', 'POST'])
+@login_required
 def addProductArea():
     if request.method == 'POST':
         product_area_name = request.form['product_area_name']
@@ -224,6 +258,7 @@ def addProductArea():
 
 @app.route('/editProductArea', methods=['POST', 'GET'])
 @app.route('/editProductAreas', methods=['POST', 'GET'])
+@login_required
 def editProductArea():
     if request.method == 'GET':
         product_area_id = request.args['product_area_id']
@@ -239,6 +274,7 @@ def editProductArea():
 
 @app.route('/deleteProductArea', methods=['POST'])
 @app.route('/deleteProductAreas', methods=['POST'])
+@login_required
 def deleteProductArea():
     product_area_id = request.form['product_area_id']
     product_area = ProductArea.query.get(product_area_id)

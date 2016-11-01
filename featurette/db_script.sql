@@ -6,9 +6,9 @@ DROP TABLE IF EXISTS `clients`;
 DROP TABLE IF EXISTS `product_areas`;
 
 CREATE TABLE `users`(id int auto_increment primary key, username
-    varchar(64),email varchar(100), password varchar(255), created_at
-    timestamp DEFAULT CURRENT_TIMESTAMP, updated_at timestamp
-    DEFAULT CURRENT_TIMESTAMP);
+    varchar(64),email varchar(100), password varchar(255), authenticated boolean,
+    created_at timestamp DEFAULT CURRENT_TIMESTAMP, updated_at timestamp DEFAULT
+    CURRENT_TIMESTAMP);
 
 CREATE TABLE `clients`(id int auto_increment primary key, name
     varchar(100),created_at timestamp DEFAULT CURRENT_TIMESTAMP,
@@ -27,11 +27,11 @@ CREATE TABLE `feature_requests`(id int auto_increment primary key,
     clients(id), foreign key(product_area_id) references product_areas(id),
     foreign key(user_id) references users(id));
 
-INSERT INTO `users`(username, email, password, created_at, updated_at)
-    VALUES('user1', 'user1@foo.com', PASSWORD('123456'), NOW(), NOW()),
-    ('user2', 'user2@foo.com', PASSWORD('123456'), NOW(), NOW()),
-    ('user3', 'user3@foo.com', PASSWORD('123456'), NOW(), NOW()),
-    ('user4', 'user4@foo.com', PASSWORD('123456'), NOW(), NOW());
+INSERT INTO `users`(username, email, password, authenticated, created_at, updated_at)
+    VALUES('user1', 'user1@foo.com', PASSWORD('123456'), false, NOW(), NOW()),
+    ('user2', 'user2@foo.com', PASSWORD('123456'), false, NOW(), NOW()),
+    ('user3', 'user3@foo.com', PASSWORD('123456'), false, NOW(), NOW()),
+    ('user4', 'user4@foo.com', PASSWORD('123456'), false, NOW(), NOW());
 
 INSERT INTO `clients`(name, created_at, updated_at) VALUES ('Client A',
     NOW(), NOW()), ('Client B', NOW(), NOW()), ('Client C', NOW(),
