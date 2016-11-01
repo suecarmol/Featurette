@@ -1,7 +1,6 @@
 from app import db
 from sqlalchemy.sql import func
 
-
 class User(db.Model):
     __tablename__ = 'users'
 

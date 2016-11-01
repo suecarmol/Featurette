@@ -1,6 +1,22 @@
 from app import app, bcrypt
 from flask import render_template, request, redirect
 from models import User, ProductArea, Client, FeatureRequest, db
+from datetime import datetime
+
+@app.route('/login', methods=['POST', 'GET'])
+def login():
+    if request.method == 'POST':
+        email = request.form['email']
+        password = request.form['password']
+        user = User.query.filter(email=email)
+        print user
+        if user:
+            print 'User exists'
+            if crypt.check_password_hash(user.password, bcrypt.generate_password_hash(password)):
+                print 'Success'
+                return redirect('/')
+    else:
+        return render_template('login.html')
 
 @app.route('/')
 @app.route('/index')
@@ -13,6 +29,7 @@ def addFeature():
     #TODO: insert id of user that is logged in
     #TODO: add algorithm to change priorities per client if priority exists
     if request.method == 'POST':
+
         title = request.form['request_title']
         description = request.form['request_description']
         client_id = request.form['client']
@@ -22,15 +39,19 @@ def addFeature():
         user_id = u'2'
         ticket_url = request.form['ticket_url']
         date_finished = None
+
+        checkPriorities(client_id, client_priority)
         feature_request = FeatureRequest(title, description, client_id, client_priority,
             product_area_id, user_id, target_date, ticket_url, date_finished)
+
         db.session.add(feature_request)
         db.session.commit()
         return redirect('/')
     else:
         clients = Client.query.all()
         product_areas = ProductArea.query.all()
-        return render_template('addFeature.html', clients=clients, product_areas=product_areas)
+        return render_template('addFeature.html', clients=clients,
+            product_areas=product_areas)
 
 @app.route('/editFeature', methods=['POST', 'GET'])
 @app.route('/editFeatures', methods=['POST', 'GET'])
@@ -48,19 +69,43 @@ def editFeature():
         title = request.form['request_title']
         description = request.form['request_description']
         client_id = request.form['client']
-        client_priority = request.form['client_priority']
+        new_client_priority = request.form['client_priority']
         target_date = request.form['target_date']
         product_area_id = request.form['product_area']
         ticket_url = request.form['ticket_url']
+
+        checkPriorities(client_id, new_client_priority)
+
         feature_request.title = title
         feature_request.description = description
         feature_request.client_id = client_id
-        feature_request.client_priority = client_priority
+        feature_request.client_priority = new_client_priority
         feature_request.target_date = target_date
         feature_request.product_area_id = product_area_id
         feature_request.ticket_url = ticket_url
         db.session.commit()
         return redirect('/')
+
+def checkPriorities(client_id, new_client_priority):
+    #find all active feature requests (with date_finished = None)
+    features_same_client = FeatureRequest.query.filter(FeatureRequest.client_id==client_id)\
+        .filter(FeatureRequest.date_finished == None)
+    for feature_priority in features_same_client:
+        #checking if client priority matches
+        print 'old ' + str(feature_priority.client_priority) + ' vs. new ' + str(new_client_priority)
+
+        if int(feature_priority.client_priority) == int(new_client_priority):
+            print 'same priority'
+            feature_priority.client_priority = feature_priority.client_priority + 1
+
+@app.route('/finishFeature', methods=['POST'])
+def finishFeature():
+    feature_request_id = request.form['feature_request_id']
+    feature_request = FeatureRequest.query.get(feature_request_id)
+    feature_request.date_finished = str(datetime.now())
+    feature_request.client_priority = 0
+    db.session.commit()
+    return redirect('/')
 
 @app.route('/deleteFeature', methods=['POST'])
 @app.route('/deleteFeatures', methods=['POST'])

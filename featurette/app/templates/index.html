@@ -27,6 +27,9 @@
                         <td>
                             <h4 class="ui center aligned header">
                                 {{ feature_request.title }}
+                                {% if feature_request.date_finished != None %}
+                                    <i class="large green checkmark icon"></i>
+                                {% endif %}
                             </h4>
                         </td>
                         <td> {{feature_request.description}} </td>
@@ -50,9 +53,12 @@
                                 </button>
                             </form>
                             {% if feature_request.date_finished == None %}
-                                <button class="ui icon green button">
-                                    <i class="check icon"></i>
-                                </button>
+                                <form action="/finishFeature" method="post">
+                                    <button class="ui icon green button" name="feature_request_id"
+                                        value="{{ feature_request.id }}">
+                                        <i class="check icon"></i>
+                                    </button>
+                                </form>
                             {%else%}
                                 <button class="ui icon green button disabled">
                                     <i class="check icon"></i>
