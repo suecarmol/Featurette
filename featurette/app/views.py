@@ -67,6 +67,8 @@ def addFeature():
 
         db.session.add(feature_request)
         db.session.commit()
+        message = 'The feature request has been added successfully'
+        flash(message)
         return redirect('/')
     else:
         clients = Client.query.all()
@@ -107,6 +109,8 @@ def editFeature():
         feature_request.ticket_url = ticket_url
         feature_request.user_id = user.id
         db.session.commit()
+        message = 'The feature request has been edited successfully'
+        flash(message)
         return redirect('/')
 
 def checkPriorities(client_id, new_client_priority):
@@ -115,10 +119,7 @@ def checkPriorities(client_id, new_client_priority):
         .filter(FeatureRequest.date_finished == None)
     for feature_priority in features_same_client:
         #checking if client priority matches
-        print 'old ' + str(feature_priority.client_priority) + ' vs. new ' + str(new_client_priority)
-
         if int(feature_priority.client_priority) == int(new_client_priority):
-            print 'same priority'
             feature_priority.client_priority = feature_priority.client_priority + 1
 
 @app.route('/finishFeature', methods=['POST'])
@@ -129,6 +130,8 @@ def finishFeature():
     feature_request.date_finished = str(datetime.now())
     feature_request.client_priority = 0
     db.session.commit()
+    message = 'The feature request has been marked as Done'
+    flash(message)
     return redirect('/')
 
 @app.route('/deleteFeature', methods=['POST'])
@@ -139,6 +142,8 @@ def deleteFeature():
     feature_request = FeatureRequest.query.get(feature_request_id)
     db.session.delete(feature_request)
     db.session.commit()
+    message = 'The feature request has been deleted'
+    flash(message)
     return redirect('/')
 
 @app.route('/users')
@@ -159,6 +164,8 @@ def addUsers():
         #TODO: put a confirm password on form and corresponding match validation
         db.session.add(user)
         db.session.commit()
+        message = 'The user has been added successfully'
+        flash(message)
         return redirect('/users')
     else:
         return render_template('addUser.html')
@@ -181,6 +188,8 @@ def editUser():
         user.email = email
         user.password = bcrypt.generate_password_hash(password)
         db.session.commit()
+        message = 'The user has been edited successfully'
+        flash(message)
         return redirect('/users')
 
 @app.route('/deleteUser', methods=['POST'])
@@ -191,6 +200,8 @@ def deleteUser():
     user = User.query.get(user_id)
     db.session.delete(user)
     db.session.commit()
+    message = 'The user has been deleted'
+    flash(message)
     return redirect('/users')
 
 @app.route('/clients')
@@ -208,6 +219,8 @@ def addClient():
         client = Client(client_name)
         db.session.add(client)
         db.session.commit()
+        message = 'The client has been added successfully'
+        flash(message)
         return redirect('/clients')
     else:
         return render_template('addClient.html')
@@ -226,6 +239,8 @@ def editClient():
         client_name = request.form['client_name']
         client.name = client_name
         db.session.commit()
+        message = 'The client has been modified successfully'
+        flash(message)
         return redirect('/clients')
 
 @app.route('/deleteClient', methods=['POST'])
@@ -236,9 +251,12 @@ def deleteClient():
     client = Client.query.get(client_id)
     db.session.delete(client)
     db.session.commit()
+    message = 'The client has been deleted'
+    flash(message)
     return redirect('/clients')
 
 @app.route('/productAreas')
+@login_required
 def productAreas():
     product_areas = ProductArea.query.all()
     return render_template('productAreas.html', product_areas=product_areas)
@@ -252,6 +270,8 @@ def addProductArea():
         product_area = ProductArea(product_area_name)
         db.session.add(product_area)
         db.session.commit()
+        message = 'The product area has been added successfully'
+        flash(message)
         return redirect('/productAreas')
     else:
         return render_template('addProductArea.html')
@@ -270,6 +290,8 @@ def editProductArea():
         product_area_name = request.form['product_area_name']
         product_area.name = product_area_name
         db.session.commit()
+        message = 'The product area has been modified successfully'
+        flash(message)
         return redirect('/productAreas')
 
 @app.route('/deleteProductArea', methods=['POST'])
@@ -280,4 +302,6 @@ def deleteProductArea():
     product_area = ProductArea.query.get(product_area_id)
     db.session.delete(product_area)
     db.session.commit()
+    message = 'The product area has been deleted'
+    flash(message)
     return redirect('/productAreas')

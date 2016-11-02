@@ -40,6 +40,19 @@ $(document).ready(function(){
                     }
 
                 ]
+            },
+            repeat_password: {
+                identifier: 'repeat_password',
+                rules: [
+                    {
+                        type: 'empty',
+                        prompt: 'Please re-enter your password'
+                    },
+                    {
+                        type: 'match[password]',
+                        prompt: 'The passwords do not match'
+                    }
+                ]
             }
         }
     });

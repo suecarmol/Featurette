@@ -19,6 +19,10 @@
                 <label>Password</label>
                 <input type="password" name="password" value="{{ user.password }}">
             </div>
+            <div class="field">
+                <label>Repeat Password</label>
+                <input type="password" name="repeat_password" placeholder="Password">
+            </div>
             <input hidden="true" name="user_id" value="{{ user.id }}">
             <button class="ui violet button" tabindex="0" type="submit">
                 Save Changes
