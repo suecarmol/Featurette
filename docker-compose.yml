@@ -1,0 +1,6 @@
+version: '2'
+services:
+  www:
+    build: .
+    ports:
+      - "5000:5000"

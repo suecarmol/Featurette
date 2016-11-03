@@ -1,8 +1,9 @@
+from datetime import datetime
+
 from app import app, bcrypt, login_manager
 from flask import render_template, request, redirect, flash, url_for
 from flask_login import login_required, current_user, login_user, logout_user
 from models import User, ProductArea, Client, FeatureRequest, db
-from datetime import datetime
 
 @app.route('/login', methods=['POST', 'GET'])
 def login():
@@ -11,13 +12,13 @@ def login():
         password = request.form['password']
         user = User.query.filter_by(email=email).first()
         if user:
-            if bcrypt.check_password_hash(user.password, password) == True:
+            if bcrypt.check_password_hash(user.password, password):
                 user.authenticated = True
                 db.session.commit()
                 login_user(user, remember=True)
                 return redirect('/')
             else:
-                errors='Email or password are incorrect'
+                errors = 'Email or password are incorrect'
                 return render_template('login.html', errors=errors)
         else:
             errors = 'User does not exist'
@@ -25,9 +26,11 @@ def login():
     else:
         return render_template('login.html')
 
+
 @login_manager.user_loader
 def user_loader(user_id):
     return User.query.get(user_id)
+
 
 @app.route('/logout', methods=['GET'])
 @login_required
@@ -38,12 +41,18 @@ def logout():
     logout_user()
     return render_template('login.html')
 
+
 @app.route('/')
 @app.route('/index')
 @login_required
 def index():
+    print current_user
+    print 'index'
+    if not current_user.is_authenticated:
+        return render_template('login.html')
     feature_requests = FeatureRequest.query.all()
     return render_template('index.html', feature_requests=feature_requests)
+
 
 @app.route('/addFeature', methods=['GET','POST'])
 @login_required
@@ -75,6 +84,7 @@ def addFeature():
         product_areas = ProductArea.query.all()
         return render_template('addFeature.html', clients=clients,
             product_areas=product_areas)
+
 
 @app.route('/editFeature', methods=['POST', 'GET'])
 @login_required
@@ -113,14 +123,16 @@ def editFeature():
         flash(message)
         return redirect('/')
 
+
 def checkPriorities(client_id, new_client_priority):
-    #find all active feature requests (with date_finished = None)
+    # find all active feature requests (with date_finished = None)
     features_same_client = FeatureRequest.query.filter(FeatureRequest.client_id==client_id)\
         .filter(FeatureRequest.date_finished == None)
     for feature_priority in features_same_client:
         #checking if client priority matches
         if int(feature_priority.client_priority) == int(new_client_priority):
             feature_priority.client_priority = feature_priority.client_priority + 1
+
 
 @app.route('/finishFeature', methods=['POST'])
 @login_required
@@ -134,6 +146,7 @@ def finishFeature():
     flash(message)
     return redirect('/')
 
+
 @app.route('/deleteFeature', methods=['POST'])
 @app.route('/deleteFeatures', methods=['POST'])
 @login_required
@@ -146,11 +159,13 @@ def deleteFeature():
     flash(message)
     return redirect('/')
 
+
 @app.route('/users')
 @login_required
 def users():
     users = User.query.all()
     return render_template('users.html', users=users)
+
 
 @app.route('/addUser', methods=['GET', 'POST'])
 @app.route('/addUsers', methods=['GET', 'POST'])
@@ -161,7 +176,7 @@ def addUsers():
         email = request.form['email']
         password = request.form['password']
         user = User(username, email, bcrypt.generate_password_hash(password))
-        #TODO: put a confirm password on form and corresponding match validation
+        # TODO: put a confirm password on form and corresponding match validation
         db.session.add(user)
         db.session.commit()
         message = 'The user has been added successfully'
@@ -169,6 +184,7 @@ def addUsers():
         return redirect('/users')
     else:
         return render_template('addUser.html')
+
 
 @app.route('/editUser', methods=['POST', 'GET'])
 @app.route('/editUsers', methods=['POST', 'GET'])
@@ -192,6 +208,7 @@ def editUser():
         flash(message)
         return redirect('/users')
 
+
 @app.route('/deleteUser', methods=['POST'])
 @app.route('/deleteUsers', methods=['POST'])
 @login_required
@@ -204,11 +221,13 @@ def deleteUser():
     flash(message)
     return redirect('/users')
 
+
 @app.route('/clients')
 @login_required
 def clients():
     clients = Client.query.all()
     return render_template('clients.html', clients=clients)
+
 
 @app.route('/addClients', methods=['GET', 'POST'])
 @app.route('/addClient', methods=['GET', 'POST'])
@@ -224,6 +243,7 @@ def addClient():
         return redirect('/clients')
     else:
         return render_template('addClient.html')
+
 
 @app.route('/editClient', methods=['POST', 'GET'])
 @app.route('/editClients', methods=['POST', 'GET'])
@@ -243,6 +263,7 @@ def editClient():
         flash(message)
         return redirect('/clients')
 
+
 @app.route('/deleteClient', methods=['POST'])
 @app.route('/deleteClients', methods=['POST'])
 @login_required
@@ -255,11 +276,13 @@ def deleteClient():
     flash(message)
     return redirect('/clients')
 
+
 @app.route('/productAreas')
 @login_required
 def productAreas():
     product_areas = ProductArea.query.all()
     return render_template('productAreas.html', product_areas=product_areas)
+
 
 @app.route('/addProductAreas', methods=['GET', 'POST'])
 @app.route('/addProductArea', methods=['GET', 'POST'])
@@ -275,6 +298,7 @@ def addProductArea():
         return redirect('/productAreas')
     else:
         return render_template('addProductArea.html')
+
 
 @app.route('/editProductArea', methods=['POST', 'GET'])
 @app.route('/editProductAreas', methods=['POST', 'GET'])
@@ -293,6 +317,7 @@ def editProductArea():
         message = 'The product area has been modified successfully'
         flash(message)
         return redirect('/productAreas')
+
 
 @app.route('/deleteProductArea', methods=['POST'])
 @app.route('/deleteProductAreas', methods=['POST'])
