@@ -67,7 +67,7 @@ class FeatureRequest(db.Model):
     ticket_url = db.Column(db.String(100))
     date_finished = db.Column(db.DateTime(timezone=True))
     created_at = db.Column(db.DateTime(timezone=True), server_default=func.now())
-    updated_at = db.Column(db.DateTime(timezone=True), onupdate=func.now())
+    updated_at = db.Column(db.DateTime(timezone=True), onupdate=func.now(), default='')
 
     client = db.relationship('Client', foreign_keys=client_id)
     product_area = db.relationship('ProductArea', foreign_keys=product_area_id)

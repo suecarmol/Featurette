@@ -68,7 +68,7 @@ def addFeature():
         user = current_user
         user_id = current_user.id
         ticket_url = request.form['ticket_url']
-        date_finished = None
+        date_finished = ''
 
         checkPriorities(client_id, client_priority)
         feature_request = FeatureRequest(title, description, client_id, client_priority,

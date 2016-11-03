@@ -61,10 +61,16 @@
                         <td> {{ feature_request.user.username }} </td>
                         <td class="single line">
                             <form action="/editFeature" method="GET">
-                                <button class="ui icon violet button" value="{{feature_request.id}}"
-                                    name="edit_feature_request">
-                                    <i class="edit icon"></i>
-                                </button>
+                                {% if feature_request.date_finished == None%}
+                                    <button class="ui icon violet button" value="{{feature_request.id}}"
+                                        name="edit_feature_request">
+                                        <i class="edit icon"></i>
+                                    </button>
+                                {%else%}
+                                    <button class="ui icon violet disabled button">
+                                        <i class="edit icon"></i>
+                                    </button>
+                                {% endif %}    
                             </form>
                             {% if feature_request.date_finished == None %}
                                 <form action="/finishFeature" method="post">
