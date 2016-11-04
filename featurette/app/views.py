@@ -43,10 +43,9 @@ def logout():
 
 
 @app.route('/')
-@app.route('/index')
 @login_required
 def index():
-    print current_user
+    print current_user.id
     print 'index'
     if not current_user.is_authenticated:
         return render_template('login.html')
@@ -148,7 +147,6 @@ def finishFeature():
 
 
 @app.route('/deleteFeature', methods=['POST'])
-@app.route('/deleteFeatures', methods=['POST'])
 @login_required
 def deleteFeature():
     feature_request_id = request.form['feature_request_id']
@@ -168,7 +166,6 @@ def users():
 
 
 @app.route('/addUser', methods=['GET', 'POST'])
-@app.route('/addUsers', methods=['GET', 'POST'])
 @login_required
 def addUsers():
     if request.method == 'POST':
@@ -187,7 +184,6 @@ def addUsers():
 
 
 @app.route('/editUser', methods=['POST', 'GET'])
-@app.route('/editUsers', methods=['POST', 'GET'])
 @login_required
 def editUser():
     if request.method == 'GET':
@@ -210,7 +206,6 @@ def editUser():
 
 
 @app.route('/deleteUser', methods=['POST'])
-@app.route('/deleteUsers', methods=['POST'])
 @login_required
 def deleteUser():
     user_id = request.form['user_id']
@@ -221,15 +216,12 @@ def deleteUser():
     flash(message)
     return redirect('/users')
 
-
 @app.route('/clients')
 @login_required
 def clients():
     clients = Client.query.all()
     return render_template('clients.html', clients=clients)
 
-
-@app.route('/addClients', methods=['GET', 'POST'])
 @app.route('/addClient', methods=['GET', 'POST'])
 @login_required
 def addClient():
@@ -246,7 +238,6 @@ def addClient():
 
 
 @app.route('/editClient', methods=['POST', 'GET'])
-@app.route('/editClients', methods=['POST', 'GET'])
 @login_required
 def editClient():
     if request.method == 'GET':
@@ -265,7 +256,6 @@ def editClient():
 
 
 @app.route('/deleteClient', methods=['POST'])
-@app.route('/deleteClients', methods=['POST'])
 @login_required
 def deleteClient():
     client_id = request.form['client_id']
@@ -284,7 +274,6 @@ def productAreas():
     return render_template('productAreas.html', product_areas=product_areas)
 
 
-@app.route('/addProductAreas', methods=['GET', 'POST'])
 @app.route('/addProductArea', methods=['GET', 'POST'])
 @login_required
 def addProductArea():
@@ -301,7 +290,6 @@ def addProductArea():
 
 
 @app.route('/editProductArea', methods=['POST', 'GET'])
-@app.route('/editProductAreas', methods=['POST', 'GET'])
 @login_required
 def editProductArea():
     if request.method == 'GET':
@@ -320,7 +308,6 @@ def editProductArea():
 
 
 @app.route('/deleteProductArea', methods=['POST'])
-@app.route('/deleteProductAreas', methods=['POST'])
 @login_required
 def deleteProductArea():
     product_area_id = request.form['product_area_id']
