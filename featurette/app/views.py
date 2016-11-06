@@ -45,10 +45,6 @@ def logout():
 @app.route('/')
 @login_required
 def index():
-    print current_user.id
-    print 'index'
-    if not current_user.is_authenticated:
-        return render_template('login.html')
     feature_requests = FeatureRequest.query.all()
     return render_template('index.html', feature_requests=feature_requests)
 
@@ -67,9 +63,9 @@ def addFeature():
         user = current_user
         user_id = current_user.id
         ticket_url = request.form['ticket_url']
-        date_finished = ''
+        date_finished = None
 
-        checkPriorities(client_id, client_priority)
+        checkPriorities(client_id, client_priority, title)
         feature_request = FeatureRequest(title, description, client_id, client_priority,
             product_area_id, user_id, target_date, ticket_url, date_finished)
 
@@ -107,7 +103,7 @@ def editFeature():
         ticket_url = request.form['ticket_url']
         user = current_user
 
-        checkPriorities(client_id, new_client_priority)
+        checkPriorities(client_id, new_client_priority, new_title)
 
         feature_request.title = title
         feature_request.description = description
@@ -123,14 +119,39 @@ def editFeature():
         return redirect('/')
 
 
-def checkPriorities(client_id, new_client_priority):
+def checkPriorities(client_id, new_client_priority, new_title):
+    #initializing priorities dictionary
+    priorities_dict = {}
     # find all active feature requests (with date_finished = None)
     features_same_client = FeatureRequest.query.filter(FeatureRequest.client_id==client_id)\
         .filter(FeatureRequest.date_finished == None)
-    for feature_priority in features_same_client:
-        #checking if client priority matches
-        if int(feature_priority.client_priority) == int(new_client_priority):
-            feature_priority.client_priority = feature_priority.client_priority + 1
+    #filling dictionary
+    for feature_same_client in features_same_client:
+        priorities_dict[str(feature_same_client.client_priority)] = feature_same_client.title
+    #checking if priority number exists
+    if str(new_client_priority) in priorities_dict:
+        #get data of existing priority (removing the key)
+        old_key = new_client_priority
+        old_title = priorities_dict[str(old_key)]
+        #while key exists continue incrementing by 1
+        while str(old_key) in priorities_dict:
+            aux = int(old_key)
+            aux = aux + 1
+            old_key = str(aux)
+        del priorities_dict[str(new_client_priority)]
+        #add new priority and title
+        priorities_dict[str(new_client_priority)] = new_title
+        #add old priority and title
+        priorities_dict[str(old_key)] = old_title
+        #get old Feature Request that matches the parameters
+        feature_request = FeatureRequest.query.filter(FeatureRequest.title==old_title)\
+            .filter(FeatureRequest.client_priority==new_client_priority)\
+            .filter(FeatureRequest.client_id==client_id)\
+            .one()
+
+        feature_request.client_priority = int(old_key)
+        db.session.add(feature_request)
+        db.session.commit()
 
 
 @app.route('/finishFeature', methods=['POST'])
@@ -173,7 +194,6 @@ def addUsers():
         email = request.form['email']
         password = request.form['password']
         user = User(username, email, bcrypt.generate_password_hash(password))
-        # TODO: put a confirm password on form and corresponding match validation
         db.session.add(user)
         db.session.commit()
         message = 'The user has been added successfully'
@@ -209,12 +229,17 @@ def editUser():
 @login_required
 def deleteUser():
     user_id = request.form['user_id']
-    user = User.query.get(user_id)
-    db.session.delete(user)
-    db.session.commit()
-    message = 'The user has been deleted'
-    flash(message)
-    return redirect('/users')
+    if int(current_user.id) != int(user_id):
+        user = User.query.get(user_id)
+        db.session.delete(user)
+        db.session.commit()
+        message = 'The user has been deleted'
+        flash(message)
+        return redirect('/users')
+    else:
+        message = 'You cannot delete yourself'
+        flash(message)
+        return redirect('/users')
 
 @app.route('/clients')
 @login_required
@@ -317,3 +342,11 @@ def deleteProductArea():
     message = 'The product area has been deleted'
     flash(message)
     return redirect('/productAreas')
+
+@app.errorhandler(401)
+def custom_401(error):
+    return render_template('login.html', errors=error)
+
+@app.errorhandler(404)
+def custom_404(error):
+    return render_template('404.html')

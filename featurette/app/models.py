@@ -11,6 +11,7 @@ class User(db.Model):
     authenticated = db.Column(db.Boolean, default=False)
     created_at = db.Column(db.DateTime(timezone=True), server_default=func.now())
     updated_at = db.Column(db.DateTime(timezone=True), onupdate=func.now())
+    feature_requests = db.relationship('FeatureRequest', cascade='delete')
 
     def __init__(self, username=None, email=None, password=None):
         self.username = username
@@ -37,6 +38,7 @@ class Client(db.Model):
     name = db.Column(db.String(100))
     created_at = db.Column(db.DateTime(timezone=True), server_default=func.now())
     updated_at = db.Column(db.DateTime(timezone=True), onupdate=func.now())
+    feature_requests = db.relationship('FeatureRequest', cascade='delete, delete-orphan')
 
     def __init__(self, name):
         self.name = name
@@ -48,6 +50,7 @@ class ProductArea(db.Model):
     name = db.Column(db.String(100))
     created_at = db.Column(db.DateTime(timezone=True), server_default=func.now())
     updated_at = db.Column(db.DateTime(timezone=True), onupdate=func.now())
+    feature_requests = db.relationship('FeatureRequest', cascade='delete, delete-orphan')
 
     def __init__(self, name):
         self.name = name
@@ -67,7 +70,7 @@ class FeatureRequest(db.Model):
     ticket_url = db.Column(db.String(100))
     date_finished = db.Column(db.DateTime(timezone=True))
     created_at = db.Column(db.DateTime(timezone=True), server_default=func.now())
-    updated_at = db.Column(db.DateTime(timezone=True), onupdate=func.now(), default='')
+    updated_at = db.Column(db.DateTime(timezone=True), onupdate=func.now())
 
     client = db.relationship('Client', foreign_keys=client_id)
     product_area = db.relationship('ProductArea', foreign_keys=product_area_id)

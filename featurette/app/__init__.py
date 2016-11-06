@@ -5,8 +5,8 @@ from flask_login import LoginManager
 from flask_alembic import Alembic
 
 app = Flask(__name__)
-#app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://featurette:br1teCor3@localhost/featurette'
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////tmp/featurette.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://featurette:br1teCor3@localhost/featurette'
+#app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////tmp/featurette.db'
 app.secret_key = 'br1teCor3'
 bcrypt = Bcrypt(app)
 login_manager = LoginManager()
