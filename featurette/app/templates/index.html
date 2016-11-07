@@ -18,7 +18,7 @@
                 </div>
             {% endif %}
         {% endwith %}
-
+        
         <h2> Feature Requests </h2>
 
         <table class="ui celled padded violet table">
@@ -70,7 +70,7 @@
                                     <button class="ui icon violet disabled button">
                                         <i class="edit icon"></i>
                                     </button>
-                                {% endif %}    
+                                {% endif %}
                             </form>
                             {% if feature_request.date_finished == None %}
                                 <form action="/finishFeature" method="post">
