@@ -1,0 +1,9 @@
+- go: http://localhost:5000/login
+- set_value:
+  - "#email"
+  - username1@foo.com
+- set_value:
+  - "#password"
+  - WrongPassword
+- click: "#login"
+- assert_text_on_page: Email or password are incorrect

@@ -1,0 +1,16 @@
+language: python
+python:
+  - 2.7
+addons:
+  firefox: "47.0.1"
+services:
+  - docker
+before_script:
+  - cd featurette
+  - docker-compose up --build -d
+script:
+  - python -m unittest discover tests
+  - webrunner tests/test_functional_login.yml
+  - webrunner tests/test_functional_login_unauth.yml
+after_script:
+  - docker-compose down

@@ -1,11 +1,13 @@
 import sys
 import os
-sys.path.append(os.path.abspath(os.path.dirname(__file__) + '/' + '../..'))
 from flask import Flask
-from app import app, db
 import unittest
-from app.models import User, Client
 from flask_testing import TestCase
+from flask_login import current_user
+sys.path.append(os.path.abspath(os.path.dirname(__file__) + '/' + '../..'))
+from app import app, db, bcrypt
+from app.models import User, Client
+
 
 class ClientUnitTest(TestCase):
 
@@ -33,7 +35,8 @@ class ClientUnitTest(TestCase):
 
     def test_restricted_user_endpoints_with_auth(self):
         user = User('username', 'username@foo.com', bcrypt.generate_password_hash('12345678'))
-        response = self.client.post('/login', { 'email': user.email, 'password': user.password})
+        response = self.client.post('/login', {'email': user.email, 'password':
+                                               user.password})
         responseClients = self.client.get('/clients')
         responseAddClients = self.client.get('/addClient')
         responseEditClients = self.client.get('/editClient')
@@ -41,7 +44,7 @@ class ClientUnitTest(TestCase):
         self.assertTrue(current_user.is_authenticated())
         self.assert200(responseClients)
         self.assert200(responseAddClients)
-        self.assert200(responseEditUsers)
+        self.assert200(responseEditClients)
         self.assert200(responseDeleteClients)
 
 if __name__ == '__main__':

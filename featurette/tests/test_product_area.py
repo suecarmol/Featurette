@@ -1,18 +1,20 @@
 import sys
 import os
-sys.path.append(os.path.abspath(os.path.dirname(__file__) + '/' + '../..'))
 from flask import Flask
-from app import app, db
 import unittest
-from app.models import User, ProductArea
-from flask_testing import TestCase
 
-class ProductAreaUnitTest(unittest.TestCase):
+from flask_testing import TestCase
+from flask_login import current_user
+sys.path.append(os.path.abspath(os.path.dirname(__file__) + '/' + '../..'))
+from app import app, db
+from app.models import User, ProductArea
+
+
+class ProductAreaUnitTest(TestCase):
 
     def create_app(self):
         app = Flask(__name__)
         app.config['TESTING'] = True
-        #app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://featurette:br1teCor3@localhost/featurette'
         return app
 
     def setUp(self):
@@ -34,7 +36,8 @@ class ProductAreaUnitTest(unittest.TestCase):
 
     def test_restricted_user_endpoints_with_auth(self):
         user = User('username', 'username@foo.com', bcrypt.generate_password_hash('12345678'))
-        response = self.client.post('/login', { 'email': user.email, 'password': user.password})
+        response = self.client.post('/login', {'email': user.email, 'password':
+                                               user.password})
         self.assertTrue(current_user.is_authenticated())
         responseProductAreas = self.client.get('/productArea')
         responseAddProductAreas = self.client.get('/addProductArea')

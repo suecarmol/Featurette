@@ -1,13 +1,15 @@
 import sys
 import os
-sys.path.append(os.path.abspath(os.path.dirname(__file__) + '/' + '../..'))
 from flask import Flask
-from app import app, db
 import unittest
-from app.models import User, FeatureRequest
 from flask_testing import TestCase
+from flask_login import current_user
+sys.path.append(os.path.abspath(os.path.dirname(__file__) + '/' + '../..'))
+from app.models import User, FeatureRequest
+from app import app, db, bcrypt
 
-class FeatureRequestUnitTest(unittest.TestCase):
+
+class FeatureRequestUnitTest(TestCase):
 
     def create_app(self):
         app = Flask(__name__)
@@ -33,7 +35,8 @@ class FeatureRequestUnitTest(unittest.TestCase):
 
     def test_restricted_user_endpoints_with_auth(self):
         user = User('username', 'username@foo.com', bcrypt.generate_password_hash('12345678'))
-        response = self.client.post('/login', { 'email': user.email, 'password': user.password})
+        response = self.client.post('/login', {'email': user.email, 'password':
+                                               user.password})
         self.assertTrue(current_user.is_authenticated())
         responseFeatures = self.client.get('/')
         responseAddFeatures = self.client.get('/addFeature')

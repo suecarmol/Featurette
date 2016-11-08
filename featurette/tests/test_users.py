@@ -1,19 +1,18 @@
-import sys
 import os
-sys.path.append(os.path.abspath(os.path.dirname(__file__) + '/' + '../..'))
-from flask import Flask
+import sys
 import unittest
-from app import app, db
-from app.models import User
+
+from flask_login import current_user
 from flask_testing import TestCase
-from flask_sqlalchemy import SQLAlchemy
+sys.path.append(os.path.abspath(os.path.dirname(__file__) + '/' + '..'))
+from app import app, bcrypt, db
+from app.models import User
+
 
 class UserUnitTest(TestCase):
 
     def create_app(self):
-        app = Flask(__name__)
         app.config['TESTING'] = True
-        app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://featurette:br1teCor3@localhost/featurette'
         return app
 
     def setUp(self):
@@ -34,8 +33,10 @@ class UserUnitTest(TestCase):
         self.assert401(responseDeleteUsers)
 
     def test_restricted_user_endpoints_with_auth(self):
-        user = User('username', 'username@foo.com', bcrypt.generate_password_hash('12345678'))
-        response = self.client.post('/login', { 'email': user.email, 'password': user.password})
+        user = User('username', 'username@foo.com',
+                    bcrypt.generate_password_hash('12345678'))
+        response = self.client.post('/login', {'email': user.email,
+                                    'password': user.password})
         responseUsers = self.client.get('/users')
         responseAddUsers = self.client.get('/addUser')
         responseEditUsers = self.client.get('/editUser')
@@ -52,8 +53,10 @@ class UserUnitTest(TestCase):
         self.assertFalse(auth)
 
     def test_login(self):
-        user = User('username', 'username@foo.com', bcrypt.generate_password_hash('12345678'))
-        response = self.client.post('/login', { 'email': user.email, 'password': user.password})
+        user = User('username', 'username@foo.com',
+                    bcrypt.generate_password_hash('12345678'))
+        response = self.client.post('/login', {'email': user.email,
+                                               'password': user.password})
         self.assertEquals(current_user.username, 'username')
         self.assertTrue(current_user.is_authenticated())
 
