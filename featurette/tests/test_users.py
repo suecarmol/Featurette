@@ -58,7 +58,7 @@ class UserUnitTest(TestCase):
                     bcrypt.generate_password_hash('12345678'))
         response = self.client.post('/login', {'email': user.email,
                                                'password': user.password})
-        self.assert200(responseUsers)
+        self.assert200(response)
         self.assertEquals(current_user.username, 'username')
         self.assertTrue(current_user.authenticated)
 

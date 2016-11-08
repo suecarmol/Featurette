@@ -41,6 +41,7 @@ class ClientUnitTest(TestCase):
         responseAddClients = self.client.get('/addClient')
         responseEditClients = self.client.get('/editClient')
         responseDeleteClients = self.client.get('/deleteClient')
+        self.assert200(response)
         self.assertTrue(current_user.is_authenticated())
         self.assert200(responseClients)
         self.assert200(responseAddClients)

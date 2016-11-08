@@ -42,6 +42,7 @@ class FeatureRequestUnitTest(TestCase):
         responseAddFeatures = self.client.get('/addFeature')
         responseEditFeatures = self.client.get('/editFeature')
         responseDeleteFeatures = self.client.get('/deleteFeature')
+        self.assert200(response)
         self.assert200(responseFeatures)
         self.assert200(responseAddFeatures)
         self.assert200(responseEditFeatures)

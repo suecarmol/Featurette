@@ -6,7 +6,7 @@ import unittest
 from flask_testing import TestCase
 from flask_login import current_user
 sys.path.append(os.path.abspath(os.path.dirname(__file__) + '/' + '../..'))
-from app import app, db
+from app import app, db, bcrypt
 from app.models import User, ProductArea
 
 
@@ -43,6 +43,7 @@ class ProductAreaUnitTest(TestCase):
         responseAddProductAreas = self.client.get('/addProductArea')
         responseEditProductAreas = self.client.get('/editProductArea')
         responseDeleteProductAreas = self.client.get('/deleteProductArea')
+        self.assert200(response)
         self.assert200(responseProductAreas)
         self.assert200(responseAddProductAreas)
         self.assert200(responseEditProductAreas)
