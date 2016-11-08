@@ -1,6 +1,7 @@
 {% extends "menu_bar.html" %}
     {% block head %}
         {{ super() }}
+        <script src="static/tablesort.js"></script>
         <script src="static/index.js"></script>
     {% endblock %}
     {% block content %}
@@ -18,10 +19,10 @@
                 </div>
             {% endif %}
         {% endwith %}
-        
+
         <h2> Feature Requests </h2>
 
-        <table class="ui celled padded violet table">
+        <table class="ui sortable celled padded violet table">
             <thead>
                 <tr>
                     <th class="single line">Title</th>
