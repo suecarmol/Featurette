@@ -7,6 +7,7 @@ services:
   - docker
 before_script:
   - cd featurette
+  - pip install -r requirements.txt
   - docker-compose up --build -d
 script:
   - python -m unittest discover tests

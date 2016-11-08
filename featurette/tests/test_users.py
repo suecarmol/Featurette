@@ -42,6 +42,7 @@ class UserUnitTest(TestCase):
         responseEditUsers = self.client.get('/editUser')
         responseDeleteUsers = self.client.get('/deleteUser')
         self.assertTrue(current_user.is_authenticated())
+        self.assert200(response)
         self.assert200(responseUsers)
         self.assert200(responseAddUsers)
         self.assert200(responseEditUsers)
@@ -57,11 +58,13 @@ class UserUnitTest(TestCase):
                     bcrypt.generate_password_hash('12345678'))
         response = self.client.post('/login', {'email': user.email,
                                                'password': user.password})
+        self.assert200(responseUsers)
         self.assertEquals(current_user.username, 'username')
-        self.assertTrue(current_user.is_authenticated())
+        self.assertTrue(current_user.authenticated)
 
     def test_logout(self):
         response = self.client.get('/logout')
+        self.assert200(response)
         self.assertFalse(current_user.authenticated)
 
 
