@@ -3,11 +3,11 @@ sudo: required
 python:
   - 2.7
 services:
-  - docker
   - mysql
-script:
+install:
   - cd featurette
   - pip install -r requirements.txt
+script:
   - python -m unittest discover tests
   - webrunner tests/test_functional_login.yml
   - webrunner tests/test_functional_login_unauth.yml
@@ -21,3 +21,4 @@ before_script:
   - export DISPLAY=:99.0
   - "sh -e /etc/init.d/xvfb start"
   - sleep 3
+  - nohup python run.py &

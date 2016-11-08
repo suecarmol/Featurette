@@ -13,6 +13,7 @@ class UserUnitTest(TestCase):
 
     def create_app(self):
         app.config['TESTING'] = True
+        app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://featurette:br1teCor3@127.0.0.1/featurette'
         return app
 
     def setUp(self):
