@@ -1,4 +1,11 @@
 #!venv/bin/python
+import os
+
 from app import app
 
-app.run(debug=True, host='0.0.0.0')
+try:
+    host = os.environ['HOST']
+except:
+    host = '127.0.0.1'
+
+app.run(debug=True, host=host)

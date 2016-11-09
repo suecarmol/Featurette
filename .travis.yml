@@ -9,6 +9,7 @@ install:
   - pip install -r requirements.txt
 script:
   - python -m unittest discover tests
+  - pip install PyWebRunner
   - webrunner tests/test_functional_login.yml
   - webrunner tests/test_functional_login_unauth.yml
 # https://github.com/SeleniumHQ/selenium/blob/master/.travis.yml
@@ -23,4 +24,4 @@ before_script:
   - sleep 3
   - nohup python run.py &
 before_install:
-  - mysql -e "create database IF NOT EXISTS featurette-test;" -uroot
+  - mysql -e "create database IF NOT EXISTS featurette;" -uroot

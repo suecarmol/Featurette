@@ -5,6 +5,7 @@ from flask import render_template, request, redirect, flash, url_for
 from flask_login import login_required, current_user, login_user, logout_user
 from models import User, ProductArea, Client, FeatureRequest, db
 
+
 @app.route('/login', methods=['POST', 'GET'])
 def login():
     if request.method == 'POST':

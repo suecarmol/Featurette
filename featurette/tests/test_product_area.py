@@ -15,7 +15,7 @@ class ProductAreaUnitTest(TestCase):
     def create_app(self):
         app = Flask(__name__)
         app.config['TESTING'] = True
-        app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root@127.0.0.1/featurette-test'
+        app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root@127.0.0.1/featurette'
         return app
 
     def setUp(self):
