@@ -12,6 +12,7 @@ services:
     environment:
       - HOST=0.0.0.0
       - MYSQL_HOST=db
+      -MYSQL_USER_PASS=featurette:br1teCor3
   db:
     image: mysql:5.7
     volumes:

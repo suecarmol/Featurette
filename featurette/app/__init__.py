@@ -9,7 +9,12 @@ try:
 except:
     host = '127.0.0.1'
 
-DB_URI = 'mysql://featurette:br1teCor3@{}/featurette'.format(host)
+try:
+    mysql_user_pass = os.environ['MYSQL_USER_PASS']
+except:
+    mysql_user_pass = 'root'
+
+DB_URI = 'mysql://{}}@{}/featurette'.format(mysql_user_pass, host)
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = DB_URI
