@@ -22,3 +22,5 @@ before_script:
   - "sh -e /etc/init.d/xvfb start"
   - sleep 3
   - nohup python run.py &
+before_install:
+  - mysql -e "create database IF NOT EXISTS featurette-test;" -uroot

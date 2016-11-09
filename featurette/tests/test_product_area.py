@@ -15,7 +15,7 @@ class ProductAreaUnitTest(TestCase):
     def create_app(self):
         app = Flask(__name__)
         app.config['TESTING'] = True
-        app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://featurette:br1teCor3@127.0.0.1/featurette'
+        app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root@127.0.0.1/featurette-test'
         return app
 
     def setUp(self):
@@ -25,7 +25,7 @@ class ProductAreaUnitTest(TestCase):
         db.session.remove()
         db.drop_all()
 
-    def test_restricted_user_endpoints_without_auth(self):
+    def test_restricted_product_area_endpoints_without_auth(self):
         responseProductAreas = self.client.get('/productArea')
         responseAddProductAreas = self.client.get('/addProductArea')
         responseEditProductAreas = self.client.get('/editProductArea')
@@ -35,7 +35,7 @@ class ProductAreaUnitTest(TestCase):
         self.assert401(responseEditProductAreas)
         self.assert401(responseDeleteProductAreas)
 
-    def test_restricted_user_endpoints_with_auth(self):
+    def test_restricted_product_area_endpoints_with_auth(self):
         user = User('username', 'username@foo.com', bcrypt.generate_password_hash('12345678'))
         response = self.client.post('/login', {'email': user.email, 'password':
                                                user.password})
@@ -49,6 +49,12 @@ class ProductAreaUnitTest(TestCase):
         self.assert200(responseAddProductAreas)
         self.assert200(responseEditProductAreas)
         self.assert200(responseDeleteProductAreas)
+
+    def test_add_product_area(self):
+        product_area = ProductArea('Product Area 1')
+        response = self.client.post('/addClient', {'name': product_area.name})
+        self.assert200(response)
+        self.assertRedirects(response, '/productArea')
 
 if __name__ == '__main__':
     unittest.main()

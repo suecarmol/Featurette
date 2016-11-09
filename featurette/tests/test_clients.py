@@ -14,7 +14,7 @@ class ClientUnitTest(TestCase):
     def create_app(self):
         app = Flask(__name__)
         app.config['TESTING'] = True
-        app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://featurette:br1teCor3@127.0.0.1/featurette'
+        app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root@127.0.0.1/featurette-test'
         return app
 
     def setUp(self):
@@ -24,30 +24,36 @@ class ClientUnitTest(TestCase):
         db.session.remove()
         db.drop_all()
 
-    def test_restricted_user_endpoints_without_auth(self):
-        responseClients = self.client.get('/clients')
-        responseAddClients = self.client.get('/addClient')
-        responseEditClients = self.client.get('/editClient')
-        responseDeleteClients = self.client.get('/deleteClient')
-        self.assert401(responseClients)
-        self.assert401(responseAddClients)
-        self.assert401(responseEditClients)
-        self.assert401(responseDeleteClients)
+    def test_restricted_client_endpoints_without_auth(self):
+        response_clients = self.client.get('/clients')
+        response_add_clients = self.client.get('/addClient')
+        response_edit_clients = self.client.get('/editClient')
+        response_delete_clients = self.client.get('/deleteClient')
+        self.assert401(response_clients)
+        self.assert401(response_add_clients)
+        self.assert401(response_edit_clients)
+        self.assert401(response_delete_clients)
 
-    def test_restricted_user_endpoints_with_auth(self):
+    def test_restricted_client_endpoints_with_auth(self):
         user = User('username', 'username@foo.com', bcrypt.generate_password_hash('12345678'))
         response = self.client.post('/login', {'email': user.email, 'password':
                                                user.password})
-        responseClients = self.client.get('/clients')
-        responseAddClients = self.client.get('/addClient')
-        responseEditClients = self.client.get('/editClient')
-        responseDeleteClients = self.client.get('/deleteClient')
+        response_clients = self.client.get('/clients')
+        response_add_clients = self.client.get('/addClient')
+        response_edit_clients = self.client.get('/editClient')
+        response_delete_clients = self.client.get('/deleteClient')
         self.assert200(response)
         self.assertTrue(current_user.is_authenticated())
-        self.assert200(responseClients)
-        self.assert200(responseAddClients)
-        self.assert200(responseEditClients)
-        self.assert200(responseDeleteClients)
+        self.assert200(response_clients)
+        self.assert200(response_add_clients)
+        self.assert200(response_edit_clients)
+        self.assert200(response_delete_clients)
+
+    def test_add_client(self):
+        client = Client('Client 1')
+        response = self.client.post('/addClient', {'name': client.name})
+        self.assert200(response)
+        self.assertRedirects(response, '/clients')
 
 if __name__ == '__main__':
     unittest.main()
