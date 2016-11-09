@@ -14,7 +14,7 @@ try:
 except:
     mysql_user_pass = 'root'
 
-DB_URI = 'mysql://{}}@{}/featurette'.format(mysql_user_pass, host)
+DB_URI = 'mysql://{}@{}/featurette'.format(mysql_user_pass, host)
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = DB_URI
