@@ -8,6 +8,7 @@ install:
   - pip install -r requirements.txt
   - pip install PyWebRunner
 script:
+  - sleep 90 # hard wait for docker compose
   - docker exec -it featurette_www_1 python -m unittest discover tests
   - webrunner tests/test_functional_login.yml
   - webrunner tests/test_functional_login_unauth.yml
@@ -17,7 +18,7 @@ before_script:
   - unzip chromedriver_linux64.zip
   - export PATH=$PATH:$PWD
   - sleep 3
-  - docker-compose up
+  - docker-compose up -d
 before_install:
   - export CHROMEDRIVER_BINARY=/usr/bin/chromium-browser
   - export CHROMEDRIVER_ARGS=--no-sandbox

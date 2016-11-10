@@ -34,7 +34,8 @@ class FeatureRequestUnitTest(TestCase):
         self.assert401(responseDeleteFeatures)
 
     def test_restricted_user_endpoints_with_auth(self):
-        user = User('username', 'username@foo.com', bcrypt.generate_password_hash('12345678'))
+        user = User('username', 'username@foo.com', bcrypt.generate_password_hash
+                    ('12345678'))
         response = self.client.post('/login', {'email': user.email, 'password':
                                                user.password})
         self.assertTrue(current_user.is_authenticated())

@@ -29,11 +29,13 @@ class UserUnitTest(TestCase):
         assert user in db.session
         response = self.client.post('/login', {'email': user.email,
                                     'password': user.password})
+        self.assert200(response)
         logout = self.client.get('/logout')
         response_users = self.client.get('/users')
         response_add_users = self.client.get('/addUser')
         response_edit_users = self.client.get('/editUser')
         response_delete_users = self.client.get('/deleteUser')
+        self.assert200(logout)
         self.assert401(response_users)
         self.assert401(response_add_users)
         self.assert401(response_edit_users)

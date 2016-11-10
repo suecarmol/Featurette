@@ -22,7 +22,8 @@ class ProductAreaUnitTest(TestCase):
         db.drop_all()
 
     def test_restricted_product_area_endpoints_without_auth(self):
-        user = User('username', 'username@foo.com', bcrypt.generate_password_hash('12345678'))
+        user = User('username', 'username@foo.com', bcrypt.generate_password_hash
+                    ('12345678'))
         db.session.add(user)
         db.session.commit()
         assert user in db.session
@@ -43,7 +44,8 @@ class ProductAreaUnitTest(TestCase):
         self.assert401(response_delete_product_areas)
 
     def test_restricted_product_area_endpoints_with_auth(self):
-        user = User('username', 'username@foo.com', bcrypt.generate_password_hash('12345678'))
+        user = User('username', 'username@foo.com', bcrypt.generate_password_hash
+                    ('12345678'))
         db.session.add(user)
         db.session.commit()
         assert user in db.session
