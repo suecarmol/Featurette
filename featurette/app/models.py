@@ -1,6 +1,6 @@
-import datetime
+from datetime import datetime
 from app import db
-from sqlalchemy.sql import func, text
+from sqlalchemy import text
 
 
 class User(db.Model):
@@ -11,11 +11,10 @@ class User(db.Model):
     email = db.Column(db.String(120), index=True, unique=True)
     password = db.Column(db.String(255))
     authenticated = db.Column(db.Boolean, default=False)
-    created_at = db.Column(db.DateTime(timezone=True), server_default=datetime.
-                           now())
-    updated_at = db.Column(db.DateTime(timezone=True), onupdate=func.
-                           current_timestamp(), server_default=text
-                           ('CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP'))
+    created_at = db.Column(db.DateTime(timezone=True), default=datetime.now(),
+                           server_default=text('NOW()'))
+    updated_at = db.Column(db.DateTime(timezone=True), onupdate=datetime.now(),
+                           server_default=text('NOW()'))
     feature_requests = db.relationship('FeatureRequest', cascade='delete')
 
     def __init__(self, username=None, email=None, password=None):
@@ -41,10 +40,10 @@ class Client(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100))
-    created_at = db.Column(db.DateTime(timezone=True), server_default=func.
-                           current_timestamp())
-    updated_at = db.Column(db.DateTime(timezone=True), onupdate=func.
-                           current_timestamp())
+    created_at = db.Column(db.DateTime(timezone=True), default=datetime.
+                           now(), server_default=text('NOW()'))
+    updated_at = db.Column(db.DateTime(timezone=True), onupdate=datetime.
+                           now(), server_default=text('NOW()'))
     feature_requests = db.relationship('FeatureRequest', cascade='delete, \
         delete-orphan')
 
@@ -57,10 +56,10 @@ class ProductArea(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100))
-    created_at = db.Column(db.DateTime(timezone=True), server_default=func.
-                           current_timestamp())
-    updated_at = db.Column(db.DateTime(timezone=True), onupdate=func.
-                           current_timestamp())
+    created_at = db.Column(db.DateTime(timezone=True), default=datetime.
+                           now(), server_default=text('NOW()'))
+    updated_at = db.Column(db.DateTime(timezone=True), onupdate=datetime.
+                           now(), server_default=text('NOW()'))
     feature_requests = db.relationship('FeatureRequest', cascade='delete, \
         delete-orphan')
 
@@ -81,10 +80,10 @@ class FeatureRequest(db.Model):
     target_date = db.Column(db.DateTime(timezone=True))
     ticket_url = db.Column(db.String(100))
     date_finished = db.Column(db.DateTime(timezone=True))
-    created_at = db.Column(db.DateTime(timezone=True), server_default=func.
-                           current_timestamp())
-    updated_at = db.Column(db.DateTime(timezone=True), onupdate=func.
-                           current_timestamp())
+    created_at = db.Column(db.DateTime(timezone=True), default=datetime.
+                           now(), server_default=text('NOW()'))
+    updated_at = db.Column(db.DateTime(timezone=True), onupdate=datetime.
+                           now(), server_default=text('NOW()'))
     client = db.relationship('Client', foreign_keys=client_id)
     product_area = db.relationship('ProductArea', foreign_keys=product_area_id)
     user = db.relationship('User', foreign_keys=user_id)
