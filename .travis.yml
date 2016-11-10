@@ -8,7 +8,7 @@ install:
   - pip install -r requirements.txt
   - pip install PyWebRunner
 script:
-  - docker exec -it www python -m unittest discover tests
+  - docker exec -it featurette_www_1 python -m unittest discover tests
   - webrunner tests/test_functional_login.yml
   - webrunner tests/test_functional_login_unauth.yml
 # https://github.com/SeleniumHQ/selenium/blob/master/.travis.yml
