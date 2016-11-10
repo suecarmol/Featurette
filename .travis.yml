@@ -17,7 +17,7 @@ before_script:
   - unzip chromedriver_linux64.zip
   - export PATH=$PATH:$PWD
   - sleep 3
-  - docker-compose up --build -d
+  - docker-compose up
 before_install:
   - export CHROMEDRIVER_BINARY=/usr/bin/chromium-browser
   - export CHROMEDRIVER_ARGS=--no-sandbox
