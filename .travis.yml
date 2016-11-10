@@ -4,11 +4,10 @@ python:
   - 2.7
 services:
   - mysql
-install:
+script:
   - cd featurette
   - pip install -r requirements.txt
   - pip install PyWebRunner
-script:
   - python -m unittest discover tests
   - webrunner tests/test_functional_login.yml
   - webrunner tests/test_functional_login_unauth.yml
@@ -16,12 +15,12 @@ script:
 before_script:
   - sudo apt-get -y purge chromium-browser
   - curl -L -O "http://chromedriver.storage.googleapis.com/2.23/chromedriver_linux64.zip"
-  - unzip chromedriver_linux64.zip && chmod +x chromedriver && sudo mv chromedriver /usr/bin
+  - unzip chromedriver_linux64.zip && chmod +x chromedriver && sudo mv chromedriver /usr/local/bin
   - export CHROMEDRIVER_VERSION=2.23
   - export CHROME_BIN=chromium-browser
   - export DISPLAY=:99.0
   - "sh -e /etc/init.d/xvfb start"
   - sleep 3
-  - nohup python run.py &
 before_install:
-  - mysql -e "create database IF NOT EXISTS featurette;" -uroot
+  - mysql -e "CREATE DATABASE IF NOT EXISTS featurette;" -uroot
+  - mysql -e "SET sql_mode = '';" -uroot
