@@ -11,9 +11,9 @@ class User(db.Model):
     password = db.Column(db.String(255))
     authenticated = db.Column(db.Boolean, default=False)
     created_at = db.Column(db.DateTime(timezone=True), server_default=func.
-                           utc_timestamp())
+                           current_timestamp())
     updated_at = db.Column(db.DateTime(timezone=True), onupdate=func.
-                           utc_timestamp())
+                           current_timestamp())
     feature_requests = db.relationship('FeatureRequest', cascade='delete')
 
     def __init__(self, username=None, email=None, password=None):
@@ -40,9 +40,9 @@ class Client(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100))
     created_at = db.Column(db.DateTime(timezone=True), server_default=func.
-                           utc_timestamp())
+                           current_timestamp())
     updated_at = db.Column(db.DateTime(timezone=True), onupdate=func.
-                           utc_timestamp())
+                           current_timestamp())
     feature_requests = db.relationship('FeatureRequest', cascade='delete, \
         delete-orphan')
 
@@ -56,9 +56,9 @@ class ProductArea(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100))
     created_at = db.Column(db.DateTime(timezone=True), server_default=func.
-                           utc_timestamp())
+                           current_timestamp())
     updated_at = db.Column(db.DateTime(timezone=True), onupdate=func.
-                           utc_timestamp())
+                           current_timestamp())
     feature_requests = db.relationship('FeatureRequest', cascade='delete, \
         delete-orphan')
 
@@ -80,9 +80,9 @@ class FeatureRequest(db.Model):
     ticket_url = db.Column(db.String(100))
     date_finished = db.Column(db.DateTime(timezone=True))
     created_at = db.Column(db.DateTime(timezone=True), server_default=func.
-                           utc_timestamp())
+                           current_timestamp())
     updated_at = db.Column(db.DateTime(timezone=True), onupdate=func.
-                           utc_timestamp())
+                           current_timestamp())
     client = db.relationship('Client', foreign_keys=client_id)
     product_area = db.relationship('ProductArea', foreign_keys=product_area_id)
     user = db.relationship('User', foreign_keys=user_id)
