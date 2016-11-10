@@ -1,5 +1,6 @@
+import datetime
 from app import db
-from sqlalchemy.sql import func
+from sqlalchemy.sql import func, text
 
 
 class User(db.Model):
@@ -10,10 +11,11 @@ class User(db.Model):
     email = db.Column(db.String(120), index=True, unique=True)
     password = db.Column(db.String(255))
     authenticated = db.Column(db.Boolean, default=False)
-    created_at = db.Column(db.DateTime(timezone=True), server_default=func.
-                           current_timestamp())
+    created_at = db.Column(db.DateTime(timezone=True), server_default=datetime.
+                           now())
     updated_at = db.Column(db.DateTime(timezone=True), onupdate=func.
-                           current_timestamp())
+                           current_timestamp(), server_default=text
+                           ('CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP'))
     feature_requests = db.relationship('FeatureRequest', cascade='delete')
 
     def __init__(self, username=None, email=None, password=None):
