@@ -50,7 +50,7 @@ def index():
     return render_template('index.html', feature_requests=feature_requests)
 
 
-@app.route('/addFeature', methods=['GET','POST'])
+@app.route('/addFeature', methods=['GET', 'POST'])
 @login_required
 def addFeature():
     if request.method == 'POST':
@@ -79,7 +79,7 @@ def addFeature():
         clients = Client.query.all()
         product_areas = ProductArea.query.all()
         return render_template('addFeature.html', clients=clients,
-            product_areas=product_areas)
+                               product_areas=product_areas)
 
 
 @app.route('/editFeature', methods=['POST', 'GET'])
@@ -91,7 +91,7 @@ def editFeature():
         clients = Client.query.all()
         product_areas = ProductArea.query.all()
         return render_template('editFeature.html', feature_request=feature_request,
-            clients=clients, product_areas=product_areas)
+                               clients=clients, product_areas=product_areas)
     else:
         feature_request_id = request.form['feature_request_id']
         feature_request = FeatureRequest.query.get(feature_request_id)
@@ -104,7 +104,7 @@ def editFeature():
         ticket_url = request.form['ticket_url']
         user = current_user
 
-        checkPriorities(client_id, new_client_priority, new_title)
+        checkPriorities(client_id, new_client_priority, title)
 
         feature_request.title = title
         feature_request.description = description
@@ -121,30 +121,30 @@ def editFeature():
 
 
 def checkPriorities(client_id, new_client_priority, new_title):
-    #initializing priorities dictionary
+    # initializing priorities dictionary
     priorities_dict = {}
     # find all active feature requests (with date_finished = None)
     features_same_client = FeatureRequest.query.filter(FeatureRequest.client_id==client_id)\
         .filter(FeatureRequest.date_finished == None)
-    #filling dictionary
+    # filling dictionary
     for feature_same_client in features_same_client:
         priorities_dict[str(feature_same_client.client_priority)] = feature_same_client.title
-    #checking if priority number exists
+    # checking if priority number exists
     if str(new_client_priority) in priorities_dict:
-        #get data of existing priority (removing the key)
+        # get data of existing priority (removing the key)
         old_key = new_client_priority
         old_title = priorities_dict[str(old_key)]
-        #while key exists continue incrementing by 1
+        # while key exists continue incrementing by 1
         while str(old_key) in priorities_dict:
             aux = int(old_key)
             aux = aux + 1
             old_key = str(aux)
         del priorities_dict[str(new_client_priority)]
-        #add new priority and title
+        # add new priority and title
         priorities_dict[str(new_client_priority)] = new_title
-        #add old priority and title
+        # add old priority and title
         priorities_dict[str(old_key)] = old_title
-        #get old Feature Request that matches the parameters
+        # get old Feature Request that matches the parameters
         feature_request = FeatureRequest.query.filter(FeatureRequest.title==old_title)\
             .filter(FeatureRequest.client_priority==new_client_priority)\
             .filter(FeatureRequest.client_id==client_id)\
@@ -344,9 +344,11 @@ def deleteProductArea():
     flash(message)
     return redirect('/productAreas')
 
+
 @app.errorhandler(401)
 def custom_401(error):
     return render_template('login.html', errors=error)
+
 
 @app.errorhandler(404)
 def custom_404(error):

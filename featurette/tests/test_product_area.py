@@ -1,11 +1,9 @@
 import sys
 import os
-from flask import Flask
 import unittest
 
 from flask_testing import TestCase
-from flask_login import current_user
-sys.path.append(os.path.abspath(os.path.dirname(__file__) + '/' + '../..'))
+sys.path.append(os.path.abspath(os.path.dirname(__file__) + '/' + '..'))
 from app import app, db, bcrypt
 from app.models import User, ProductArea
 
@@ -13,7 +11,6 @@ from app.models import User, ProductArea
 class ProductAreaUnitTest(TestCase):
 
     def create_app(self):
-        app = Flask(__name__)
         app.config['TESTING'] = True
         app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root@127.0.0.1/featurette'
         return app
@@ -26,35 +23,52 @@ class ProductAreaUnitTest(TestCase):
         db.drop_all()
 
     def test_restricted_product_area_endpoints_without_auth(self):
-        responseProductAreas = self.client.get('/productArea')
-        responseAddProductAreas = self.client.get('/addProductArea')
-        responseEditProductAreas = self.client.get('/editProductArea')
-        responseDeleteProductAreas = self.client.get('/deleteProductArea')
-        self.assert401(responseProductAreas)
-        self.assert401(responseAddProductAreas)
-        self.assert401(responseEditProductAreas)
-        self.assert401(responseDeleteProductAreas)
+        user = User('username', 'username@foo.com', bcrypt.generate_password_hash('12345678'))
+        db.session.add(user)
+        db.session.commit()
+        assert user in db.session
+        response_login = self.client.post('/login', {'email': user.email,
+                                                     'password': user.password})
+        self.assert200(response_login)
+        self.assertTrue(user.authenticated)
+        response_logout = self.client.get('/logout')
+        self.assert200(response_logout)
+        response_product_areas = self.client.get('/productArea')
+        response_add_product_areas = self.client.get('/addProductArea')
+        response_edit_product_areas = self.client.get('/editProductArea')
+        response_delete_product_areas = self.client.get('/deleteProductArea')
+        self.assertFalse(user.authenticated)
+        self.assert401(response_product_areas)
+        self.assert401(response_add_product_areas)
+        self.assert401(response_edit_product_areas)
+        self.assert401(response_delete_product_areas)
 
     def test_restricted_product_area_endpoints_with_auth(self):
         user = User('username', 'username@foo.com', bcrypt.generate_password_hash('12345678'))
+        db.session.add(user)
+        db.session.commit()
+        assert user in db.session
         response = self.client.post('/login', {'email': user.email, 'password':
                                                user.password})
-        self.assertTrue(current_user.is_authenticated())
-        responseProductAreas = self.client.get('/productArea')
-        responseAddProductAreas = self.client.get('/addProductArea')
-        responseEditProductAreas = self.client.get('/editProductArea')
-        responseDeleteProductAreas = self.client.get('/deleteProductArea')
         self.assert200(response)
-        self.assert200(responseProductAreas)
-        self.assert200(responseAddProductAreas)
-        self.assert200(responseEditProductAreas)
-        self.assert200(responseDeleteProductAreas)
+        self.assertTrue(user.authenticated)
+        response_product_areas = self.client.get('/productArea')
+        response_add_product_areas = self.client.get('/addProductArea')
+        response_edit_product_areas = self.client.get('/editProductArea')
+        response_delete_product_areas = self.client.get('/deleteProductArea')
+        self.assert200(response_product_areas)
+        self.assert200(response_add_product_areas)
+        self.assert200(response_edit_product_areas)
+        self.assert200(response_delete_product_areas)
 
     def test_add_product_area(self):
         product_area = ProductArea('Product Area 1')
         response = self.client.post('/addClient', {'name': product_area.name})
+        db.session.add(product_area)
+        db.session.commit()
+        assert product_area in db.session
         self.assert200(response)
-        self.assertRedirects(response, '/productArea')
+        self.assertRedirects(response, '/productAreas')
 
 if __name__ == '__main__':
     unittest.main()
