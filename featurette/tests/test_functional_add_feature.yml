@@ -10,7 +10,7 @@
   - Client A
 -set_value:
   - "#target-date"
-  -2016-11-05
+  - 2016-11-05
 -set_value:
   - "#product_area"
   - Claims
