@@ -17,7 +17,7 @@
                 </div>
             {% endif %}
         {% endwith %}
-        
+
         <h2> Clients </h2>
 
         <table class="ui celled padded violet table">
@@ -35,13 +35,13 @@
                         </td>
                         <td class="single line">
                             <form action="/editClient" method="GET">
-                                <button class="ui icon violet button" name="client_id"
+                                <button id="edit_client" class="ui icon violet button" name="client_id"
                                     value="{{ client.id }}">
                                     <i class="edit icon"></i>
                                 </button>
                             </form>
                             <form action="/deleteClient" method="POST">
-                                <button class="ui icon red button" name="client_id"
+                                <button id="delete_client" class="ui icon red button" name="client_id"
                                     value="{{ client.id }}">
                                     <i class="delete icon"></i>
                                 </button>
@@ -53,7 +53,7 @@
             <tfoot class="full-width">
                 <tr>
                     <th colspan="2">
-                        <a class="ui right floated button violet" href="/addClient">
+                        <a id="add_client" class="ui right floated button violet" href="/addClient">
                             <i class="add user icon"></i>
                             Add Client
                         </a>

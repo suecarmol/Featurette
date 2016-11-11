@@ -8,13 +8,16 @@ install:
   - pip install -r requirements.txt
   - pip install PyWebRunner
 script:
-  - sleep 50 # hard wait for docker compose
+  - sleep 40 # hard wait for docker compose
   - docker exec -it featurette_www_1 python -m unittest discover -v tests
   - webrunner tests/test_functional_login.yml
   - webrunner tests/test_functional_login_unauth.yml
   - webrunner tests/test_functional_add_client.yml
   - webrunner tests/test_functional_add_feature.yml
   - webrunner tests/test_functional_add_product_area.yml
+  - webrunner tests/test_functional_add_user.yml
+  - webrunner tests/test_functional_add_client_empty.yml
+  - webrunner tests/test__functional_add_product_area_empty.yml
 # https://github.com/SeleniumHQ/selenium/blob/master/.travis.yml
 before_script:
   - wget http://chromedriver.storage.googleapis.com/2.12/chromedriver_linux64.zip

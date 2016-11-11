@@ -1,0 +1,24 @@
+- go: http://localhost:5000/addUser
+- set_value:
+  - "#email"
+  - username1@foo.com
+- set_value:
+  - "#password"
+  - 12345678
+- click: "#login"
+- click: "#users_id"
+- click: "#add_user"
+- set_value:
+  - "#username"
+  - AUser
+- set_value:
+  - "#email"
+  - email@foo.com
+- set_value:
+  - "#password"
+  - 12345678
+- set_value:
+  - "#repeat_password"
+  - 12345678
+- click: "#submit"
+- assert_text_on_page: The user has been added successfully

@@ -63,7 +63,7 @@
                         <td class="single line">
                             <form action="/editFeature" method="GET">
                                 {% if feature_request.date_finished == None%}
-                                    <button class="ui icon violet button" value="{{feature_request.id}}"
+                                    <button id="edit_feature" class="ui icon violet button" value="{{feature_request.id}}"
                                         name="edit_feature_request">
                                         <i class="edit icon"></i>
                                     </button>
@@ -75,7 +75,7 @@
                             </form>
                             {% if feature_request.date_finished == None %}
                                 <form action="/finishFeature" method="post">
-                                    <button class="ui icon green button" name="feature_request_id"
+                                    <button id="finish_feature" class="ui icon green button" name="feature_request_id"
                                         value="{{ feature_request.id }}">
                                         <i class="check icon"></i>
                                     </button>
@@ -86,7 +86,7 @@
                                 </button>
                             {% endif %}
                             <form action="/deleteFeature" method="POST">
-                                <button class="ui icon red button" value="{{feature_request.id}}"
+                                <button id="delete_feature" class="ui icon red button" value="{{feature_request.id}}"
                                     name="feature_request_id">
                                     <i class="delete icon"></i>
                                 </button>
@@ -98,7 +98,7 @@
             <tfoot class="full-width">
                 <tr>
                     <th colspan="9">
-                        <a class="ui right floated button violet" href="/addFeature">
+                        <a id="add_feature" class="ui right floated button violet" href="/addFeature">
                             <i class="plus icon"></i>
                             Add Feature Request
                         </a>

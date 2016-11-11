@@ -32,12 +32,12 @@
                         <td>{{ product_area.name }}</td>
                         <td class="single line">
                             <form action="/editProductArea" method="GET">
-                                <button class="ui icon violet button" name="product_area_id"
+                                <button id="edit_product_area" class="ui icon violet button" name="product_area_id"
                                     value="{{ product_area.id }}">
                                     <i class="edit icon"></i>
                                 </button>
                             </form>
-                            <form action="/deleteProductArea" method="POST">
+                            <form id="delete_product_area" action="/deleteProductArea" method="POST">
                                 <button class="ui icon red button" type="submit"
                                     name="product_area_id" value="{{ product_area.id }}">
                                     <i class="delete icon"></i>
@@ -50,7 +50,7 @@
             <tfoot class="full-width">
                 <tr>
                     <th colspan="2">
-                        <a class="ui right floated button violet" href="/addProductArea">
+                        <a id="add_product_area" class="ui right floated button violet" href="/addProductArea">
                             <i class="plus icon"></i>
                             Add Product Area
                         </a>

@@ -8,8 +8,5 @@
 - click: "#login"
 - click: "#clients_id"
 - click: "#add_client"
-- set_value:
-  - "#client_name"
-  - Client Z
 - click: "#submit"
-- assert_text_on_page: The client has been added successfully
+- assert_text_on_page: Please enter a client

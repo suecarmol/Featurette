@@ -1,20 +1,31 @@
 - go: http://localhost:5000/addFeature
 - set_value:
+  - "#email"
+  - username1@foo.com
+- set_value:
+  - "#password"
+  - 12345678
+- click: "#login"
+- click: "#add_feature"
+- set_value:
   - "#request_title"
   - This is a title
 - set_value:
   - "#request_description"
   - This is a description
-- set_value:
+- set_select_by_text:
   - "#client"
   - Client A
--set_value:
+- set_value:
+  - "#client_priority"
+  - 3
+- set_value:
   - "#target-date"
   - 2016-11-05
--set_value:
+- set_select_by_text:
   - "#product_area"
   - Claims
--set_value:
+- set_value:
   - "#ticket_url"
   - www.wired.com
 - click: "#submit"
