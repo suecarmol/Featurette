@@ -1,7 +1,7 @@
 from datetime import datetime
 
 from app import app, bcrypt, login_manager
-from flask import render_template, request, redirect, flash, url_for
+from flask import render_template, request, redirect, flash
 from flask_login import login_required, current_user, login_user, logout_user
 from models import User, ProductArea, Client, FeatureRequest, db
 
@@ -61,14 +61,15 @@ def addFeature():
         client_priority = request.form['client_priority']
         target_date = request.form['target_date']
         product_area_id = request.form['product_area']
-        user = current_user
         user_id = current_user.id
         ticket_url = request.form['ticket_url']
         date_finished = None
 
         checkPriorities(client_id, client_priority, title)
-        feature_request = FeatureRequest(title, description, client_id, client_priority,
-            product_area_id, user_id, target_date, ticket_url, date_finished)
+        feature_request = FeatureRequest(title, description, client_id,
+                                         client_priority, product_area_id,
+                                         user_id, target_date, ticket_url,
+                                         date_finished)
 
         db.session.add(feature_request)
         db.session.commit()

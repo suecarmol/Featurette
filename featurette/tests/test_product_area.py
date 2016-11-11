@@ -35,12 +35,10 @@ class ProductAreaUnitTest(TestCase):
         self.assert200(response_logout)
         response_product_areas = self.client.get('/productArea')
         response_add_product_areas = self.client.get('/addProductArea')
-        response_edit_product_areas = self.client.get('/editProductArea')
         response_delete_product_areas = self.client.get('/deleteProductArea')
         self.assertFalse(user.authenticated)
         self.assert401(response_product_areas)
         self.assert401(response_add_product_areas)
-        self.assert401(response_edit_product_areas)
         self.assert401(response_delete_product_areas)
 
     def test_restricted_product_area_endpoints_with_auth(self):
@@ -55,11 +53,9 @@ class ProductAreaUnitTest(TestCase):
         self.assertTrue(user.authenticated)
         response_product_areas = self.client.get('/productArea')
         response_add_product_areas = self.client.get('/addProductArea')
-        response_edit_product_areas = self.client.get('/editProductArea')
         response_delete_product_areas = self.client.get('/deleteProductArea')
         self.assert200(response_product_areas)
         self.assert200(response_add_product_areas)
-        self.assert200(response_edit_product_areas)
         self.assert200(response_delete_product_areas)
 
     def test_add_product_area(self):

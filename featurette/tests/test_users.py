@@ -33,12 +33,10 @@ class UserUnitTest(TestCase):
         logout = self.client.get('/logout')
         response_users = self.client.get('/users')
         response_add_users = self.client.get('/addUser')
-        response_edit_users = self.client.get('/editUser')
         response_delete_users = self.client.get('/deleteUser')
         self.assert200(logout)
         self.assert401(response_users)
         self.assert401(response_add_users)
-        self.assert401(response_edit_users)
         self.assert401(response_delete_users)
 
     def test_restricted_user_endpoints_with_auth(self):
@@ -52,12 +50,10 @@ class UserUnitTest(TestCase):
         self.assertTrue(user.authenticated)
         response_users = self.client.get('/users')
         response_add_users = self.client.get('/addUser')
-        response_edit_users = self.client.get('/editUser')
         response_delete_users = self.client.get('/deleteUser')
         self.assert200(response)
         self.assert200(response_users)
         self.assert200(response_add_users)
-        self.assert200(response_edit_users)
         self.assert200(response_delete_users)
 
     def test_unauth(self):
