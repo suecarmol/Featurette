@@ -12,6 +12,9 @@ script:
   - docker exec -it featurette_www_1 python -m unittest discover -v tests
   - webrunner tests/test_functional_login.yml
   - webrunner tests/test_functional_login_unauth.yml
+  - webrunner tests/test_functional_add_client.yml
+  - webrunner tests/test_functional_add_feature.yml
+  - webrunner tests/test_functional_add_product_area.yml
 # https://github.com/SeleniumHQ/selenium/blob/master/.travis.yml
 before_script:
   - wget http://chromedriver.storage.googleapis.com/2.12/chromedriver_linux64.zip
