@@ -243,11 +243,13 @@ def deleteUser():
         flash(message)
         return redirect('/users')
 
+
 @app.route('/clients')
 @login_required
 def clients():
     clients = Client.query.all()
     return render_template('clients.html', clients=clients)
+
 
 @app.route('/addClient', methods=['GET', 'POST'])
 @login_required

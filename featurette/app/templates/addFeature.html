@@ -10,17 +10,17 @@
             <h3 class="ui dividing header">Feature Request</h3>
             <div class="field">
                 <label>Title</label>
-                <input type="text" name="request_title"
+                <input id="request_title" type="text" name="request_title"
                     placeholder="Request Title">
             </div>
             <div class="field">
                 <label>Description</label>
-                <input type="text" name="request_description"
+                <input id="request_description" type="text" name="request_description"
                     placeholder="Description">
             </div>
             <div class="field">
                 <label>Client</label>
-                <select class="ui fluid dropdown" name="client">
+                <select id="client" class="ui fluid dropdown" name="client">
                     <option value="">Client</option>
                     {% for client in clients %}
                         <option value="{{client.id}}"> {{client.name}} </option>
@@ -40,7 +40,7 @@
             </div>
             <div class="field">
                 <label>Product Area</label>
-                <select class="ui fluid dropdown" name="product_area">
+                <select id="product_area" class="ui fluid dropdown" name="product_area">
                     <option value="">Product Area</option>
                     {% for product_area in product_areas %}
                         <option value="{{ product_area.id }}"> {{ product_area.name }} </option>
@@ -49,10 +49,10 @@
             </div>
             <div class="field">
                 <label>URL</label>
-                <input type="text" name="ticket_url"
+                <input id="ticket_url" type="text" name="ticket_url"
                     placeholder="Ticket URL">
             </div>
-            <button class="ui violet button" tabindex="0" type="submit">
+            <button id="submit" class="ui violet button" tabindex="0" type="submit">
                 Submit Feature Request
             </button>
             <a href="/" class="ui red button" tabindex="0">

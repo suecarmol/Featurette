@@ -1,0 +1,6 @@
+- go: http://localhost:5000/addClient
+- set_value:
+  - "#client_name"
+  - Client Z
+- click: "#submit"
+- assert_text_on_page: The client has been added successfully

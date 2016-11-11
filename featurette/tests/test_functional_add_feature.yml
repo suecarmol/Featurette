@@ -1,0 +1,21 @@
+- go: http://localhost:5000/addFeature
+- set_value:
+  - "#request_title"
+  - This is a title
+- set_value:
+  - "#request_description"
+  - This is a description
+- set_value:
+  - "#client"
+  - Client A
+-set_value:
+  - "#target-date"
+  -2016-11-05
+-set_value:
+  - "#product_area"
+  - Claims
+-set_value:
+  - "#ticket_url"
+  - www.wired.com
+- click: "#submit"
+- assert_text_on_page: The feature request has been added successfully
