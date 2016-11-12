@@ -19,9 +19,7 @@
 - set_value:
   - "#client_priority"
   - 3
-- set_value:
-  - "#target-date"
-  - 2016-11-05
+- js: $('#target-date').setDate('2016-11-22')
 - set_select_by_text:
   - "#product_area"
   - Claims
