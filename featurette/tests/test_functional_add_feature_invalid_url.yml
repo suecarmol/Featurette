@@ -25,7 +25,7 @@
   - Claims
 - set_value:
   - "#ticket_url"
-  - www.wired.com
+  - not a url
 - click: "#submit"
-- assert_text_on_page: The feature request has been added successfully
+- assert_text_on_page: The content must be a valid URL
 - wait: 2

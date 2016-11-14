@@ -7,3 +7,4 @@
   - 12345678
 - click: "#login"
 - assert_text_on_page: Logout
+- wait: 2

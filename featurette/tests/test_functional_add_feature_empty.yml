@@ -1,4 +1,4 @@
-- go: http://localhost:5000/addClient
+- go: http://localhost:5000/addFeature
 - set_value:
   - "#email"
   - username1@foo.com
@@ -6,8 +6,7 @@
   - "#password"
   - 12345678
 - click: "#login"
-- click: "#clients_id"
-- click: "#add_client"
+- click: "#add_feature"
 - click: "#submit"
-- assert_text_on_page: Please enter a client
+- assert_text_on_page: Please enter the title of the feature request
 - wait: 2

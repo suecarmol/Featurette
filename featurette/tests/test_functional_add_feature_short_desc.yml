@@ -12,7 +12,7 @@
   - This is a title
 - set_value:
   - "#request_description"
-  - This is a description
+  - Short
 - set_select_by_text:
   - "#client"
   - Client A
@@ -27,5 +27,5 @@
   - "#ticket_url"
   - www.wired.com
 - click: "#submit"
-- assert_text_on_page: The feature request has been added successfully
+- assert_text_on_page: Your description has to have at least 10 characters
 - wait: 2

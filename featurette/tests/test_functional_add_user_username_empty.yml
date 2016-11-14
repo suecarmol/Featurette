@@ -9,9 +9,6 @@
 - click: "#users_id"
 - click: "#add_user"
 - set_value:
-  - "#username"
-  - AUser
-- set_value:
   - "#email"
   - email@foo.com
 - set_value:
@@ -21,5 +18,5 @@
   - "#repeat_password"
   - 12345678
 - click: "#submit"
-- assert_text_on_page: The user has been added successfully
+- assert_text_on_page: Please enter a username
 - wait: 2

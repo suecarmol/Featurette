@@ -125,7 +125,7 @@ def checkPriorities(client_id, new_client_priority, new_title):
     # initializing priorities dictionary
     priorities_dict = {}
     # find all active feature requests (with date_finished = None)
-    features_same_client = FeatureRequest.query.filter(FeatureRequest.client_id==client_id)\
+    features_same_client = FeatureRequest.query.filter(FeatureRequest.client_id == client_id)\
         .filter(FeatureRequest.date_finished == None)
     # filling dictionary
     for feature_same_client in features_same_client:
@@ -146,9 +146,9 @@ def checkPriorities(client_id, new_client_priority, new_title):
         # add old priority and title
         priorities_dict[str(old_key)] = old_title
         # get old Feature Request that matches the parameters
-        feature_request = FeatureRequest.query.filter(FeatureRequest.title==old_title)\
-            .filter(FeatureRequest.client_priority==new_client_priority)\
-            .filter(FeatureRequest.client_id==client_id)\
+        feature_request = FeatureRequest.query.filter(FeatureRequest.title == old_title)\
+            .filter(FeatureRequest.client_priority == new_client_priority)\
+            .filter(FeatureRequest.client_id == client_id)\
             .one()
 
         feature_request.client_priority = int(old_key)

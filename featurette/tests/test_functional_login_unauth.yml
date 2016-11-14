@@ -7,3 +7,4 @@
   - WrongPassword
 - click: "#login"
 - assert_text_on_page: Email or password are incorrect
+- wait: 2

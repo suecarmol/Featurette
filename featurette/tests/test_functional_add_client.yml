@@ -13,3 +13,4 @@
   - Client Z
 - click: "#submit"
 - assert_text_on_page: The client has been added successfully
+- wait: 2

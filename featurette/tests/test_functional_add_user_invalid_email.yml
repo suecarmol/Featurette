@@ -13,7 +13,7 @@
   - AUser
 - set_value:
   - "#email"
-  - email@foo.com
+  - notanemail.com
 - set_value:
   - "#password"
   - 12345678
@@ -21,5 +21,5 @@
   - "#repeat_password"
   - 12345678
 - click: "#submit"
-- assert_text_on_page: The user has been added successfully
+- assert_text_on_page: Please include an '@' in the email address
 - wait: 2

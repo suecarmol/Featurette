@@ -10,3 +10,4 @@
 - click: "#add_product_area"
 - click: "#submit"
 - assert_text_on_page: Please enter a product area name
+- wait: 2
