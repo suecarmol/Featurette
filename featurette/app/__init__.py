@@ -23,12 +23,12 @@ login_manager.init_app(app)
 api = Api(app, catch_all_404s=True)
 
 api.add_resource(ClientListResource, '/api/v1/clients')
-api.add_resource(ClientResource, '/api/v1/client/<int:id>')
+api.add_resource(ClientResource, '/api/v1/client/<id>')
 api.add_resource(UserListResource, '/api/v1/users')
-api.add_resource(UserResource, '/api/v1/user/<int:id>')
+api.add_resource(UserResource, '/api/v1/user/<id>')
 api.add_resource(ProductAreaListResource, '/api/v1/productAreas')
-api.add_resource(ProductAreaResource, '/api/v1/productArea/<int:id>')
+api.add_resource(ProductAreaResource, '/api/v1/productArea/<id>')
 api.add_resource(FeatureRequestListResource, '/api/v1/featureRequests')
-api.add_resource(FeatureRequestResource, '/api/v1/featureRequest/<int:id>')
+api.add_resource(FeatureRequestResource, '/api/v1/featureRequest/<id>')
 
 from app import views, models

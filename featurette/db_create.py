@@ -1,8 +1,9 @@
 #!venv/bin/python
 from app import db, bcrypt
 from app.models import User, Client, ProductArea
+from app.db import create_db_tables
 
-db.create_all()
+create_db_tables()
 
 # Inserting data
 username1 = User('username1', 'username1@foo.com',

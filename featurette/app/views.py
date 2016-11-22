@@ -109,75 +109,16 @@ def index():
     return render_template('index.html')
 
 
-@app.route('/addFeature', methods=['GET', 'POST'])
+@app.route('/addFeature')
 @login_required
 def addFeature():
-    if request.method == 'POST':
-
-        title = request.form['request_title']
-        description = request.form['request_description']
-        client_id = request.form['client']
-        client_priority = request.form['client_priority']
-        target_date = request.form['target_date']
-        product_area_id = request.form['product_area']
-        user_id = current_user.id
-        ticket_url = request.form['ticket_url']
-        date_finished = None
-
-        checkPriorities(client_id, client_priority, title)
-        feature_request = FeatureRequest(title, description, client_id,
-                                         client_priority, product_area_id,
-                                         user_id, target_date, ticket_url,
-                                         date_finished)
-
-        session.add(feature_request)
-        session.commit()
-        message = 'The feature request has been added successfully'
-        flash(message)
-        return redirect('/')
-    else:
-        clients = Client.query.all()
-        product_areas = ProductArea.query.all()
-        return render_template('addFeature.html', clients=clients,
-                               product_areas=product_areas)
+    return render_template('addFeature.html')
 
 
-@app.route('/editFeature', methods=['POST', 'GET'])
+@app.route('/editFeature')
 @login_required
 def editFeature():
-    if request.method == 'GET':
-        feature_request_id = request.args['edit_feature_request']
-        feature_request = FeatureRequest.query.get(feature_request_id)
-        clients = Client.query.all()
-        product_areas = ProductArea.query.all()
-        return render_template('editFeature.html', feature_request=feature_request,
-                               clients=clients, product_areas=product_areas)
-    else:
-        feature_request_id = request.form['feature_request_id']
-        feature_request = FeatureRequest.query.get(feature_request_id)
-        title = request.form['request_title']
-        description = request.form['request_description']
-        client_id = request.form['client']
-        new_client_priority = request.form['client_priority']
-        target_date = request.form['target_date']
-        product_area_id = request.form['product_area']
-        ticket_url = request.form['ticket_url']
-        user = current_user
-
-        checkPriorities(client_id, new_client_priority, title)
-
-        feature_request.title = title
-        feature_request.description = description
-        feature_request.client_id = client_id
-        feature_request.client_priority = new_client_priority
-        feature_request.target_date = target_date
-        feature_request.product_area_id = product_area_id
-        feature_request.ticket_url = ticket_url
-        feature_request.user_id = user.id
-        session.commit()
-        message = 'The feature request has been edited successfully'
-        flash(message)
-        return redirect('/')
+    return render_template('editFeature.html')
 
 
 def checkPriorities(client_id, new_client_priority, new_title):

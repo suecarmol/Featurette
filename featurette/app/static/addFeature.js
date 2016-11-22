@@ -86,4 +86,34 @@ $( document ).ready(function() {
 			}
 		}
 	});
+
+	//get clients
+	$.getJSON({
+		url: 'http://localhost:5000/api/v1/clients',
+		dataType: 'json',
+        success: function(data){
+			var client_select = document.getElementById('client');
+			$.each(data, function(index, element) {
+				var opt = document.createElement('option');
+				opt.setAttribute('value', element.id);
+				opt.textContent= element.name;
+				client_select.appendChild(opt);
+			});
+		}
+	});
+
+	//get product areas
+	$.getJSON({
+		url: 'http://localhost:5000/api/v1/productAreas',
+		dataType: 'json',
+        success: function(data){
+			var product_area_select = document.getElementById('product_area');
+			$.each(data, function(index, element) {
+				var opt = document.createElement('option');
+				opt.setAttribute('value', element.id);
+				opt.textContent = element.name;
+				product_area_select.appendChild(opt);
+			});
+		}
+	});
 });

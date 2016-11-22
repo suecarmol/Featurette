@@ -2,6 +2,7 @@ import os
 from sqlalchemy import create_engine
 from sqlalchemy.orm import scoped_session
 from sqlalchemy.orm import sessionmaker
+from models import Base
 
 try:
     host = os.environ['MYSQL_HOST']
@@ -15,8 +16,14 @@ except:
 
 DB_URI = 'mysql://{}@{}/featurette'.format(mysql_user_pass, host)
 
+engine = create_engine(DB_URI)
 
 Session = sessionmaker(autocommit=False,
                        autoflush=False,
-                       bind=create_engine(DB_URI))
+                       bind=engine)
 session = scoped_session(Session)
+
+
+def create_db_tables():
+    Base.metadata.drop_all(bind=engine)
+    Base.metadata.create_all(bind=engine)
