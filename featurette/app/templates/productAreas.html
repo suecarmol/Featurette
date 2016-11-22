@@ -26,26 +26,8 @@
                     <th>Actions</th>
                 </tr>
             </thead>
-            <tbody>
-                {% for product_area in product_areas %}
-                    <tr>
-                        <td>{{ product_area.name }}</td>
-                        <td class="single line">
-                            <form action="/editProductArea" method="GET">
-                                <button id="edit_product_area" class="ui icon violet button" name="product_area_id"
-                                    value="{{ product_area.id }}">
-                                    <i class="edit icon"></i>
-                                </button>
-                            </form>
-                            <form id="delete_product_area" action="/deleteProductArea" method="POST">
-                                <button class="ui icon red button" type="submit"
-                                    name="product_area_id" value="{{ product_area.id }}">
-                                    <i class="delete icon"></i>
-                                </button>
-                            </form>
-                        </td>
-                    </tr>
-                {% endfor %}
+            <tbody id="productAreasTable">
+
             </tbody>
             <tfoot class="full-width">
                 <tr>

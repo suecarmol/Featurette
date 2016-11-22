@@ -29,26 +29,8 @@
                     <th>Actions</th>
                 </tr>
             </thead>
-            <tbody>
-                {% for user in users %}
-                    <tr>
-                        <td> {{ user.username }} </td>
-                        <td> {{ user.email }} </td>
-                        <td class="single line">
-                            <form action="/editUser" method="GET">
-                                <button id="edit_user" class="ui icon violet button" name="user_id"
-                                    value="{{ user.id }}">
-                                    <i class="edit icon"></i>
-                                </button>
-                            </form>
-                            <form id="delete_user" action="/deleteUser" method="POST">
-                                <button class="ui icon red button" name="user_id"
-                                    value="{{ user.id }}">
-                                    <i class="delete icon"></i>
-                                </button>
-                            </form>
-                        </td>
-                {% endfor %}
+            <tbody id="usersTable">
+        
             </tbody>
             <tfoot class="full-width">
                 <tr>

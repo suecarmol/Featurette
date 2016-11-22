@@ -19,7 +19,6 @@
         {% endwith %}
 
         <h2> Clients </h2>
-
         <table class="ui celled padded violet table">
             <thead>
                 <tr>
@@ -27,28 +26,8 @@
                     <th>Actions</th>
                 </tr>
             </thead>
-            <tbody>
-                {% for client in clients %}
-                    <tr>
-                        <td>
-                            {{ client.name }}
-                        </td>
-                        <td class="single line">
-                            <form action="/editClient" method="GET">
-                                <button id="edit_client" class="ui icon violet button" name="client_id"
-                                    value="{{ client.id }}">
-                                    <i class="edit icon"></i>
-                                </button>
-                            </form>
-                            <form action="/deleteClient" method="POST">
-                                <button id="delete_client" class="ui icon red button" name="client_id"
-                                    value="{{ client.id }}">
-                                    <i class="delete icon"></i>
-                                </button>
-                            </form>
-                        </td>
-                    </tr>
-                {% endfor %}
+            <tbody id="clientTable">
+
             </tbody>
             <tfoot class="full-width">
                 <tr>

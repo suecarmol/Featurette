@@ -23,3 +23,10 @@ services:
       MYSQL_DATABASE: featurette
       MYSQL_USER: featurette
       MYSQL_PASSWORD: br1teCor3
+  isso:
+    image: wonderfall/isso
+    ports:
+      - 8080:8080
+    volumes:
+      - ./isso:/config
+      - ./isso:/db
