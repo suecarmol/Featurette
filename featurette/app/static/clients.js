@@ -1,20 +1,8 @@
 $(document).ready(function(){
-    $('table').tablesort();
-    
     $('.message .close').on('click', function() {
         $(this).closest('.message').transition('fade');
     });
-
-    $('.ui.secondary.pointing.menu')
-    .on('click', '.item', function() {
-      if(!$(this).hasClass('dropdown')) {
-        $(this)
-          .addClass('active')
-          .siblings('.item')
-            .removeClass('active');
-      }
-    });
-
+    
     $.getJSON({
         url: 'http://localhost:5000/api/v1/clients',
         dataType: 'json',
@@ -58,4 +46,5 @@ $(document).ready(function(){
             });
         }
     });
+
 });

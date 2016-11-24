@@ -116,4 +116,9 @@ $( document ).ready(function() {
 			});
 		}
 	});
+
+	//Adding feature request
+	$('#submit').click(function(){
+
+	});
 });

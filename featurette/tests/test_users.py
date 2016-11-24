@@ -28,7 +28,9 @@ class UserUnitTest(TestCase):
         db.session.commit()
         assert user in db.session
         response = self.client.post('/login', {'email': user.email,
-                                    'password': user.password})
+                                    'password': user.password},
+                                    follow_redirects=True, content_type=
+                                    'application/x-www-form-urlencoded')
         self.assert200(response)
         logout = self.client.get('/logout')
         response_users = self.client.get('/users')
@@ -46,7 +48,9 @@ class UserUnitTest(TestCase):
         db.session.commit()
         assert user in db.session
         response = self.client.post('/login', {'email': user.email,
-                                    'password': user.password})
+                                    'password': user.password},
+                                    follow_redirects=True, content_type=
+                                    'application/x-www-form-urlencoded')
         self.assertTrue(user.authenticated)
         response_users = self.client.get('/users')
         response_add_users = self.client.get('/addUser')
@@ -71,7 +75,9 @@ class UserUnitTest(TestCase):
         db.session.commit()
         assert user in db.session
         response = self.client.post('/login', {'email': user.email,
-                                               'password': user.password})
+                                               'password': user.password},
+                                    follow_redirects=True, content_type=
+                                    'application/x-www-form-urlencoded')
         self.assert200(response)
         self.assertEquals(user.username, 'username')
         self.assertTrue(user.authenticated)
@@ -84,7 +90,9 @@ class UserUnitTest(TestCase):
         db.session.commit()
         assert user in db.session
         response_login = self.client.post('/login', {'email': user.email,
-                                                     'password': user.password})
+                                                     'password': user.password},
+                                          follow_redirects=True, content_type=
+                                          'application/x-www-form-urlencoded')
         self.assertRedirects(response_login, '/')
         self.assertTrue(user.authenticated)
         # logging out
