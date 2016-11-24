@@ -103,13 +103,13 @@ def logout():
     return render_template('login.html')
 
 
-@app.route('/')
+@app.route('/', methods=['POST', 'GET'])
 @login_required
 def index():
     return render_template('index.html')
 
 
-@app.route('/addFeature')
+@app.route('/addFeature', methods=['POST', 'GET'])
 @login_required
 def addFeature():
     return render_template('addFeature.html')
@@ -232,7 +232,7 @@ def deleteUser():
         return redirect('/users')
 
 
-@app.route('/clients')
+@app.route('/clients', methods=['POST', 'GET'])
 @login_required
 def clients():
     return render_template('clients.html')
@@ -274,7 +274,7 @@ def deleteClient():
     return redirect('/clients')
 
 
-@app.route('/productAreas')
+@app.route('/productAreas', methods=['POST', 'GET'])
 @login_required
 def productAreas():
     return render_template('productAreas.html')

@@ -1,8 +1,8 @@
 {% extends "menu_bar.html" %}
     {% block head %}
         {{ super() }}
-        <script src="static/users.js"></script>
-        <script src="static/addUser.js"></script>
+        <script src="static/user_validation.js"></script>
+        <script src="static/editUser.js"></script>
     {% endblock %}
     {% block content %}
         <form class="ui form segment" action="/editUser" method="POST">

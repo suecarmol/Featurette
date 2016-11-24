@@ -1,3 +1,4 @@
+from app import bcrypt
 from db import session
 from flask_restful import reqparse
 from flask_restful import abort
@@ -179,7 +180,8 @@ class UserListResource(Resource):
     def post(self):
         parsed_args = parser_user.parse_args()
         user = User(username=parsed_args['username'], email=parsed_args
-                    ['email'], password=parsed_args['password'])
+                    ['email'], password=bcrypt.generate_password_hash
+                    (parsed_args['password']))
         session.add(user)
         session.commit()
         return user, 201
@@ -211,10 +213,16 @@ class FeatureRequestListResource(Resource):
     @marshal_with(feature_request_fields)
     def post(self):
         parsed_args = parser_user.parse_args()
-        feature_request = FeatureRequest(title=parsed_args['title'],
+        # checking if priority exists
+        client_id = parsed_args['client_id']
+        client_priority = parsed_args['client_priority']
+        title = parsed_args['title']
+        # priority algorithm
+        checkPriorities(client_id, client_priority, title)
+        feature_request = FeatureRequest(title=title,
                                          description=parsed_args['description'],
-                                         client_id=parsed_args['client_id'],
-                                         client_priority=parsed_args['client_priority'],
+                                         client_id=client_id,
+                                         client_priority=client_priority,
                                          product_area_id=parsed_args['product_area_id'],
                                          user_id=parsed_args['user_id'],
                                          target_date=parsed_args['target_date'],
@@ -228,7 +236,7 @@ class FeatureRequestListResource(Resource):
         # initializing priorities dictionary
         priorities_dict = {}
         # find all active feature requests (with date_finished = None)
-        features_same_client = FeatureRequest.query.filter(FeatureRequest.client_id == client_id)\
+        features_same_client = session.query(FeatureRequest).filter(FeatureRequest.client_id == client_id)\
             .filter(FeatureRequest.date_finished is None)
         # filling dictionary
         for feature_same_client in features_same_client:
@@ -249,7 +257,7 @@ class FeatureRequestListResource(Resource):
             # add old priority and title
             priorities_dict[str(old_key)] = old_title
             # get old Feature Request that matches the parameters
-            feature_request = FeatureRequest.query.filter
+            feature_request = session.query(FeatureRequest).filter
             (FeatureRequest.title == old_title)\
                 .filter(FeatureRequest.client_priority == new_client_priority)\
                 .filter(FeatureRequest.client_id == client_id)\

@@ -1,11 +1,11 @@
 {% extends "menu_bar.html" %}
     {% block head %}
         {{ super() }}
-        <script src="static/users.js"></script>
+        <script src="static/user_validation.js"></script>
         <script src="static/addUser.js"></script>
     {% endblock %}
     {% block content %}
-        <form class="ui form segment" action="/addUser" method="POST">
+        <form class="ui form segment" action="/users" method="POST">
             <h3 class="ui dividing header">User</h3>
             <div class="field">
                 <label>Username</label>
@@ -23,10 +23,10 @@
                 <label>Repeat Password</label>
                 <input id="repeat_password" type="password" name="repeat_password" placeholder="Password">
             </div>
-            <button id="submit" class="ui violet button" tabindex="0" type="submit">
+            <button id="submit" class="ui violet button">
                 Create User
             </button>
-            <a href="/users" class="ui red button" tabindex="0" type="submit">
+            <a href="/users" class="ui red button">
                 Cancel
             </a>
             <div class="ui error message">

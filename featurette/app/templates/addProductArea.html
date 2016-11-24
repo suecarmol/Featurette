@@ -1,21 +1,21 @@
 {% extends "menu_bar.html" %}
     {% block head %}
         {{ super() }}
-        <script src="static/productAreas.js"></script>
+        <script src="static/product_area_validation.js"></script>
         <script src="static/addProductArea.js"></script>
     {% endblock %}
     {% block content %}
-        <form class="ui form segment" action="/addProductArea" method="POST">
+        <form class="ui form segment" action="/productAreas" method="POST">
             <h3 class="ui dividing header">Product Area</h3>
             <div class="field">
                 <label>Name</label>
                 <input id="product_area_name" type="text" name="product_area_name"
                     placeholder="Name">
             </div>
-            <button id="submit" class="ui violet button" tabindex="0" type="submit">
+            <button id="submit" class="ui violet button">
                 Create Product Area
             </button>
-            <a href="/productAreas" class="ui red button" tabindex="0" type="submit">
+            <a href="/productAreas" class="ui red button">
                 Cancel
             </a>
             <div class="ui error message">
