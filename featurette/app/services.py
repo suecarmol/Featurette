@@ -1,3 +1,5 @@
+from datetime import datetime
+from app import bcrypt, login_manager
 from db import session
 from flask_restful import reqparse
 from flask_restful import abort
@@ -6,7 +8,6 @@ from flask_restful import fields
 from flask_restful import marshal_with
 from flask_login import current_user, login_user, logout_user
 from models import User, FeatureRequest, ProductArea, Client
-from views import bcrypt
 
 client_fields = {
     'id': fields.Integer,
@@ -40,6 +41,10 @@ feature_request_fields = {
     'date_finished': fields.DateTime
 }
 
+parser_login = reqparse.RequestParser()
+parser_login.add_argument('email', type=str, required=True)
+parser_login.add_argument('password', type=str, required=True)
+
 parser_client = reqparse.RequestParser()
 parser_client.add_argument('client_name', type=str, required=True)
 
@@ -59,6 +64,33 @@ parser_feature.add_argument('client_priority', type=int, required=True)
 parser_feature.add_argument('product_area_id', type=int, required=True)
 parser_feature.add_argument('user_id', type=int, required=True)
 parser_feature.add_argument('ticket_url', type=str, required=True)
+
+
+@login_manager.user_loader
+def user_loader(user_id):
+    return session.query(User).get(user_id)
+
+
+class LoginResource(Resource):
+    def login(self, email):
+        parsed_args = parser_login.parsed_args()
+        email = parsed_args['email']
+        password = parsed_args['password']
+        user = session.query(User).filter_by(email=email)
+        if not user:
+            abort(404, message="User {} doesn't exist".format(id))
+        if bcrypt.check_password_hash(user.password, password):
+            user.authenticated = True
+            session.commit()
+            login_user(user, remember=True)
+
+
+class LogoutResource(Resource):
+    def logout(self):
+        user = current_user
+        user.authenticated = False
+        session.commit()
+        logout_user()
 
 
 class ClientResource(Resource):
@@ -204,6 +236,14 @@ class FeatureRequestResource(Resource):
         session.commit()
         return {}, 204
 
+    def finishFeature(self, id):
+        feature_request = session.query(FeatureRequest).get(id)
+        if not feature_request:
+            abort(404, message="Feature request {} doesn't exist".format(id))
+        feature_request.date_finished = str(datetime.now())
+        feature_request.client_priority = 0
+        session.commit()
+
 
 class FeatureRequestListResource(Resource):
     @marshal_with(feature_request_fields)
@@ -220,7 +260,7 @@ class FeatureRequestListResource(Resource):
         client_priority = parsed_args['client_priority']
         user_id = current_user
         # priority algorithm
-        checkPriorities(client_id, client_priority, title)
+        self.checkPriorities(client_id, client_priority, title)
         feature_request = FeatureRequest(title=title,
                                          description=parsed_args['description'],
                                          client_id=client_id,
