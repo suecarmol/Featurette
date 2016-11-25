@@ -37,3 +37,7 @@ api.add_resource(ProductAreaResource, '/api/v1/productArea/<id>')
 api.add_resource(FeatureRequestListResource, '/api/v1/featureRequests')
 api.add_resource(FeatureRequestResource, '/api/v1/featureRequest/<id>')
 # api.add_resource(FeatureRequestResource, '/api/v1/featureRequest/<id>/finishFeature')
+
+from app import app, views, models
+
+# noqa

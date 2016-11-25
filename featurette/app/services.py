@@ -72,7 +72,7 @@ def user_loader(user_id):
 
 
 class LoginResource(Resource):
-    def login(self, email):
+    def post(self, email):
         parsed_args = parser_login.parsed_args()
         email = parsed_args['email']
         password = parsed_args['password']
