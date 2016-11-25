@@ -39,11 +39,20 @@ $( document ).ready(function() {
 
 	//Adding feature request
 	$('#submit').click(function(){
-		//TODO: get form values and pass them to data
+		var request_title = $('#request_title').val();
+		var request_description = $('#request_description').val();
+		var client = $('#client').val();
+		var client_priority = $('#client_priority').val();
+		var target_date = $('#target-date').val();
+		var product_area = $('#product_area').val();
+		var ticket_url = $('#ticket_url').val();
 		$.ajax({
 			url: 'http://localhost:5000/api/v1/featureRequest',
             type: "POST",
-			data: {},
+			data: {title: request_title, description: request_description,
+				   client_id: client, client_priority: client_priority,
+				   target_date: target_date, product_area_id: product_area,
+			       ticket_url: ticket_url},
 			success: function(data){
                 console.log('Feature request inserted successfully');
             },

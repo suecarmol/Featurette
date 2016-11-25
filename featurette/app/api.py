@@ -1,11 +1,12 @@
-from app import bcrypt
 from db import session
 from flask_restful import reqparse
 from flask_restful import abort
 from flask_restful import Resource
 from flask_restful import fields
 from flask_restful import marshal_with
+from flask_login import current_user, login_user, logout_user
 from models import User, FeatureRequest, ProductArea, Client
+from views import bcrypt
 
 client_fields = {
     'id': fields.Integer,
@@ -46,18 +47,18 @@ parser_product_area = reqparse.RequestParser()
 parser_product_area.add_argument('product_area_name', type=str, required=True)
 
 parser_user = reqparse.RequestParser()
-parser_user.add_argument('username', type=str)
-parser_user.add_argument('email', type=str)
-parser_user.add_argument('password', type=str)
+parser_user.add_argument('username', type=str, required=True)
+parser_user.add_argument('email', type=str, required=True)
+parser_user.add_argument('password', type=str, required=True)
 
 parser_feature = reqparse.RequestParser()
-parser_feature.add_argument('title', type=str)
-parser_feature.add_argument('description', type=str)
-parser_feature.add_argument('client_id', type=int)
-parser_feature.add_argument('client_priority', type=int)
-parser_feature.add_argument('product_area_id', type=int)
-parser_feature.add_argument('user_id', type=int)
-parser_feature.add_argument('ticket_url', type=str)
+parser_feature.add_argument('title', type=str, required=True)
+parser_feature.add_argument('description', type=str, required=True)
+parser_feature.add_argument('client_id', type=int, required=True)
+parser_feature.add_argument('client_priority', type=int, required=True)
+parser_feature.add_argument('product_area_id', type=int, required=True)
+parser_feature.add_argument('user_id', type=int, required=True)
+parser_feature.add_argument('ticket_url', type=str, required=True)
 
 
 class ClientResource(Resource):
@@ -214,9 +215,10 @@ class FeatureRequestListResource(Resource):
     def post(self):
         parsed_args = parser_user.parse_args()
         # checking if priority exists
+        title = parsed_args['title']
         client_id = parsed_args['client_id']
         client_priority = parsed_args['client_priority']
-        title = parsed_args['title']
+        user_id = current_user
         # priority algorithm
         checkPriorities(client_id, client_priority, title)
         feature_request = FeatureRequest(title=title,
@@ -224,7 +226,7 @@ class FeatureRequestListResource(Resource):
                                          client_id=client_id,
                                          client_priority=client_priority,
                                          product_area_id=parsed_args['product_area_id'],
-                                         user_id=parsed_args['user_id'],
+                                         user_id=user_id,
                                          target_date=parsed_args['target_date'],
                                          ticket_url=parsed_args['ticket_url'],
                                          date_finished=None)

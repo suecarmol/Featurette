@@ -16,11 +16,11 @@ app = Flask(__name__)
 app.config.from_object(config['dev'])
 app.secret_key = 'br1teCor3'
 bcrypt = Bcrypt(app)
+api = Api(app, catch_all_404s=True)
 login_manager = LoginManager()
 login_manager.session_protection = 'strong'
 login_manager.init_app(app)
 # db = SQLAlchemy(app)
-api = Api(app, catch_all_404s=True)
 
 api.add_resource(ClientListResource, '/api/v1/clients')
 api.add_resource(ClientResource, '/api/v1/client/<id>')
