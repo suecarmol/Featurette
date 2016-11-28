@@ -9,10 +9,10 @@
             <h3 class="ui dividing header">Edit Product Area</h3>
             <div class="field">
                 <label>Name</label>
-                <input type="text" name="product_area_name" value="{{ product_area.name }}">
+                <input id="product_area_name" type="text" name="product_area_name">
             </div>
-            <input hidden="true" name="product_area_id" value="{{ product_area.id }}">
-            <button class="ui violet button" tabindex="0" type="submit">
+            <input id="product_area_id" hidden="true" name="product_area_id">
+            <button id="submit" class="ui violet button">
                 Save Changes
             </button>
             <a href="/productAreas" class="ui red button" tabindex="0" type="submit">

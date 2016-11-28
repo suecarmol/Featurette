@@ -54,12 +54,12 @@ $(document).ready(function(){
                 var td_actions = document.createElement('td');
                 td_actions.setAttribute('class', 'single line');
 
-                var editButton = document.createElement('button');
+                var editButton = document.createElement('a');
                 if(element.date_finished != null){
                     editButton.setAttribute('class', 'ui icon violet button disabled');
                 }
                 else{
-                    editButton.setAttribute('class', 'ui icon violet button');
+                    editButton.setAttribute('class', 'edit ui icon violet button');
                     editButton.setAttribute('value', element.id);
                 }
 
@@ -72,7 +72,7 @@ $(document).ready(function(){
                     finishButton.setAttribute('class', 'ui icon green button disabled');
                 }
                 else{
-                    finishButton.setAttribute('class', 'ui icon green button');
+                    finishButton.setAttribute('class', 'finish ui icon green button');
                     finishButton.setAttribute('value', element.id);
                 }
 
@@ -81,7 +81,7 @@ $(document).ready(function(){
                 finishButton.appendChild(finishIcon);
 
                 var deleteButton = document.createElement('button');
-                deleteButton.setAttribute('class', 'ui icon red button');
+                deleteButton.setAttribute('class', 'delete ui icon red button');
                 deleteButton.setAttribute('value', element.id);
 
                 var deleteIcon = document.createElement('i');

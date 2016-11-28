@@ -1,7 +1,8 @@
 {% extends "menu_bar.html" %}
     {% block head %}
         {{ super() }}
-        <script src="static/productAreas.js"></script>
+        <script type="text/javascript" src="static/productAreas.js"></script>
+        <script type="text/javascript" src="static/deleteProductArea.js"></script>
     {% endblock %}
     {% block content %}
         {% with messages = get_flashed_messages() %}
