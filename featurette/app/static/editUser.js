@@ -18,28 +18,31 @@ $(document).ready(function(){
     var id = getUrlParameter('id');
 
     $.ajax({
-        url: 'http://localhost:5000/api/v1/productArea/' + id,
+        url: 'http://localhost:5000/api/v1/user/' + id,
         type: 'GET',
         success(data){
-            var name = document.getElementById('product_area_name').value = data.name;
-            var id = document.getElementById('product_area_id').value = data.id;
+            var username = document.getElementById('username').value = data.username;
+            var email = document.getElementById('email').value = data.email;
+            var id = document.getElementById('user_id').value = data.id;
         }
 
     });
 
 
     $('#submit').click(function(){
-        console.log('Submitting! Such submit!');
-        var product_area_id = $('#product_area_id').val();
-        var product_area = $('#product_area_name').val();
-        console.log(product_area_id);
-        console.log(product_area);
+        console.log('Submitting user!');
+        var user_id = $('#user_id').val();
+        var username = $('#username').val();
+        var email = $('#email').val();
+        var password = $('#password').val();
+        console.log(user_id);
+        console.log(username);
         $.ajax({
-            url: 'http://localhost:5000/api/v1/productArea/'+ product_area_id,
+            url: 'http://localhost:5000/api/v1/user/'+ user_id,
             type: 'PUT',
-            data: {product_area_name : product_area},
+            data: {username : username, email : email, password : password},
             success: function(data){
-                console.log('Product Area updated successfully');
+                console.log('User updated successfully');
             },
             error: function(xhr,err){
                 console.log("readyState: "+xhr.readyState+"\nstatus: "+xhr.status);

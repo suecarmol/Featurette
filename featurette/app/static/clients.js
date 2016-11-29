@@ -48,4 +48,9 @@ $(document).ready(function(){
         }
     });
 
+    $(document).on('click', '.edit', function(event){
+        var id = $(this).attr('value');
+        window.location = '/editClient?id=' + id;
+    });
+
 });

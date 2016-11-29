@@ -30,19 +30,18 @@ $(document).ready(function(){
                 var td_actions = document.createElement('td');
                 td_actions.setAttribute('class', 'single line');
 
-                var form = document.createElement('form');+
-                form.setAttribute('action', '/editProductArea');
-                form.setAttribute('method', 'GET');
+                // var form = document.createElement('form');+
+                // form.setAttribute('action', '/editProductArea');
+                // form.setAttribute('method', 'GET');
 
                 var editButton = document.createElement('a');
                 editButton.setAttribute('class', 'edit ui icon violet button');
                 editButton.setAttribute('value', element.id);
-                editButton.setAttribute('href', '/editProductArea');
 
                 var editIcon = document.createElement('i');
                 editIcon.setAttribute('class', 'edit icon');
                 editButton.appendChild(editIcon);
-                form.appendChild(editButton);
+                // form.appendChild(editButton);
 
                 var deleteButton = document.createElement('a');
                 deleteButton.setAttribute('class', 'delete ui icon red button');
@@ -52,7 +51,7 @@ $(document).ready(function(){
                 deleteIcon.setAttribute('class', 'delete icon');
                 deleteButton.appendChild(deleteIcon);
 
-                td_actions.appendChild(form);
+                td_actions.appendChild(editButton);
                 td_actions.appendChild(deleteButton);
 
 
@@ -62,5 +61,10 @@ $(document).ready(function(){
 
             });
         }
+    });
+
+    $(document).on('click', '.edit', function(event){
+        var id = $(this).attr('value');
+        window.location = '/editProductArea?id=' + id;
     });
 });

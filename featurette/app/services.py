@@ -262,12 +262,12 @@ class FeatureRequestListResource(Resource):
         # priority algorithm
         self.checkPriorities(client_id, client_priority, title)
         feature_request = FeatureRequest(title=title,
-                                         description=parsed_args['description'],
+                                         description=parsed_args['description'], # noqa
                                          client_id=client_id,
                                          client_priority=client_priority,
-                                         product_area_id=parsed_args['product_area_id'],
+                                         product_area_id=parsed_args['product_area_id'], # noqa
                                          user_id=user_id,
-                                         target_date=parsed_args['target_date'],
+                                         target_date=parsed_args['target_date'], # noqa
                                          ticket_url=parsed_args['ticket_url'],
                                          date_finished=None)
         session.add(feature_request)
@@ -282,7 +282,7 @@ class FeatureRequestListResource(Resource):
             .filter(FeatureRequest.date_finished is None)
         # filling dictionary
         for feature_same_client in features_same_client:
-            priorities_dict[str(feature_same_client.client_priority)] = feature_same_client.title
+            priorities_dict[str(feature_same_client.client_priority)] = feature_same_client.title # noqa
         # checking if priority number exists
         if str(new_client_priority) in priorities_dict:
             # get data of existing priority (removing the key)

@@ -14,16 +14,16 @@ login_manager = LoginManager()
 login_manager.session_protection = 'strong'
 login_manager.init_app(app)
 
-from services import ClientResource
-from services import ClientListResource
-from services import UserResource
-from services import UserListResource
-from services import ProductAreaResource
-from services import ProductAreaListResource
-from services import FeatureRequestResource
-from services import FeatureRequestListResource
-from services import LoginResource
-from services import LogoutResource
+from services import ClientResource # noqa
+from services import ClientListResource # noqa
+from services import UserResource # noqa
+from services import UserListResource # noqa
+from services import ProductAreaResource # noqa
+from services import ProductAreaListResource # noqa
+from services import FeatureRequestResource # noqa
+from services import FeatureRequestListResource # noqa
+from services import LoginResource # noqa
+from services import LogoutResource # noqa
 # db = SQLAlchemy(app)
 
 api.add_resource(LoginResource, '/api/v1/login')
@@ -38,6 +38,4 @@ api.add_resource(FeatureRequestListResource, '/api/v1/featureRequests')
 api.add_resource(FeatureRequestResource, '/api/v1/featureRequest/<id>')
 # api.add_resource(FeatureRequestResource, '/api/v1/featureRequest/<id>/finishFeature')
 
-from app import app, views, models
-
-# noqa
+from app import app, views, models # noqa

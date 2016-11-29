@@ -18,11 +18,11 @@ $(document).ready(function(){
     var id = getUrlParameter('id');
 
     $.ajax({
-        url: 'http://localhost:5000/api/v1/productArea/' + id,
+        url: 'http://localhost:5000/api/v1/client/' + id,
         type: 'GET',
         success(data){
-            var name = document.getElementById('product_area_name').value = data.name;
-            var id = document.getElementById('product_area_id').value = data.id;
+            var name = document.getElementById('client_name').value = data.name;
+            var id = document.getElementById('client_id').value = data.id;
         }
 
     });
@@ -30,16 +30,16 @@ $(document).ready(function(){
 
     $('#submit').click(function(){
         console.log('Submitting! Such submit!');
-        var product_area_id = $('#product_area_id').val();
-        var product_area = $('#product_area_name').val();
-        console.log(product_area_id);
-        console.log(product_area);
+        var client_id = $('#client_id').val();
+        var client = $('#client_name').val();
+        console.log(client_id);
+        console.log(client);
         $.ajax({
-            url: 'http://localhost:5000/api/v1/productArea/'+ product_area_id,
+            url: 'http://localhost:5000/api/v1/client/'+ client_id,
             type: 'PUT',
-            data: {product_area_name : product_area},
+            data: {client_name : client},
             success: function(data){
-                console.log('Product Area updated successfully');
+                console.log('Client updated successfully');
             },
             error: function(xhr,err){
                 console.log("readyState: "+xhr.readyState+"\nstatus: "+xhr.status);
