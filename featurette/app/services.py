@@ -62,7 +62,8 @@ parser_feature.add_argument('description', type=str, required=True)
 parser_feature.add_argument('client_id', type=int, required=True)
 parser_feature.add_argument('client_priority', type=int, required=True)
 parser_feature.add_argument('product_area_id', type=int, required=True)
-parser_feature.add_argument('user_id', type=int, required=True)
+parser_feature.add_argument('target_date', required=True)
+# parser_feature.add_argument('user_id', type=int, required=True)
 parser_feature.add_argument('ticket_url', type=str, required=True)
 
 
@@ -236,6 +237,22 @@ class FeatureRequestResource(Resource):
         session.commit()
         return {}, 204
 
+    def put(self, id):
+        parsed_args = parser_feature.parse_args()
+        feature_request = session.query(FeatureRequest).get(id)
+        feature_request.title = parsed_args['title']
+        feature_request.description = parsed_args['description']
+        feature_request.client_id = parsed_args['client_id']
+        feature_request.client_priority = parsed_args['client_priority']
+        feature_request.product_area_id = parsed_args['product_area_id']
+        feature_request.user_id = 2
+        feature_request.target_date = parsed_args['target_date']
+        feature_request.ticket_url = parsed_args['ticket_url']
+        feature_request.date_finished = None
+        session.add(feature_request)
+        session.comit()
+        return feature_request, 201
+
     def finishFeature(self, id):
         feature_request = session.query(FeatureRequest).get(id)
         if not feature_request:
@@ -253,12 +270,13 @@ class FeatureRequestListResource(Resource):
 
     @marshal_with(feature_request_fields)
     def post(self):
-        parsed_args = parser_user.parse_args()
+        parsed_args = parser_feature.parse_args()
         # checking if priority exists
         title = parsed_args['title']
         client_id = parsed_args['client_id']
         client_priority = parsed_args['client_priority']
-        user_id = current_user
+        # user_id = current_user.id
+        user_id = 2
         # priority algorithm
         self.checkPriorities(client_id, client_priority, title)
         feature_request = FeatureRequest(title=title,
@@ -274,7 +292,7 @@ class FeatureRequestListResource(Resource):
         session.commit()
         return feature_request, 201
 
-    def checkPriorities(client_id, new_client_priority, new_title):
+    def checkPriorities(self, client_id, new_client_priority, new_title):
         # initializing priorities dictionary
         priorities_dict = {}
         # find all active feature requests (with date_finished = None)

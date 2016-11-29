@@ -47,8 +47,8 @@ $( document ).ready(function() {
 		var product_area = $('#product_area').val();
 		var ticket_url = $('#ticket_url').val();
 		$.ajax({
-			url: 'http://localhost:5000/api/v1/featureRequest',
-            type: "POST",
+			url: 'http://localhost:5000/api/v1/featureRequests',
+            type: 'POST',
 			data: {title: request_title, description: request_description,
 				   client_id: client, client_priority: client_priority,
 				   target_date: target_date, product_area_id: product_area,

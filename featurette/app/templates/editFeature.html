@@ -7,52 +7,47 @@
         <script src="static/editFeature.js"></script>
     {% endblock %}
     {% block content %}
-        <form class="ui form segment" action="/editFeature" method="POST">
+        <form class="ui form segment" action="/" method="POST">
             <h3 class="ui dividing header">Edit Feature Request</h3>
             <div class="field">
                 <label>Title</label>
-                <input type="text" name="request_title"
-                    value="{{ feature_request.title }}">
+                <input id="request_title" type="text" name="request_title">
             </div>
             <div class="field">
                 <label>Description</label>
-                <input type="text" name="request_description"
-                    value="{{ feature_request.description }}">
+                <input id="request_description" type="text" name="request_description">
             </div>
             <div class="field">
                 <label>Client</label>
                 <select id="client" class="ui fluid dropdown" name="client">
-                    <option value="{{feature_request.client_id}}">
-                        {{feature_request.client.name}}
+                    <option id="current_client">
+
                     </option>
                 </select>
             </div>
             <div class="field">
                 <label>Priority</label>
-                <input type="number" name="client_priority"
-                    value="{{ feature_request.client_priority }}">
+                <input id="client_priority" type="number" name="client_priority">
             </div>
             <div class="field">
                 <label>Target Date</label>
                 <input id="target-date" type="text" class="flatpickr"
-                    data-enable-time="false" name="target_date"
-                    value="{{ feature_request.target_date }}">
+                    data-enable-time="false" name="target_date">
             </div>
             <div class="field">
                 <label>Product Area</label>
                 <select id="product_area" class="ui fluid dropdown" name="product_area">
-                    <option value="{{ feature_request.product_area_id }}">
-                        {{ feature_request.product_area.name }}
+                    <option id="current_product_area">
+
                     </option>
                 </select>
             </div>
             <div class="field">
                 <label>URL</label>
-                <input type="text" name="ticket_url"
-                    value="{{ feature_request.ticket_url }}">
+                <input id="ticket_url" type="text" name="ticket_url">
             </div>
-            <input hidden="true" name="feature_request_id" value="{{ feature_request.id }}">
-            <button class="ui violet button" tabindex="0" type="submit">
+            <input id="feature_request_id" hidden="true" name="feature_request_id">
+            <button id="submit" class="ui violet button">
                 Submit Feature Request
             </button>
             <a href="/" class="ui red button" tabindex="0">
