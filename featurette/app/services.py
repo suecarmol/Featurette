@@ -62,8 +62,7 @@ parser_feature.add_argument('description', type=str, required=True)
 parser_feature.add_argument('client_id', type=int, required=True)
 parser_feature.add_argument('client_priority', type=int, required=True)
 parser_feature.add_argument('product_area_id', type=int, required=True)
-parser_feature.add_argument('target_date', required=True)
-# parser_feature.add_argument('user_id', type=int, required=True)
+parser_feature.add_argument('target_date', type=datetime, required=True)
 parser_feature.add_argument('ticket_url', type=str, required=True)
 
 
@@ -242,16 +241,21 @@ class FeatureRequestResource(Resource):
     @marshal_with(feature_request_fields)
     def put(self, id):
         parsed_args = parser_feature.parse_args()
+        title = parsed_args['title']
+        client_id = parsed_args['client_id']
+        client_priority = parsed_args['client_priority']
         feature_request = session.query(FeatureRequest).get(id)
-        feature_request.title = parsed_args['title']
+        feature_request.title = title
         feature_request.description = parsed_args['description']
-        feature_request.client_id = parsed_args['client_id']
-        feature_request.client_priority = parsed_args['client_priority']
+        feature_request.client_id = client_id
+        feature_request.client_priority = client_priority
         feature_request.product_area_id = parsed_args['product_area_id']
         feature_request.user_id = 2
         feature_request.target_date = parsed_args['target_date']
         feature_request.ticket_url = parsed_args['ticket_url']
         feature_request.date_finished = None
+        # priority algorithm
+        self.checkPriorities(client_id, client_priority, title)
         session.add(feature_request)
         session.commit()
         return feature_request, 201
@@ -302,8 +306,7 @@ class FeatureRequestListResource(Resource):
         # initializing priorities dictionary
         priorities_dict = {}
         # find all active feature requests (with date_finished = None)
-        features_same_client = session.query(FeatureRequest).filter(FeatureRequest.client_id == client_id)\
-            .filter(FeatureRequest.date_finished is None)
+        features_same_client = session.query(FeatureRequest).filter(FeatureRequest.client_id == client_id).filter(FeatureRequest.date_finished == None) # noqa
         # filling dictionary
         for feature_same_client in features_same_client:
             priorities_dict[str(feature_same_client.client_priority)] = feature_same_client.title # noqa
@@ -323,11 +326,7 @@ class FeatureRequestListResource(Resource):
             # add old priority and title
             priorities_dict[str(old_key)] = old_title
             # get old Feature Request that matches the parameters
-            feature_request = session.query(FeatureRequest).filter
-            (FeatureRequest.title == old_title)\
-                .filter(FeatureRequest.client_priority == new_client_priority)\
-                .filter(FeatureRequest.client_id == client_id)\
-                .one()
+            feature_request = session.query(FeatureRequest).filter(FeatureRequest.title == old_title).filter(FeatureRequest.client_priority == new_client_priority).filter(FeatureRequest.client_id == client_id).one() # noqa
 
             feature_request.client_priority = int(old_key)
             session.add(feature_request)

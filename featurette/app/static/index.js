@@ -1,6 +1,6 @@
 $(document).ready(function(){
-    $('table').tablesort();
 
+    $('table').tablesort();
     $('.message .close').on('click', function() {
         $(this).closest('.message').transition('fade');
     });
@@ -33,22 +33,45 @@ $(document).ready(function(){
                 td_description.textContent= element.description;
 
                 var td_client_id = document.createElement('td');
-                td_client_id.textContent= element.client_id;
+                //getting client name
+                $.getJSON({
+                    url: 'http://localhost:5000/api/v1/client/' + element.client_id,
+                    dataType: 'json',
+                    success: function(data){
+                        td_client_id.textContent= data.name;
+                    }
+                });
 
                 var td_client_priority = document.createElement('td');
                 td_client_priority.textContent= element.client_priority;
 
                 var td_product_area = document.createElement('td');
-                td_product_area.textContent= element.product_area_id;
+                //getting product area
+                $.getJSON({
+                    url: 'http://localhost:5000/api/v1/productArea/' + element.product_area_id,
+                    dataType: 'json',
+                    success: function(data){
+                        td_product_area.textContent= data.name;
+                    }
+                });
 
                 var td_target_date = document.createElement('td');
-                td_target_date.textContent= element.target_date;
+                var date = new Date(element.target_date);
+                month = date.getMonth() + 1;
+                td_target_date.textContent= date.getDate() + '/' + month + '/' + date.getFullYear();
 
                 var td_ticket_url = document.createElement('td');
                 td_ticket_url.textContent= element.ticket_url;
 
                 var td_user_id = document.createElement('td');
-                td_user_id.textContent= element.user_id;
+                //getting user
+                $.getJSON({
+                    url: 'http://localhost:5000/api/v1/user/' + element.user_id,
+                    dataType: 'json',
+                    success: function(data){
+                        td_user_id.textContent= data.username;
+                    }
+                });
 
                 //td actions
                 var td_actions = document.createElement('td');
