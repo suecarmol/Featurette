@@ -73,13 +73,14 @@ def user_loader(user_id):
 
 
 class LoginResource(Resource):
-    def post(self, email):
-        parsed_args = parser_login.parsed_args()
+    @marshal_with(user_fields)
+    def post(self):
+        parsed_args = parser_login.parse_args()
         email = parsed_args['email']
         password = parsed_args['password']
-        user = session.query(User).filter_by(email=email)
+        user = session.query(User).filter_by(email=email).first()
         if not user:
-            abort(404, message="User {} doesn't exist".format(id))
+            abort(404, message="User {} doesn't exist".format(email))
         if bcrypt.check_password_hash(user.password, password):
             user.authenticated = True
             session.commit()
@@ -87,7 +88,8 @@ class LoginResource(Resource):
 
 
 class LogoutResource(Resource):
-    def logout(self):
+    @marshal_with(user_fields)
+    def post(self):
         user = current_user
         user.authenticated = False
         session.commit()
@@ -237,6 +239,7 @@ class FeatureRequestResource(Resource):
         session.commit()
         return {}, 204
 
+    @marshal_with(feature_request_fields)
     def put(self, id):
         parsed_args = parser_feature.parse_args()
         feature_request = session.query(FeatureRequest).get(id)
@@ -250,10 +253,13 @@ class FeatureRequestResource(Resource):
         feature_request.ticket_url = parsed_args['ticket_url']
         feature_request.date_finished = None
         session.add(feature_request)
-        session.comit()
+        session.commit()
         return feature_request, 201
 
-    def finishFeature(self, id):
+
+class FinishFeatureResource(Resource):
+    @marshal_with(feature_request_fields)
+    def post(self, id):
         feature_request = session.query(FeatureRequest).get(id)
         if not feature_request:
             abort(404, message="Feature request {} doesn't exist".format(id))

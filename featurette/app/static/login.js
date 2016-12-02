@@ -41,7 +41,7 @@ $(document).ready(function() {
           var password = $('#password').val();
           $.ajax({
               url: 'http://localhost:5000/api/v1/login',
-              type: "POST",
+              type: 'POST',
               data: {email : email, password: password},
               success: function(data){
                   console.log('Login was successful');

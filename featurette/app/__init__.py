@@ -24,6 +24,7 @@ from services import FeatureRequestResource # noqa
 from services import FeatureRequestListResource # noqa
 from services import LoginResource # noqa
 from services import LogoutResource # noqa
+from services import FinishFeatureResource # noqa
 # db = SQLAlchemy(app)
 
 api.add_resource(LoginResource, '/api/v1/login')
@@ -36,6 +37,6 @@ api.add_resource(ProductAreaListResource, '/api/v1/productAreas')
 api.add_resource(ProductAreaResource, '/api/v1/productArea/<id>')
 api.add_resource(FeatureRequestListResource, '/api/v1/featureRequests')
 api.add_resource(FeatureRequestResource, '/api/v1/featureRequest/<id>')
-# api.add_resource(FeatureRequestResource, '/api/v1/featureRequest/<id>/finishFeature')
+api.add_resource(FinishFeatureResource, '/api/v1/finishFeature/<id>')
 
 from app import app, views, models # noqa
