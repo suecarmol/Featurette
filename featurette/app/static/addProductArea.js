@@ -1,5 +1,12 @@
 $(document).ready(function(){
 
+	$( document ).ajaxError(function( event, jqxhr, settings, exception ) {
+        if ( jqxhr.status== 401 ) {
+            //$( "div.log" ).text( "Triggered ajaxError handler." );
+            window.location = '/login';
+        }
+    });
+
     //Adding product area
 	$('#submit').click(function(){
         var product_area = $('#product_area_name').val();
@@ -17,5 +24,5 @@ $(document).ready(function(){
             }
         });
 	});
-    
+
 });

@@ -4,8 +4,8 @@ import unittest
 
 from flask_testing import TestCase
 sys.path.append(os.path.abspath(os.path.dirname(__file__) + '/' + '../..'))
-from app.models import User, FeatureRequest
-from app import app, db, bcrypt
+from app.models import User, FeatureRequest # noqa
+from app import app, db, bcrypt # noqa
 
 
 class FeatureRequestUnitTest(TestCase):

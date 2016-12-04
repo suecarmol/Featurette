@@ -1,5 +1,12 @@
 $(document).ready(function(){
 
+	$( document ).ajaxError(function( event, jqxhr, settings, exception ) {
+        if ( jqxhr.status== 401 ) {
+            //$( "div.log" ).text( "Triggered ajaxError handler." );
+            window.location = '/login';
+        }
+    });
+	
     //Adding client
 	$('#submit').click(function(){
         var client_name = $('#client_name').val();
@@ -17,5 +24,5 @@ $(document).ready(function(){
             }
         });
 	});
-    
+
 });

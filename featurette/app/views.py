@@ -1,6 +1,5 @@
 from app import app
 from flask import render_template
-from flask_login import login_required
 
 
 @app.route('/login', methods=['POST', 'GET'])
@@ -66,80 +65,63 @@ def login():
 
 
 @app.route('/', methods=['POST', 'GET'])
-# @login_required
 def index():
     return render_template('index.html')
 
 
 @app.route('/addFeature', methods=['POST', 'GET'])
-# @login_required
 def addFeature():
     return render_template('addFeature.html')
 
 
 @app.route('/editFeature', methods=['POST', 'GET'])
-# @login_required
 def editFeature():
     return render_template('editFeature.html')
 
 
 @app.route('/users', methods=['POST', 'GET'])
-# @login_required
 def users():
     return render_template('users.html')
 
 
 @app.route('/addUser', methods=['POST', 'GET'])
-# @login_required
 def addUsers():
     return render_template('addUser.html')
 
 
 @app.route('/editUser', methods=['POST', 'GET'])
-# @login_required
 def editUser():
     return render_template('editUser.html')
 
 
 @app.route('/clients', methods=['POST', 'GET'])
-# @login_required
 def clients():
     return render_template('clients.html')
 
 
 @app.route('/addClient', methods=['POST', 'GET'])
-# @login_required
 def addClient():
     return render_template('addClient.html')
 
 
 @app.route('/editClient', methods=['POST', 'GET'])
-# @login_required
 def editClient():
     return render_template('editClient.html')
 
 
 @app.route('/productAreas', methods=['POST', 'GET'])
-# @login_required
 def productAreas():
     return render_template('productAreas.html')
 
 
 @app.route('/addProductArea', methods=['POST', 'GET'])
-# @login_required
 def addProductArea():
     return render_template('addProductArea.html')
 
 
 @app.route('/editProductArea', methods=['POST', 'GET'])
-# @login_required
 def editProductArea():
     return render_template('editProductArea.html')
-
-
-@app.errorhandler(401)
-def custom_401(error):
-    return render_template('login.html', errors=error)
 
 
 @app.errorhandler(404)

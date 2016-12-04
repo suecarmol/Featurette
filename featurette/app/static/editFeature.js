@@ -24,6 +24,13 @@ $(document).ready(function(){
 
     var id = getUrlParameter('id');
 
+    $( document ).ajaxError(function( event, jqxhr, settings, exception ) {
+        if ( jqxhr.status== 401 ) {
+            //$( "div.log" ).text( "Triggered ajaxError handler." );
+            window.location = '/login';
+        }
+    });
+
     //get clients
 	$.getJSON({
 		url: 'http://localhost:5000/api/v1/clients',

@@ -3,6 +3,13 @@ $(document).ready(function(){
         $(this).closest('.message').transition('fade');
     });
 
+    $( document ).ajaxError(function( event, jqxhr, settings, exception ) {
+        if ( jqxhr.status== 401 ) {
+            //$( "div.log" ).text( "Triggered ajaxError handler." );
+            window.location = '/login';
+        }
+    });
+
     $.getJSON({
         url: 'http://localhost:5000/api/v1/clients',
         dataType: 'json',
