@@ -1,25 +1,21 @@
 import os
 import sys
 import unittest
+import requests
 
-from flask_testing import TestCase
 sys.path.append(os.path.abspath(os.path.dirname(__file__) + '/' + '..'))
 from app import app, bcrypt, db # noqa
 from app.models import User # noqa
+from app.db import session # noqa
+from app.db import create_db_tables # noqa
 
 
-class UserUnitTest(TestCase):
-
-    def create_app(self):
-        app.config['TESTING'] = True
-        return app
+class UserUnitTest(unittest.TestCase):
 
     def setUp(self):
-        db.create_all()
-
-    def tearDown(self):
-        db.session.remove()
-        db.drop_all()
+        app.test_mode = True
+        self.app = app.test_client()
+        create_db_tables
 
     def test_restricted_user_endpoints_without_auth(self):
         user = User('username', 'username@foo.com',
@@ -27,19 +23,21 @@ class UserUnitTest(TestCase):
         db.session.add(user)
         db.session.commit()
         assert user in db.session
-        response = self.client.post('/login', {'email': user.email,
-                                    'password': user.password},
-                                    follow_redirects=True, content_type=
-                                    'application/x-www-form-urlencoded')
-        self.assert200(response)
-        logout = self.client.get('/logout')
-        response_users = self.client.get('/users')
-        response_add_users = self.client.get('/addUser')
-        response_delete_users = self.client.get('/deleteUser')
-        self.assert200(logout)
-        self.assert401(response_users)
-        self.assert401(response_add_users)
-        self.assert401(response_delete_users)
+        response = requests.post('http://127.0.0.1:5000/api/v1/login', data={
+                                 'email': user.email,
+                                 'password': user.password})
+        self.assertEqual(200, response.status_code)
+        logout = requests.post('http://127.0.0.1:5000/api/v1/logout')
+        response_users = requests.get('http://127.0.0.1:5000/api/v1/users')
+        response_add_users = requests.post('http://127.0.0.1:5000/api/v1/users',
+                                           data={'username': 'user1',
+                                                 'email': 'user1@foo.com',
+                                                 'password': '12345678'})
+        response_delete_users = requests.delete('http://127.0.0.1:5000/api/v1/user/3')
+        self.assertEqual(200, logout.status_code)
+        self.assertEqual(401, response_users.status_code)
+        self.assertEqual(401, response_add_users.status_code)
+        self.assertEqual(401, response_delete_users.status_code)
 
     def test_restricted_user_endpoints_with_auth(self):
         user = User('username', 'username@foo.com',
@@ -47,18 +45,20 @@ class UserUnitTest(TestCase):
         db.session.add(user)
         db.session.commit()
         assert user in db.session
-        response = self.client.post('/login', {'email': user.email,
-                                    'password': user.password},
-                                    follow_redirects=True, content_type=
-                                    'application/x-www-form-urlencoded')
+        response = requests.post('http://127.0.0.1:5000/api/v1/login', data={
+                                 'email': user.email,
+                                 'password': user.password})
         self.assertTrue(user.authenticated)
-        response_users = self.client.get('/users')
-        response_add_users = self.client.get('/addUser')
-        response_delete_users = self.client.get('/deleteUser')
-        self.assert200(response)
-        self.assert200(response_users)
-        self.assert200(response_add_users)
-        self.assert200(response_delete_users)
+        response_users = requests.get('http://127.0.0.1:5000/api/v1/users')
+        response_add_users = requests.post('http://127.0.0.1:5000/api/v1/users',
+                                           data={'username': 'user1',
+                                                 'email': 'user1@foo.com',
+                                                 'password': '12345678'})
+        response_delete_users = requests.delete('http://127.0.0.1:5000/api/v1/user/2')
+        self.assertEqual(200, response.status_code)
+        self.assertEqual(200, response_users.status_code)
+        self.assertEqual(200, response_add_users.status_code)
+        self.assertEqual(200, response_delete_users.status_code)
 
     def test_unauth(self):
         user = User('username', 'username@foo.com',
@@ -74,12 +74,11 @@ class UserUnitTest(TestCase):
         db.session.add(user)
         db.session.commit()
         assert user in db.session
-        response = self.client.post('/login', {'email': user.email,
-                                               'password': user.password},
-                                    follow_redirects=True, content_type=
-                                    'application/x-www-form-urlencoded')
-        self.assert200(response)
-        self.assertEquals(user.username, 'username')
+        response = requests.post('http://127.0.0.1:5000/api/v1/login', data={
+                                 'email': user.email,
+                                 'password': user.password})
+        self.assertEqual(200, response.status_code)
+        self.assertEqual(user.username, 'username')
         self.assertTrue(user.authenticated)
 
     def test_logout(self):
@@ -89,16 +88,15 @@ class UserUnitTest(TestCase):
         db.session.add(user)
         db.session.commit()
         assert user in db.session
-        response_login = self.client.post('/login', {'email': user.email,
-                                                     'password': user.password},
-                                          follow_redirects=True, content_type=
-                                          'application/x-www-form-urlencoded')
-        self.assertRedirects(response_login, '/')
+        response_login = requests.post('http://127.0.0.1:5000/api/v1/login',
+                                       data={'email': user.email,
+                                             'password': user.password})
+        self.assertEqual(200, response_login.status_code)
         self.assertTrue(user.authenticated)
         # logging out
         response_logout = self.client.get('/logout')
         # assert that logout was made
-        self.assert200(response_logout)
+        self.assertEqual(200, response_logout.status_code)
         self.assertFalse(user.authenticated)
 
 

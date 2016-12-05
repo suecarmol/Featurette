@@ -1,44 +1,39 @@
 import sys
 import os
 import unittest
+import requests
 
-from flask_testing import TestCase
 sys.path.append(os.path.abspath(os.path.dirname(__file__) + '/' + '../..'))
 from app.models import User, FeatureRequest # noqa
-from app import app, db, bcrypt # noqa
+from app import app, bcrypt # noqa
+from app.db import session # noqa
+from app.db import create_db_tables # noqa
 
 
-class FeatureRequestUnitTest(TestCase):
-
-    def create_app(self):
-        app.config['TESTING'] = True
-        return app
+class FeatureRequestUnitTest(unittest.TestCase):
 
     def setUp(self):
-        db.create_all()
-
-    def tearDown(self):
-        db.session.remove()
-        db.drop_all()
+        app.test_mode = True
+        self.app = app.test_client()
+        create_db_tables
 
     def test_restricted_feature_request_endpoints_without_auth(self):
-        response_logout = self.client.get('/logout')
-        self.assert200(response_logout)
-        response_features = self.client.get('/')
-        response_add_features = self.client.get('/addFeature')
-        self.assert200(response_features)
-        self.assert200(response_add_features)
+        response_features = requests.get('http://127.0.0.1:5000/api/v1/featureRequests')
+        response_add_features = requests.get('http://127.0.0.1:5000/api/v1/featureRequests')
+        self.assertEqual(401, response_features.status_code)
+        self.assertEqual(401, response_add_features.status_code)
 
     def test_restricted_feature_request_endpoints_with_auth(self):
         user = User('username', 'username@foo.com', bcrypt.generate_password_hash
                     ('12345678'))
-        db.session.add(user)
-        db.session.commit()
-        assert user in db.session
-        response = self.client.post('/login', {'email': user.email, 'password':
-                                               user.password})
-        self.assertRedirects(response, '/')
-        self.assertFalse(user.authenticated)
+        session.add(user)
+        session.commit()
+        assert user in session
+        response = requests.post('http://127.0.0.1:5000/api/v1/login', data={
+                                 'email': user.email,
+                                 'password': user.password})
+        self.assertTrue(user.authenticated)
+        self.assertEqual(200, response.status_code)
         # response_features = self.client.get('/')
         # response_add_features = self.client.get('/addFeature')
         # response_delete_features = self.client.get('/deleteFeature')

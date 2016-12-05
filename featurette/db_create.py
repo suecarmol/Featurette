@@ -1,6 +1,6 @@
 #!venv/bin/python
 from app import db, bcrypt
-from app.models import User, Client, ProductArea
+from app.models import User, Client, ProductArea, FeatureRequest
 from app.db import create_db_tables
 
 create_db_tables()
@@ -39,5 +39,9 @@ db.session.add(policies)
 db.session.add(claims)
 db.session.add(billing)
 db.session.add(reports)
+
+feat_req = FeatureRequest('This is a title',
+                          'This is not the description you are looking for',
+                          1, 1, 1, 1, '2017-06-01', 'www.wired.com', None)
 
 db.session.commit()

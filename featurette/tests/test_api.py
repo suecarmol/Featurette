@@ -6,8 +6,10 @@ from flask import json
 
 sys.path.append(os.path.abspath(os.path.dirname(__file__) + '/' + '..')) # noqa
 
-from app import app
+from app import app, bcrypt
 from app.db import create_db_tables
+from app.db import session
+from app.models import User
 
 
 class ApiTest(unittest.TestCase):
@@ -18,9 +20,17 @@ class ApiTest(unittest.TestCase):
         create_db_tables
 
     def test_get_clients(self):
+        user = User('username', 'username@foo.com',
+                    bcrypt.generate_password_hash('12345678'))
+        session.add(user)
+        session.commit()
+        assert user in session
+        login = self.app.post('/api/v1/login', data={'email': user.email,
+                              'password': user.password})
         result = self.app.get('/api/v1/clients')
         data = json.loads(result.data)
 
+        self.assertEqual(200, login.status_code)
         self.assertEqual(200, result.status_code)
         self.assertEqual(4, len(data))
 
@@ -37,9 +47,17 @@ class ApiTest(unittest.TestCase):
         self.assertEqual('Client D', data[3]['name'])
 
     def test_get_users(self):
+        user = User('username', 'username@foo.com',
+                    bcrypt.generate_password_hash('12345678'))
+        session.add(user)
+        session.commit()
+        assert user in session
+        login = self.app.post('/api/v1/login', data={'email': user.email,
+                              'password': user.password})
         result = self.app.get('/api/v1/users')
         data = json.loads(result.data)
 
+        self.assertEqual(200, login.status_code)
         self.assertEqual(200, result.status_code)
         self.assertEqual(5, len(data))
 
@@ -58,16 +76,32 @@ class ApiTest(unittest.TestCase):
         self.assertEqual('username2@foo.com', data[1]['email'])
 
     def test_suggest_endpoint(self):
+        user = User('username', 'username@foo.com',
+                    bcrypt.generate_password_hash('12345678'))
+        session.add(user)
+        session.commit()
+        assert user in session
+        login = self.app.post('/api/v1/login', data={'email': user.email,
+                              'password': user.password})
         result = self.app.get('/api/v1/product_areas')
         data = json.loads(result.data)
 
+        self.assertEqual(200, login.status_code)
         self.assertEqual(404, result.status_code)
         self.assertIn('did you mean /api/v1/productAreas', data['message'])
 
     def test_get_product_areas(self):
+        user = User('username', 'username@foo.com',
+                    bcrypt.generate_password_hash('12345678'))
+        session.add(user)
+        session.commit()
+        assert user in session
+        login = self.app.post('/api/v1/login', data={'email': user.email,
+                              'password': user.password})
         result = self.app.get('/api/v1/productAreas')
         data = json.loads(result.data)
 
+        self.assertEqual(200, login.status_code)
         self.assertEqual(200, result.status_code)
         self.assertEqual(4, len(data))
 
@@ -84,7 +118,16 @@ class ApiTest(unittest.TestCase):
         self.assertEqual('Reports', data[3]['name'])
 
     def test_get_feature_requests(self):
+        user = User('username', 'username@foo.com',
+                    bcrypt.generate_password_hash('12345678'))
+        session.add(user)
+        session.commit()
+        assert user in session
+        login = self.app.post('/api/v1/login', data={'email': user.email,
+                              'password': user.password})
         result = self.app.get('/api/v1/featureRequests')
+
+        self.assertEqual(200, login.status_code)
         data = json.loads(result.data)
         print data
 
