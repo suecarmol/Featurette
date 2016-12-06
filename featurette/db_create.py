@@ -16,6 +16,9 @@ username4 = User('username4', 'username4@foo.com',
                  bcrypt.generate_password_hash('12345678'))
 username5 = User('username5', 'username5@foo.com',
                  bcrypt.generate_password_hash('12345678'))
+user = User('username', 'username@foo.com',
+            bcrypt.generate_password_hash('12345678'))
+db.session.add(user)
 db.session.add(username1)
 db.session.add(username2)
 db.session.add(username3)
@@ -43,5 +46,6 @@ db.session.add(reports)
 feat_req = FeatureRequest('This is a title',
                           'This is not the description you are looking for',
                           1, 1, 1, 1, '2017-06-01', 'www.wired.com', None)
+db.session.add(feat_req)
 
 db.session.commit()
