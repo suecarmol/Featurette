@@ -1,4 +1,4 @@
-- go: http://localhost:5000/addClient
+- go: http://localhost:5000/login
 - set_value:
   - "#email"
   - username1@foo.com

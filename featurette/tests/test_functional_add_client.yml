@@ -1,4 +1,4 @@
-- go: http://localhost:5000/addClient
+- go: http://localhost:5000/login
 - set_value:
   - "#email"
   - username1@foo.com
@@ -12,5 +12,5 @@
   - "#client_name"
   - Client Z
 - click: "#submit"
-- assert_text_on_page: The client has been added successfully
+- assert_text_on_page: Add Client
 - wait: 2

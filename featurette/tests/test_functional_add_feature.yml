@@ -27,5 +27,5 @@
   - "#ticket_url"
   - www.wired.com
 - click: "#submit"
-- assert_text_on_page: The feature request has been added successfully
+- assert_text_on_page: Add Feature Request
 - wait: 2

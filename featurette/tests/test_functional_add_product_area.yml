@@ -12,5 +12,5 @@
   - "#product_area_name"
   - Accounting
 - click: "#submit"
-- assert_text_on_page: The product area has been added successfully
+- assert_text_on_page: Add Product Area
 - wait: 2

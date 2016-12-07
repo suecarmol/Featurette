@@ -6,10 +6,9 @@ from flask import json
 
 sys.path.append(os.path.abspath(os.path.dirname(__file__) + '/' + '..')) # noqa
 
-from app import app, bcrypt
+from app import app
 from app.db import create_db_tables
-from app.db import session
-from app.models import User
+from app.db import delete_db_tables
 
 
 class ApiTest(unittest.TestCase):
@@ -18,6 +17,10 @@ class ApiTest(unittest.TestCase):
         app.test_mode = True
         self.app = app.test_client()
         create_db_tables
+
+    def tearDown(self):
+        app.test_mode = False
+        delete_db_tables
 
     def test_get_clients(self):
         with self.app:
@@ -44,7 +47,7 @@ class ApiTest(unittest.TestCase):
 
     def test_get_users(self):
         with self.app:
-            login = self.app.post('/api/v1/login', data={'email': 'username@foo.com',
+            login = self.app.post('/api/v1/login', data={'email': 'username1@foo.com',
                                   'password': '12345678'})
             result = self.app.get('/api/v1/users')
             data = json.loads(result.data)
@@ -62,7 +65,7 @@ class ApiTest(unittest.TestCase):
 
             self.assertEqual(2, data[1]['id'])
             self.assertEqual('username2', data[1]['username'])
-            self.assertTrue(data[1]['authenticated'])
+            self.assertFalse(data[1]['authenticated'])
             self.assertFalse(data[1]['token'])
             self.assertTrue(data[1]['password'])
             self.assertEqual('username2@foo.com', data[1]['email'])

@@ -1,12 +1,14 @@
 import sys
 import os
 import unittest
+from flask import json
 
 sys.path.append(os.path.abspath(os.path.dirname(__file__) + '/' + '..')) # noqa
-from app import app, bcrypt
+from app import app
 from app.models import User
 from app.db import create_db_tables
 from app.db import session
+from app.db import delete_db_tables
 
 
 class ProductAreaUnitTest(unittest.TestCase):
@@ -16,12 +18,16 @@ class ProductAreaUnitTest(unittest.TestCase):
         self.app = app.test_client()
         create_db_tables
 
+    def tearDown(self):
+        app.test_mode = False
+        delete_db_tables
+
     def test_restricted_product_area_endpoints_without_auth(self):
         with self.app:
             response_product_areas = self.app.get('/api/v1/productAreas')
             response_add_product_areas = self.app.post('/api/v1/productAreas',
                                                        data={'name': 'Test1'})
-            response_delete_product_areas = self.app.delete('/api/v1/productArea/5')
+            response_delete_product_areas = self.app.delete('/api/v1/productArea/4')
             self.assertEqual(401, response_product_areas.status_code)
             self.assertEqual(401, response_add_product_areas.status_code)
             self.assertEqual(401, response_delete_product_areas.status_code)

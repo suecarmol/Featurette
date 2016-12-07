@@ -85,6 +85,7 @@ class LoginResource(Resource):
             user.authenticated = True
             session.commit()
             login_user(user, remember=True)
+            return {}, 200
 
 
 class LogoutResource(Resource):
@@ -95,6 +96,7 @@ class LogoutResource(Resource):
         user.authenticated = False
         session.commit()
         logout_user()
+        return {}, 204
 
 
 class ClientResource(Resource):

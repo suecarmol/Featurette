@@ -25,5 +25,8 @@ session = scoped_session(Session)
 
 
 def create_db_tables():
-    Base.metadata.drop_all(bind=engine)
     Base.metadata.create_all(bind=engine)
+
+
+def delete_db_tables():
+    Base.metadata.drop_all(bind=engine)
