@@ -205,6 +205,8 @@ class UserResource(Resource):
         user = session.query(User).get(id)
         if not user:
             abort(404, message="User {} doesn't exist".format(id))
+        if user.id == current_user.id:
+            abort(403, message="You cannot delete yourself")
         session.delete(user)
         session.commit()
         return {}, 204

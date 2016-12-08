@@ -69,8 +69,8 @@ class UserUnitTest(unittest.TestCase):
         user = session.query(User).get(1)
         with self.app as c:
             response_login = c.post('/api/v1/login', method='POST',
-                                           data={'email': user.email,
-                                                 'password': user.password})
+                                    data={'email': user.email,
+                                          'password': user.password})
             self.assertTrue(user.authenticated)
             self.assertEqual(200, response_login.status_code)
             # logging out
