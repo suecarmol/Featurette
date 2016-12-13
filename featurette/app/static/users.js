@@ -19,7 +19,7 @@ $(document).ready(function(){
     });
 
     $.getJSON({
-        url: 'http://localhost:5000/api/v1/users',
+        url: '/api/v1/users',
         dataType: 'json',
         success: function(data){
             $.each(data, function(index, element) {

@@ -6,14 +6,14 @@ $(document).ready(function(){
             window.location = '/login';
         }
     });
-	
+
     //Adding user
 	$('#submit').click(function(){
         var username = $('#username').val();
         var email = $('#email').val();
         var password = $('#password').val();
         $.ajax({
-            url: 'http://localhost:5000/api/v1/users',
+            url: '/api/v1/users',
             type: "POST",
             data: {username : username, email : email, password : password},
             success: function(data){

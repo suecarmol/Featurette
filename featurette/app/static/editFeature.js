@@ -33,7 +33,7 @@ $(document).ready(function(){
 
     //get clients
 	$.getJSON({
-		url: 'http://localhost:5000/api/v1/clients',
+		url: '/api/v1/clients',
 		dataType: 'json',
         success: function(data){
 			var client_select = document.getElementById('client');
@@ -48,7 +48,7 @@ $(document).ready(function(){
 
 	//get product areas
 	$.getJSON({
-		url: 'http://localhost:5000/api/v1/productAreas',
+		url: '/api/v1/productAreas',
 		dataType: 'json',
         success: function(data){
 			var product_area_select = document.getElementById('product_area');
@@ -62,7 +62,7 @@ $(document).ready(function(){
 	});
 
     $.ajax({
-        url: 'http://localhost:5000/api/v1/featureRequest/' + id,
+        url: '/api/v1/featureRequest/' + id,
         type: 'GET',
         success(data){
             var id = document.getElementById('feature_request_id').value = data.id;
@@ -91,7 +91,7 @@ $(document).ready(function(){
         console.log(feature_request_id);
         console.log(title);
         $.ajax({
-            url: 'http://localhost:5000/api/v1/featureRequest/'+ feature_request_id,
+            url: '/api/v1/featureRequest/'+ feature_request_id,
             type: 'PUT',
             data: {title : title, description : description, client_id : client_id,
             client_priority : client_priority, target_date : target_date, product_area_id : product_area_id,

@@ -16,7 +16,7 @@ $( document ).ready(function() {
 
 	//get clients
 	$.getJSON({
-		url: 'http://localhost:5000/api/v1/clients',
+		url: '/api/v1/clients',
 		dataType: 'json',
         success: function(data){
 			var client_select = document.getElementById('client');

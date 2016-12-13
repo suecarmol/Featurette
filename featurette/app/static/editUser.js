@@ -25,7 +25,7 @@ $(document).ready(function(){
     });
 
     $.ajax({
-        url: 'http://localhost:5000/api/v1/user/' + id,
+        url: '/api/v1/user/' + id,
         type: 'GET',
         success(data){
             var username = document.getElementById('username').value = data.username;
@@ -45,7 +45,7 @@ $(document).ready(function(){
         console.log(user_id);
         console.log(username);
         $.ajax({
-            url: 'http://localhost:5000/api/v1/user/'+ user_id,
+            url: '/api/v1/user/'+ user_id,
             type: 'PUT',
             data: {username : username, email : email, password : password},
             success: function(data){

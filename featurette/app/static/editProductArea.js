@@ -25,7 +25,7 @@ $(document).ready(function(){
     });
 
     $.ajax({
-        url: 'http://localhost:5000/api/v1/productArea/' + id,
+        url: '/api/v1/productArea/' + id,
         type: 'GET',
         success(data){
             var name = document.getElementById('product_area_name').value = data.name;
@@ -42,7 +42,7 @@ $(document).ready(function(){
         console.log(product_area_id);
         console.log(product_area);
         $.ajax({
-            url: 'http://localhost:5000/api/v1/productArea/'+ product_area_id,
+            url: '/api/v1/productArea/'+ product_area_id,
             type: 'PUT',
             data: {product_area_name : product_area},
             success: function(data){

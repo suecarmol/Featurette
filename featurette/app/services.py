@@ -1,13 +1,14 @@
 from datetime import datetime
 from app import bcrypt, login_manager
 from db import session
+from config import config
 from flask_restful import reqparse
 from flask_restful import abort
 from flask_restful import Resource
 from flask_restful import fields
 from flask_restful import marshal_with
 from flask_login import current_user, login_user, logout_user, login_required
-from models import User, FeatureRequest, ProductArea, Client
+from models import User, FeatureRequest, ProductArea, Client, login_serializer
 
 
 client_fields = {
@@ -70,6 +71,22 @@ parser_feature.add_argument('ticket_url', type=str, required=True)
 @login_manager.user_loader
 def user_loader(user_id):
     return session.query(User).get(user_id)
+
+
+@login_manager.token_loader
+def load_token(token):
+    max_age = config["REMEMBER_COOKIE_DURATION"].total_seconds()
+
+    # Decrypt the Security Token, data = [username, hashpass]
+    data = login_serializer.loads(token, max_age=max_age)
+
+    # Find the User
+    user = session.query(User).get(data[0])
+
+    # Check Password and return user or None
+    if user and data[1] == user.password:
+        return user
+    return None
 
 
 class LoginResource(Resource):

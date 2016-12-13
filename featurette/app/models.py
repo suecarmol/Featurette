@@ -9,7 +9,10 @@ from sqlalchemy import Boolean
 from sqlalchemy import Text
 from sqlalchemy.orm import relationship
 from sqlalchemy import ForeignKey
+from itsdangerous import URLSafeTimedSerializer
+from config import config
 Base = declarative_base()
+login_serializer = URLSafeTimedSerializer(config.SECRET_KEY)
 
 
 class User(Base):
@@ -43,6 +46,13 @@ class User(Base):
 
     def is_anonymous(self):
         return False
+
+    def get_auth_token(self):
+        """
+        Encode a secure token for cookie
+        """
+        data = [str(self.id), self.password]
+        return login_serializer.dumps(data)
 
 
 class Client(Base):

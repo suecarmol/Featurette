@@ -2,11 +2,11 @@ import sys
 import os
 import unittest
 
-sys.path.append(os.path.abspath(os.path.dirname(__file__) + '/' + '../..'))
-from app.models import User, FeatureRequest # noqa
-from app import app, bcrypt # noqa
-from app.db import session # noqa
-from app.db import create_db_tables # noqa
+sys.path.append(os.path.abspath(os.path.dirname(__file__) + '/' + '../..')) # noqa
+from app.models import User
+from app import app
+from app.db import session
+from app.db import create_db_tables
 
 
 class FeatureRequestUnitTest(unittest.TestCase):

@@ -1,4 +1,5 @@
 import os
+from datetime import timedelta
 
 basedir = os.path.abspath(os.path.dirname(__file__))
 
@@ -29,6 +30,7 @@ class Auth:
 class Config:
     APP_NAME = "Featurette"
     SECRET_KEY = os.environ.get("SECRET_KEY") or "br1teCor3"
+    REMEMBER_COOKIE_DURATION = timedelta(days=14)
 
 
 class DevConfig(Config):

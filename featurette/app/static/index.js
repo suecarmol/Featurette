@@ -23,7 +23,7 @@ $(document).ready(function(){
     });
 
     $.getJSON({
-        url: 'http://localhost:5000/api/v1/featureRequests',
+        url: '/api/v1/featureRequests',
         dataType: 'json',
         success: function(data){
             $.each(data, function(index, element) {

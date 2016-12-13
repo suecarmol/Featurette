@@ -12,7 +12,7 @@ $(document).ready(function(){
         var product_area = $('#product_area_name').val();
         console.log(product_area);
         $.ajax({
-            url: 'http://localhost:5000/api/v1/productAreas',
+            url: '/api/v1/productAreas',
             type: "POST",
             data: {product_area_name : product_area},
             success: function(data){

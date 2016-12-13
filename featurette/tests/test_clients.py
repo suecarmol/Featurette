@@ -3,11 +3,11 @@ import os
 import unittest
 import requests
 
-sys.path.append(os.path.abspath(os.path.dirname(__file__) + '/' + '../..'))
-from app import app, bcrypt # noqa
-from app.models import User, Client # noqa
-from app.db import session # noqa
-from app.db import create_db_tables # noqa
+sys.path.append(os.path.abspath(os.path.dirname(__file__) + '/' + '../..')) # noqa
+from app import app
+from app.models import User
+from app.db import session
+from app.db import create_db_tables
 
 
 class ClientUnitTest(unittest.TestCase):

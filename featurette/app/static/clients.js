@@ -11,7 +11,7 @@ $(document).ready(function(){
     });
 
     $.getJSON({
-        url: 'http://localhost:5000/api/v1/clients',
+        url: '/api/v1/clients',
         dataType: 'json',
         success: function(data){
             $.each(data, function(index, element) {
