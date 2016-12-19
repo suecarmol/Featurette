@@ -10,12 +10,13 @@ from sqlalchemy import Text
 from sqlalchemy.orm import relationship
 from sqlalchemy import ForeignKey
 from itsdangerous import URLSafeTimedSerializer
+from flask_login import UserMixin
 from config import config
 Base = declarative_base()
 login_serializer = URLSafeTimedSerializer(config.SECRET_KEY)
 
 
-class User(Base):
+class User(Base, UserMixin):
     __tablename__ = 'users'
 
     id = Column(Integer, primary_key=True)
