@@ -1,7 +1,7 @@
 from datetime import datetime
 from app import bcrypt, login_manager
 from db import session
-from config import config
+from config import Config
 from flask_restful import reqparse
 from flask_restful import abort
 from flask_restful import Resource
@@ -75,7 +75,7 @@ def user_loader(user_id):
 
 @login_manager.token_loader
 def load_token(token):
-    max_age = config["REMEMBER_COOKIE_DURATION"].total_seconds()
+    max_age = Config.REMEMBER_COOKIE_DURATION.total_seconds()
 
     # Decrypt the Security Token, data = [username, hashpass]
     data = login_serializer.loads(token, max_age=max_age)

@@ -1,7 +1,6 @@
 import os
 import sys
 import unittest
-from flask import json
 
 sys.path.append(os.path.abspath(os.path.dirname(__file__) + '/' + '..')) # noqa
 from app import app

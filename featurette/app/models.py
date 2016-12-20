@@ -11,9 +11,9 @@ from sqlalchemy.orm import relationship
 from sqlalchemy import ForeignKey
 from itsdangerous import URLSafeTimedSerializer
 from flask_login import UserMixin
-from config import config
+from config import Config
 Base = declarative_base()
-login_serializer = URLSafeTimedSerializer(config.SECRET_KEY)
+login_serializer = URLSafeTimedSerializer(Config.SECRET_KEY)
 
 
 class User(Base, UserMixin):
