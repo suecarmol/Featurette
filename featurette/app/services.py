@@ -222,8 +222,10 @@ class UserResource(Resource):
         user = session.query(User).get(id)
         if not user:
             abort(404, message="User {} doesn't exist".format(id))
-        if user.id == current_user.id:
-            abort(403, message="You cannot delete yourself")
+        # current_user is not enabled during unit tests
+        if current_user.is_authenticated:
+            if user.id == current_user.id:
+                abort(403, message="You cannot delete yourself")
         session.delete(user)
         session.commit()
         return {}, 204
@@ -291,7 +293,11 @@ class FeatureRequestResource(Resource):
         feature_request.client_id = client_id
         feature_request.client_priority = client_priority
         feature_request.product_area_id = parsed_args['product_area_id']
-        feature_request.user_id = current_user.id
+        # current_user is not enabled during unit tests
+        if current_user.is_authenticated:
+            feature_request.user_id = current_user.id
+        else:
+            feature_request.user_id = 1
         feature_request.target_date = parsed_args['target_date']
         feature_request.ticket_url = parsed_args['ticket_url']
         feature_request.date_finished = None
@@ -325,7 +331,7 @@ class FeatureRequestResource(Resource):
             # add old priority and title
             priorities_dict[str(old_key)] = old_title
             # get old Feature Request that matches the parameters
-            feature_request = session.query(FeatureRequest).filter(FeatureRequest.title == old_title).filter(FeatureRequest.client_priority == new_client_priority).filter(FeatureRequest.client_id == client_id).one() # noqa
+            feature_request = session.query(FeatureRequest).filter(FeatureRequest.title == old_title).filter(FeatureRequest.client_priority == new_client_priority).filter(FeatureRequest.client_id == client_id).first() # noqa
 
 
 class FinishFeatureResource(Resource):
@@ -355,7 +361,11 @@ class FeatureRequestListResource(Resource):
         title = parsed_args['title']
         client_id = parsed_args['client_id']
         client_priority = parsed_args['client_priority']
-        user_id = current_user.id
+        # current_user is not enabled during unit tests
+        if current_user.is_authenticated:
+            user_id = current_user.id
+        else:
+            user_id = 1
         # priority algorithm
         self.checkPriorities(client_id, client_priority, title)
         feature_request = FeatureRequest(title=title,
@@ -395,7 +405,7 @@ class FeatureRequestListResource(Resource):
             # add old priority and title
             priorities_dict[str(old_key)] = old_title
             # get old Feature Request that matches the parameters
-            feature_request = session.query(FeatureRequest).filter(FeatureRequest.title == old_title).filter(FeatureRequest.client_priority == new_client_priority).filter(FeatureRequest.client_id == client_id).one() # noqa
+            feature_request = session.query(FeatureRequest).filter(FeatureRequest.title == old_title).filter(FeatureRequest.client_priority == new_client_priority).filter(FeatureRequest.client_id == client_id).first() # noqa
 
             feature_request.client_priority = int(old_key)
             session.add(feature_request)

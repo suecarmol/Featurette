@@ -41,8 +41,7 @@ class FeatureRequestUnitTest(unittest.TestCase):
                                                         'client_priority': 2,
                                                         'product_area_id': 1,
                                                         'target_date': '2017-01-09',
-                                                        'ticket_url': 'www.wired.com',
-                                                        })
+                                                        'ticket_url': 'www.wired.com'})
             self.assertEqual(201, response_add_feat_req.status_code)
 
     def test_edit_feature_request(self):
@@ -54,14 +53,13 @@ class FeatureRequestUnitTest(unittest.TestCase):
                                                     'client_priority': 99,
                                                     'product_area_id': 1,
                                                     'target_date': '2017-01-09',
-                                                    'ticket_url': 'www.apple.com'
-                                                    })
+                                                    'ticket_url': 'www.apple.com'})
             self.assertEqual(201, resp_edit_feat_req.status_code)
 
     def test_delete_feature_request(self):
         with self.app:
             response_del_feat_req = self.app.delete('/api/v1/featureRequest/2')
-            self.assertEqual(200, response_del_feat_req.status_code)
+            self.assertEqual(204, response_del_feat_req.status_code)
 
 if __name__ == '__main__':
     unittest.main()

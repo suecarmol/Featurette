@@ -36,19 +36,19 @@ class ProductAreaUnitTest(unittest.TestCase):
     def test_add_product_area(self):
         with self.app:
             response_add_product_area = self.app.post('/api/v1/productAreas',
-                                                      data={'name': 'TestPA'})
+                                                      data={'product_area_name': 'TestPA'})
             self.assertEqual(201, response_add_product_area.status_code)
 
     def test_edit_product_area(self):
         with self.app:
             response_edit_product_area = self.app.put('/api/v1/productArea/2',
-                                                      data={'name': 'Edited'})
+                                                      data={'product_area_name': 'Edited'})
             self.assertEqual(201, response_edit_product_area.status_code)
 
     def test_delete_product_area(self):
         with self.app:
             response_del_prod_area = self.app.delete('/api/v1/productArea/3')
-            self.assertEqual(200, response_del_prod_area.status_code)
+            self.assertEqual(204, response_del_prod_area.status_code)
 
 if __name__ == '__main__':
     unittest.main()

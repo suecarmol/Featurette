@@ -54,18 +54,18 @@ class ApiTest(unittest.TestCase):
             self.assertEqual(6, len(data))
 
             self.assertEqual(1, data[0]['id'])
-            self.assertEqual('username1', data[0]['username'])
-            self.assertTrue(data[0]['authenticated'])
+            self.assertEqual('username', data[0]['username'])
+            self.assertFalse(data[0]['authenticated'])
             self.assertFalse(data[0]['token'])
             self.assertTrue(data[0]['password'])
-            self.assertEqual('username1@foo.com', data[0]['email'])
+            self.assertEqual('username@foo.com', data[0]['email'])
 
             self.assertEqual(2, data[1]['id'])
-            self.assertEqual('username2', data[1]['username'])
+            self.assertEqual('username1', data[1]['username'])
             self.assertFalse(data[1]['authenticated'])
             self.assertFalse(data[1]['token'])
             self.assertTrue(data[1]['password'])
-            self.assertEqual('username2@foo.com', data[1]['email'])
+            self.assertEqual('username1@foo.com', data[1]['email'])
 
     def test_suggest_endpoint(self):
         with self.app:

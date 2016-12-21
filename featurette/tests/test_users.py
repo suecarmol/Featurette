@@ -53,8 +53,8 @@ class UserUnitTest(unittest.TestCase):
 
     def test_delete_user(self):
         with self.app:
-            response_delete_user = self.app.delete('/api/v1/user/2')
-            self.assertEqual(200, response_delete_user.status_code)
+            response_delete_user = self.app.delete('/api/v1/user/3')
+            self.assertEqual(204, response_delete_user.status_code)
 
     def test_unauth(self):
         with self.app:

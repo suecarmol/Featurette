@@ -35,19 +35,19 @@ class ClientUnitTest(unittest.TestCase):
     def test_add_client(self):
         with self.app:
             response_add_client = self.app.post('/api/v1/clients',
-                                                data={'name': 'Test Client'})
+                                                data={'client_name': 'Test Client'})
             self.assertEqual(201, response_add_client.status_code)
 
     def test_edit_client(self):
         with self.app:
-            response_edit_client = self.app.put('/api/v1/client/2',
-                                                data={'name': 'Edited Client'})
+            response_edit_client = self.app.put('/api/v1/client/3',
+                                                data={'client_name': 'Edited Client'})
             self.assertEqual(201, response_edit_client.status_code)
 
     def test_delete_client(self):
         with self.app:
             response_delete_client = self.app.delete('/api/v1/client/2')
-            self.assertEqual(200, response_delete_client.status_code)
+            self.assertEqual(204, response_delete_client.status_code)
 
 if __name__ == '__main__':
     unittest.main()
