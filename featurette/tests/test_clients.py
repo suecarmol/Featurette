@@ -5,17 +5,25 @@ import requests
 
 sys.path.append(os.path.abspath(os.path.dirname(__file__) + '/' + '../..')) # noqa
 from app import app
+from config import config
 from app.models import User
 from app.db import session
 from app.db import create_db_tables
+from app.db import delete_db_tables
 
 
 class ClientUnitTest(unittest.TestCase):
 
     def setUp(self):
+        app.config.from_object(config['test'])
+        app.login_manager.init_app(app)
         app.test_mode = True
         self.app = app.test_client()
         create_db_tables
+
+    def tearDown(self):
+        app.test_mode = False
+        delete_db_tables
 
     def test_restricted_client_endpoints_without_auth(self):
         with self.app:

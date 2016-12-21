@@ -36,15 +36,26 @@ class Config:
 class DevConfig(Config):
     DEBUG = True
     SQLALCHEMY_DATABASE_URI = DB_URI
+    TESTING = True
+    LOGIN_DISABLED = False
 
 
 class ProdConfig(Config):
     DEBUG = True
     SQLALCHEMY_DATABASE_URI = DB_URI
+    TESTING = False
+    LOGIN_DISABLED = False
 
+
+class TestConfig(Config):
+    DEBUG = False
+    SQLALCHEMY_DATABASE_URI = DB_URI
+    TESTING = True
+    LOGIN_DISABLED = True
 
 config = {
     "dev": DevConfig,
     "prod": ProdConfig,
-    "default": DevConfig
+    "default": DevConfig,
+    "test": TestConfig
 }

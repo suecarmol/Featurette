@@ -4,6 +4,7 @@ import unittest
 
 sys.path.append(os.path.abspath(os.path.dirname(__file__) + '/' + '..')) # noqa
 from app import app
+from config import config
 from app.models import User
 from app.db import session
 from app.db import create_db_tables
@@ -13,6 +14,8 @@ from app.db import delete_db_tables
 class UserUnitTest(unittest.TestCase):
 
     def setUp(self):
+        app.config.from_object(config['test'])
+        app.login_manager.init_app(app)
         app.test_mode = True
         self.app = app.test_client()
         create_db_tables
@@ -25,8 +28,8 @@ class UserUnitTest(unittest.TestCase):
         with self.app:
             response_users = self.app.get('/api/v1/users')
             response_add_users = self.app.post('/api/v1/users',
-                                               data={'username': 'user1',
-                                                     'email': 'user1@foo.com',
+                                               data={'username': 'user321311',
+                                                     'email': 'user321311@foo.com',
                                                      'password': '12345678'})
             response_delete_users = self.app.delete('/api/v1/user/3')
             self.assertEqual(401, response_users.status_code)
@@ -41,8 +44,8 @@ class UserUnitTest(unittest.TestCase):
                                      'password': user.password})
             self.assertTrue(user.authenticated)
             response_add_users = self.app.post('/api/v1/users',
-                                               data={'username': 'user1',
-                                                     'email': 'user1@foo.com',
+                                               data={'username': 'user134e234',
+                                                     'email': 'user134e234@foo.com',
                                                      'password': '12345678'})
             response_delete_users = self.app.delete('/api/v1/user/2')
 
