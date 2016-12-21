@@ -5,15 +5,14 @@ import unittest
 sys.path.append(os.path.abspath(os.path.dirname(__file__) + '/' + '..')) # noqa
 from app import app
 from config import config
-from app.models import User
 from app.db import create_db_tables
-from app.db import session
 from app.db import delete_db_tables
 
 
 class ProductAreaUnitTest(unittest.TestCase):
 
     def setUp(self):
+        # LOGIN_DISABLED flag is turned on
         app.config.from_object(config['test'])
         app.login_manager.init_app(app)
         app.test_mode = True
@@ -24,38 +23,32 @@ class ProductAreaUnitTest(unittest.TestCase):
         app.test_mode = False
         delete_db_tables
 
-    def test_restricted_product_area_endpoints_without_auth(self):
+    def test_get_product_areas(self):
         with self.app:
-            response_product_areas = self.app.get('/api/v1/productAreas')
-            response_add_product_areas = self.app.post('/api/v1/productAreas',
-                                                       data={'name': 'Test1'})
-            response_delete_product_areas = self.app.delete('/api/v1/productArea/4')
-            self.assertEqual(401, response_product_areas.status_code)
-            self.assertEqual(401, response_add_product_areas.status_code)
-            self.assertEqual(401, response_delete_product_areas.status_code)
+            response_all_product_areas = self.app.get('/api/v1/productAreas')
+            self.assertEqual(200, response_all_product_areas.status_code)
 
-    def test_restricted_product_area_endpoints_with_auth(self):
+    def test_get_one_product_area(self):
         with self.app:
-            user = session.query(User).get(1)
-            response = self.app.post('/api/v1/login', data={
-                                     'email': user.email,
-                                     'password': user.password})
-            self.assertEqual(200, response.status_code)
-            self.assertTrue(user.authenticated)
-            response_product_areas = self.app.get('/api/v1/productAreas')
-            response_add_product_areas = self.app.post('/api/v1/productAreas',
-                                                       data={'name': 'Test1'})
-            response_delete_product_areas = self.app.delete('/api/v1/productArea/5')
-            self.assertEqual(200, response_product_areas.status_code)
-            self.assertEqual(200, response_add_product_areas.status_code)
-            self.assertEqual(200, response_delete_product_areas.status_code)
+            response_product_area = self.app.get('/api/v1/productArea/1')
+            self.assertEqual(200, response_product_area.status_code)
 
     def test_add_product_area(self):
         with self.app:
-            product_area = 'Product Area 1'
-            response = self.app.post('/api/v1/productAreas',
-                                     {'name': product_area})
-            self.assertEqual(401, response.status_code)
+            response_add_product_area = self.app.post('/api/v1/productAreas',
+                                                      data={'name': 'TestPA'})
+            self.assertEqual(201, response_add_product_area.status_code)
+
+    def test_edit_product_area(self):
+        with self.app:
+            response_edit_product_area = self.app.put('/api/v1/productArea/2',
+                                                      data={'name': 'Edited'})
+            self.assertEqual(201, response_edit_product_area.status_code)
+
+    def test_delete_product_area(self):
+        with self.app:
+            response_del_prod_area = self.app.delete('/api/v1/productArea/3')
+            self.assertEqual(200, response_del_prod_area.status_code)
 
 if __name__ == '__main__':
     unittest.main()

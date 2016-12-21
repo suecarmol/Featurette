@@ -3,10 +3,8 @@ import os
 import unittest
 
 sys.path.append(os.path.abspath(os.path.dirname(__file__) + '/' + '../..')) # noqa
-from app.models import User
 from app import app
 from config import config
-from app.db import session
 from app.db import create_db_tables
 from app.db import delete_db_tables
 
@@ -24,27 +22,46 @@ class FeatureRequestUnitTest(unittest.TestCase):
         app.test_mode = False
         delete_db_tables
 
-    def test_restricted_feature_request_endpoints_without_auth(self):
+    def test_get_all_feature_requests(self):
         with self.app:
-            response_features = self.app.get('/api/v1/featureRequests')
-            response_add_features = self.app.get('/api/v1/featureRequests')
-            self.assertEqual(401, response_features.status_code)
-            self.assertEqual(401, response_add_features.status_code)
+            response_all_feat_req = self.app.get('/api/v1/featureRequests')
+            self.assertEqual(200, response_all_feat_req.status_code)
 
-    def test_restricted_feature_request_endpoints_with_auth(self):
+    def test_get_one_feature_request(self):
         with self.app:
-            user = session.query(User).get(1)
-            response = self.app.post('/api/v1/login', data={
-                                     'email': user.email,
-                                     'password': user.password})
-            self.assertTrue(user.authenticated)
-            self.assertEqual(200, response.status_code)
-            response_features = self.app.get('/api/v1/featureRequests')
-            # response_add_features = self.app.get('/addFeature')
-            # response_delete_features = self.app.get('/deleteFeature')
-            self.assertEqual(200, response_features.status_code)
-            # self.assert200(response_add_features)
-            # self.assert200(response_delete_features)
+            response_one_feat_req = self.app.get('/api/v1/featureRequest/1')
+            self.assertEqual(200, response_one_feat_req.status_code)
+
+    def test_add_feature_request(self):
+        with self.app:
+            response_add_feat_req = self.app.post('/api/v1/featureRequests',
+                                                  data={'title': 'Great Title',
+                                                        'description': 'A description',
+                                                        'client_id': 1,
+                                                        'client_priority': 2,
+                                                        'product_area_id': 1,
+                                                        'target_date': '2017-01-09',
+                                                        'ticket_url': 'www.wired.com',
+                                                        })
+            self.assertEqual(201, response_add_feat_req.status_code)
+
+    def test_edit_feature_request(self):
+        with self.app:
+            resp_edit_feat_req = self.app.put('/api/v1/featureRequest/1',
+                                              data={'title': 'Great Title',
+                                                    'description': 'A description',
+                                                    'client_id': 1,
+                                                    'client_priority': 99,
+                                                    'product_area_id': 1,
+                                                    'target_date': '2017-01-09',
+                                                    'ticket_url': 'www.apple.com'
+                                                    })
+            self.assertEqual(201, resp_edit_feat_req.status_code)
+
+    def test_delete_feature_request(self):
+        with self.app:
+            response_del_feat_req = self.app.delete('/api/v1/featureRequest/2')
+            self.assertEqual(200, response_del_feat_req.status_code)
 
 if __name__ == '__main__':
     unittest.main()

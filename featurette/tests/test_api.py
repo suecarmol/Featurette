@@ -27,12 +27,9 @@ class ApiTest(unittest.TestCase):
 
     def test_get_clients(self):
         with self.app:
-            login = self.app.post('/api/v1/login', data={'email': 'username@foo.com',
-                                  'password': '12345678'})
             result = self.app.get('/api/v1/clients')
             data = json.loads(result.data)
 
-            self.assertEqual(200, login.status_code)
             self.assertEqual(200, result.status_code)
             self.assertEqual(4, len(data))
 
@@ -50,12 +47,9 @@ class ApiTest(unittest.TestCase):
 
     def test_get_users(self):
         with self.app:
-            login = self.app.post('/api/v1/login', data={'email': 'username1@foo.com',
-                                  'password': '12345678'})
             result = self.app.get('/api/v1/users')
             data = json.loads(result.data)
 
-            self.assertEqual(200, login.status_code)
             self.assertEqual(200, result.status_code)
             self.assertEqual(6, len(data))
 
@@ -75,23 +69,17 @@ class ApiTest(unittest.TestCase):
 
     def test_suggest_endpoint(self):
         with self.app:
-            login = self.app.post('/api/v1/login', data={'email': 'username@foo.com',
-                                  'password': '12345678'})
             result = self.app.get('/api/v1/product_areas')
             data = json.loads(result.data)
 
-            self.assertEqual(200, login.status_code)
             self.assertEqual(404, result.status_code)
             self.assertIn('did you mean /api/v1/productAreas', data['message'])
 
     def test_get_product_areas(self):
         with self.app:
-            login = self.app.post('/api/v1/login', data={'email': 'username@foo.com',
-                                  'password': '12345678'})
             result = self.app.get('/api/v1/productAreas')
             data = json.loads(result.data)
 
-            self.assertEqual(200, login.status_code)
             self.assertEqual(200, result.status_code)
             self.assertEqual(4, len(data))
 
@@ -109,11 +97,8 @@ class ApiTest(unittest.TestCase):
 
     def test_get_feature_requests(self):
         with self.app:
-            login = self.app.post('/api/v1/login', data={'email': 'username@foo.com',
-                                  'password': '12345678'})
             result = self.app.get('/api/v1/featureRequests')
 
-            self.assertEqual(200, login.status_code)
             self.assertEqual(200, result.status_code)
             data = json.loads(result.data)
             print data
