@@ -36,12 +36,6 @@ class ApiTest(unittest.TestCase):
             self.assertEqual(1, data[0]['id'])
             self.assertEqual('Client A', data[0]['name'])
 
-            self.assertEqual(2, data[1]['id'])
-            self.assertEqual('Client B', data[1]['name'])
-
-            self.assertEqual(3, data[2]['id'])
-            self.assertEqual('Client C', data[2]['name'])
-
             self.assertEqual(4, data[3]['id'])
             self.assertEqual('Client D', data[3]['name'])
 
@@ -52,13 +46,6 @@ class ApiTest(unittest.TestCase):
 
             self.assertEqual(200, result.status_code)
             self.assertEqual(6, len(data))
-
-            self.assertEqual(1, data[0]['id'])
-            self.assertEqual('username', data[0]['username'])
-            self.assertFalse(data[0]['authenticated'])
-            self.assertFalse(data[0]['token'])
-            self.assertTrue(data[0]['password'])
-            self.assertEqual('username@foo.com', data[0]['email'])
 
             self.assertEqual(2, data[1]['id'])
             self.assertEqual('username1', data[1]['username'])
@@ -85,12 +72,6 @@ class ApiTest(unittest.TestCase):
 
             self.assertEqual(1, data[0]['id'])
             self.assertEqual('Policies', data[0]['name'])
-
-            self.assertEqual(2, data[1]['id'])
-            self.assertEqual('Claims', data[1]['name'])
-
-            self.assertEqual(3, data[2]['id'])
-            self.assertEqual('Billing', data[2]['name'])
 
             self.assertEqual(4, data[3]['id'])
             self.assertEqual('Reports', data[3]['name'])
