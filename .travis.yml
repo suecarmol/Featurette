@@ -17,7 +17,17 @@ script:
   - webrunner tests/test_functional_add_product_area.yml
   - webrunner tests/test_functional_add_user.yml
   - webrunner tests/test_functional_add_client_empty.yml
-  - webrunner tests/test__functional_add_product_area_empty.yml
+  - webrunner tests/test_functional_add_product_area_empty.yml
+  - webrunner tests/test_functional_add_feature_empty.yml
+  - webrunner tests/test_functional_add_user_empty.yml
+  - webrunner tests/test_functional_add_feature_invalid_url.yml
+  - webrunner tests/test_functional_add_feature_negative_priority.yml
+  - webrunner tests/test_functional_add_feature_no_title.yml
+  - webrunner tests/test_functional_add_feature_priority_empty.yml
+  - webrunner tests/test_functional_add_feature_short_desc.yml
+  - webrunner tests/test_functional_add_user_invalid_email.yml
+  - webrunner tests/test_functional_add_user_username_empty.yml
+  - webrunner tests/test_functional_add_user_wrong_password.yml
 # https://github.com/SeleniumHQ/selenium/blob/master/.travis.yml
 before_script:
   - wget http://chromedriver.storage.googleapis.com/2.24/chromedriver_linux64.zip

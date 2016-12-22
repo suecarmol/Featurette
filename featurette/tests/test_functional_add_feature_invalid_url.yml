@@ -22,7 +22,7 @@
 - js: "var date = document.getElementById('target-date').flatpickr(); date.setDate('2016-11-22');"
 - set_select_by_text:
   - "#product_area"
-  - Claims
+  - Policies
 - set_value:
   - "#ticket_url"
   - not a url
