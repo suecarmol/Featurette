@@ -36,9 +36,6 @@ class ApiTest(unittest.TestCase):
             self.assertEqual(1, data[0]['id'])
             self.assertEqual('Client A', data[0]['name'])
 
-            self.assertEqual(4, data[3]['id'])
-            self.assertEqual('Client D', data[3]['name'])
-
     def test_get_users(self):
         with self.app:
             result = self.app.get('/api/v1/users')
@@ -72,9 +69,6 @@ class ApiTest(unittest.TestCase):
 
             self.assertEqual(1, data[0]['id'])
             self.assertEqual('Policies', data[0]['name'])
-
-            self.assertEqual(4, data[3]['id'])
-            self.assertEqual('Reports', data[3]['name'])
 
     def test_get_feature_requests(self):
         with self.app:
