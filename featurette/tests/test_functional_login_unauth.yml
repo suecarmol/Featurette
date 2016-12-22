@@ -6,5 +6,5 @@
   - "#password"
   - WrongPassword
 - click: "#login"
-- assert_text_on_page: Email or password are incorrect
+- assert_text_on_page: Login Featurette
 - wait: 2

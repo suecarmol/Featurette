@@ -8,9 +8,6 @@
 - click: "#login"
 - click: "#product_areas_id"
 - click: "#add_product_area"
-- set_value:
-  - "#product_area_name"
-  - Accounting
 - click: "#submit"
-- assert_text_on_page: Add Product Area
+- assert_text_on_page: Please enter a product area name
 - wait: 2
