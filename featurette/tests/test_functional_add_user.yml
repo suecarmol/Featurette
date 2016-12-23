@@ -13,7 +13,7 @@
   - AUser
 - set_value:
   - "#email"
-  - email@foo.com
+  - someemail@foo.com
 - set_value:
   - "#password"
   - 12345678
