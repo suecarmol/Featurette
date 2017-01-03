@@ -12,18 +12,20 @@ $(document).ready(function(){
         var username = $('#username').val();
         var email = $('#email').val();
         var password = $('#password').val();
-        $.ajax({
-            url: '/api/v1/users',
-            type: "POST",
-            data: {username : username, email : email, password : password},
-            success: function(data){
-                console.log('User inserted successfully');
-            },
-            error: function(xhr,err){
-                console.log("readyState: "+xhr.readyState+"\nstatus: "+xhr.status);
-                console.log("responseText: "+xhr.responseText);
-            }
-        });
+		if(username !== undefined && email !== undefined && password !== undefined){
+			$.ajax({
+	            url: '/api/v1/users',
+	            type: "POST",
+	            data: {username : username, email : email, password : password},
+	            success: function(data){
+	                console.log('User inserted successfully');
+	            },
+	            error: function(xhr,err){
+	                console.log("readyState: "+xhr.readyState+"\nstatus: "+xhr.status);
+	                console.log("responseText: "+xhr.responseText);
+	            }
+	        });
+		}
 	});
 
 });
