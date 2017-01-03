@@ -6,6 +6,7 @@
   - "#password"
   - 12345678
 - click: "#login"
+- wait: 1
 - click: "#users_id"
 - click: "#add_user"
 - set_value:
