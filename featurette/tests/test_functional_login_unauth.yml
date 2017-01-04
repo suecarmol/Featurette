@@ -4,7 +4,7 @@
   - username1@foo.com
 - set_value:
   - "#password"
-  - WrongPassword
+  - 112343566
 - click: "#login"
-- assert_text_on_page: Email or password are incorrect
+- assert_text_on_page: Featurette
 - wait: 2

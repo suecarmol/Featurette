@@ -1,4 +1,4 @@
-- go: http://localhost:5000/addFeature
+- go: http://localhost:5000/login
 - set_value:
   - "#email"
   - username1@foo.com
@@ -19,7 +19,7 @@
 - js: "var date = document.getElementById('target-date').flatpickr(); date.setDate('2016-11-22');"
 - set_select_by_text:
   - "#product_area"
-  - Claims
+  - Policies
 - set_value:
   - "#ticket_url"
   - www.wired.com

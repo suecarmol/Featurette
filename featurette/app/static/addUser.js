@@ -1,59 +1,46 @@
 $(document).ready(function(){
-    $('.ui.form').form({
-        fields: {
-            username: {
-                identifier: 'username',
-                rules: [
-                    {
-                        type: 'empty',
-                        prompt: 'Please enter a username'
-                    },
-                    {
-                        type: 'minLength[6]',
-                        prompt: 'Username must have at least 6 characters'
-                    }
-                ]
-            },
-            email: {
-                identifier: 'email',
-                rules: [
-                    {
-                        type: 'empty',
-                        prompt: 'Please enter an email'
-                    },
-                    {
-                        type: 'email',
-                        prompt: 'Email must ve a valid email'
-                    }
-                ]
-            },
-            password: {
-                identifier: 'password',
-                rules: [
-                    {
-                        type: 'empty',
-                        prompt: 'Please enter a password'
-                    },
-                    {
-                        type: 'minLength[8]',
-                        prompt: 'Password must have at least 8 characters'
-                    }
 
-                ]
-            },
-            repeat_password: {
-                identifier: 'repeat_password',
-                rules: [
-                    {
-                        type: 'empty',
-                        prompt: 'Please re-enter your password'
-                    },
-                    {
-                        type: 'match[password]',
-                        prompt: 'The passwords do not match'
-                    }
-                ]
-            }
+	function validateEmail(mail){
+		if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(mail)){
+			return true;
+		}
+		return false;
+	}
+
+
+	//redirected when unauthorized
+	$( document ).ajaxError(function( event, jqxhr, settings, exception ) {
+        if ( jqxhr.status== 401 ) {
+            window.location = '/login';
         }
     });
+
+    //Adding user
+	$('#submit').click(function(){
+		console.log('Submitting user...');
+        var username = $('#username').val();
+        var email = $('#email').val();
+        var password = $('#password').val();
+		if((username !== undefined || $.trim(username)) ||
+			(email !== undefined || $.trim(email)) ||
+			(password !== undefined || $.trim(password))){
+			if(validateEmail(email)){
+				console.log('Valid email');
+				$.ajax({
+		            url: '/api/v1/users',
+		            type: "POST",
+		            data: {username : username, email : email, password : password},
+		            success: function(data){
+		                console.log('User inserted successfully');
+						console.log(data);
+		            },
+		            error: function(xhr,err){
+		                console.log("readyState: "+xhr.readyState+"\nstatus: "+xhr.status);
+		                console.log("responseText: "+xhr.responseText);
+		            }
+		        });
+			}
+		}
+	});
+
 });

@@ -8,7 +8,7 @@ install:
   - pip install -r requirements.txt
   - pip install PyWebRunner
 script:
-  - sleep 40 # hard wait for docker compose
+  - sleep 45 # hard wait for docker compose
   - docker exec -it featurette_www_1 python -m unittest discover -v tests
   - webrunner tests/test_functional_login.yml
   - webrunner tests/test_functional_login_unauth.yml
@@ -17,10 +17,20 @@ script:
   - webrunner tests/test_functional_add_product_area.yml
   - webrunner tests/test_functional_add_user.yml
   - webrunner tests/test_functional_add_client_empty.yml
-  - webrunner tests/test__functional_add_product_area_empty.yml
+  - webrunner tests/test_functional_add_product_area_empty.yml
+  - webrunner tests/test_functional_add_feature_empty.yml
+  - webrunner tests/test_functional_add_user_empty.yml
+  - webrunner tests/test_functional_add_feature_invalid_url.yml
+  - webrunner tests/test_functional_add_feature_negative_priority.yml
+  - webrunner tests/test_functional_add_feature_no_title.yml
+  - webrunner tests/test_functional_add_feature_priority_empty.yml
+  - webrunner tests/test_functional_add_feature_short_desc.yml
+  - webrunner tests/test_functional_add_user_invalid_email.yml
+  - webrunner tests/test_functional_add_user_username_empty.yml
+  - webrunner tests/test_functional_add_user_wrong_password.yml
 # https://github.com/SeleniumHQ/selenium/blob/master/.travis.yml
 before_script:
-  - wget http://chromedriver.storage.googleapis.com/2.12/chromedriver_linux64.zip
+  - wget http://chromedriver.storage.googleapis.com/2.24/chromedriver_linux64.zip
   - unzip chromedriver_linux64.zip
   - export PATH=$PATH:$PWD
   - sleep 3

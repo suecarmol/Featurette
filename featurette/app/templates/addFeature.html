@@ -2,11 +2,11 @@
     {% block head %}
         <link rel="stylesheet" type="text/css" href="static/flatpickr.min.css">
         <script src="static/flatpickr.min.js"></script>
-        <script src="static/index.js"></script>
+        <script src="static/feature_request_validation.js"></script>
         <script src="static/addFeature.js"></script>
     {% endblock %}
     {% block content %}
-        <form class="ui form segment" action="/addFeature" method="POST">
+        <form class="ui form segment" action="/" method="POST">
             <h3 class="ui dividing header">Feature Request</h3>
             <div class="field">
                 <label>Title</label>
@@ -52,7 +52,7 @@
                 <input id="ticket_url" type="text" name="ticket_url"
                     placeholder="Ticket URL">
             </div>
-            <button id="submit" class="ui violet button" tabindex="0" type="submit">
+            <button id="submit" class="ui violet button">
                 Submit Feature Request
             </button>
             <a href="/" class="ui red button" tabindex="0">

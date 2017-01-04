@@ -1,7 +1,8 @@
 {% extends "menu_bar.html" %}
     {% block head %}
         {{ super() }}
-        <script src="static/productAreas.js"></script>
+        <script type="text/javascript" src="static/productAreas.js"></script>
+        <script type="text/javascript" src="static/deleteProductArea.js"></script>
     {% endblock %}
     {% block content %}
         {% with messages = get_flashed_messages() %}
@@ -19,33 +20,15 @@
         {% endwith %}
         <h2> Product Areas </h2>
 
-        <table class="ui celled padded violet table">
+        <table class="ui sortable celled padded violet table">
             <thead>
                 <tr>
                     <th>Name</th>
                     <th>Actions</th>
                 </tr>
             </thead>
-            <tbody>
-                {% for product_area in product_areas %}
-                    <tr>
-                        <td>{{ product_area.name }}</td>
-                        <td class="single line">
-                            <form action="/editProductArea" method="GET">
-                                <button id="edit_product_area" class="ui icon violet button" name="product_area_id"
-                                    value="{{ product_area.id }}">
-                                    <i class="edit icon"></i>
-                                </button>
-                            </form>
-                            <form id="delete_product_area" action="/deleteProductArea" method="POST">
-                                <button class="ui icon red button" type="submit"
-                                    name="product_area_id" value="{{ product_area.id }}">
-                                    <i class="delete icon"></i>
-                                </button>
-                            </form>
-                        </td>
-                    </tr>
-                {% endfor %}
+            <tbody id="productAreasTable">
+
             </tbody>
             <tfoot class="full-width">
                 <tr>

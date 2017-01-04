@@ -13,6 +13,8 @@ services:
       - HOST=0.0.0.0
       - MYSQL_HOST=db
       - MYSQL_USER_PASS=featurette:br1teCor3
+    volumes:
+      - ./featurette:/opt/www/featurette
   db:
     image: mysql:5.6
     volumes:
@@ -23,3 +25,10 @@ services:
       MYSQL_DATABASE: featurette
       MYSQL_USER: featurette
       MYSQL_PASSWORD: br1teCor3
+  isso:
+    image: wonderfall/isso
+    ports:
+      - 8080:8080
+    volumes:
+      - ./isso:/config
+      - ./isso:/db

@@ -2,70 +2,53 @@ import sys
 import os
 import unittest
 
-from flask_testing import TestCase
-sys.path.append(os.path.abspath(os.path.dirname(__file__) + '/' + '..'))
-from app import app, db, bcrypt
-from app.models import User, ProductArea
+sys.path.append(os.path.abspath(os.path.dirname(__file__) + '/' + '..')) # noqa
+from app import app
+from config import config
+from app.db import create_db_tables
+from app.db import delete_db_tables
 
 
-class ProductAreaUnitTest(TestCase):
-
-    def create_app(self):
-        app.config['TESTING'] = True
-        return app
+class ProductAreaUnitTest(unittest.TestCase):
 
     def setUp(self):
-        db.create_all()
+        # LOGIN_DISABLED flag is turned on
+        app.config.from_object(config['test'])
+        app.login_manager.init_app(app)
+        app.test_mode = True
+        self.app = app.test_client()
+        create_db_tables
 
     def tearDown(self):
-        db.session.remove()
-        db.drop_all()
+        app.test_mode = False
+        delete_db_tables
 
-    def test_restricted_product_area_endpoints_without_auth(self):
-        user = User('username', 'username@foo.com', bcrypt.generate_password_hash
-                    ('12345678'))
-        db.session.add(user)
-        db.session.commit()
-        assert user in db.session
-        response_login = self.client.post('/login', {'email': user.email,
-                                                     'password': user.password})
-        self.assert200(response_login)
-        self.assertTrue(user.authenticated)
-        response_logout = self.client.get('/logout')
-        self.assert200(response_logout)
-        response_product_areas = self.client.get('/productArea')
-        response_add_product_areas = self.client.get('/addProductArea')
-        response_delete_product_areas = self.client.get('/deleteProductArea')
-        self.assertFalse(user.authenticated)
-        self.assert401(response_product_areas)
-        self.assert401(response_add_product_areas)
-        self.assert401(response_delete_product_areas)
+    def test_get_product_areas(self):
+        with self.app:
+            response_all_product_areas = self.app.get('/api/v1/productAreas')
+            self.assertEqual(200, response_all_product_areas.status_code)
 
-    def test_restricted_product_area_endpoints_with_auth(self):
-        user = User('username', 'username@foo.com', bcrypt.generate_password_hash
-                    ('12345678'))
-        db.session.add(user)
-        db.session.commit()
-        assert user in db.session
-        response = self.client.post('/login', {'email': user.email, 'password':
-                                               user.password})
-        self.assert200(response)
-        self.assertTrue(user.authenticated)
-        response_product_areas = self.client.get('/productArea')
-        response_add_product_areas = self.client.get('/addProductArea')
-        response_delete_product_areas = self.client.get('/deleteProductArea')
-        self.assert200(response_product_areas)
-        self.assert200(response_add_product_areas)
-        self.assert200(response_delete_product_areas)
+    def test_get_one_product_area(self):
+        with self.app:
+            response_product_area = self.app.get('/api/v1/productArea/1')
+            self.assertEqual(200, response_product_area.status_code)
 
     def test_add_product_area(self):
-        product_area = ProductArea('Product Area 1')
-        response = self.client.post('/addClient', {'name': product_area.name})
-        db.session.add(product_area)
-        db.session.commit()
-        assert product_area in db.session
-        self.assert200(response)
-        self.assertRedirects(response, '/productAreas')
+        with self.app:
+            response_add_product_area = self.app.post('/api/v1/productAreas',
+                                                      data={'product_area_name': 'TestPA'})
+            self.assertEqual(201, response_add_product_area.status_code)
+
+    def test_edit_product_area(self):
+        with self.app:
+            response_edit_product_area = self.app.put('/api/v1/productArea/2',
+                                                      data={'product_area_name': 'Edited'})
+            self.assertEqual(201, response_edit_product_area.status_code)
+
+    def test_delete_product_area(self):
+        with self.app:
+            response_del_prod_area = self.app.delete('/api/v1/productArea/3')
+            self.assertEqual(204, response_del_prod_area.status_code)
 
 if __name__ == '__main__':
     unittest.main()

@@ -1,15 +1,28 @@
 $(document).ready(function(){
-    $('.ui.form').form({
-        fields: {
-            client_name: {
-                identifier: 'client_name',
-                rules: [
-                    {
-                        type: 'empty',
-                        prompt: 'Please enter a client'
-                    }
-                ]
-            }
+
+	$( document ).ajaxError(function( event, jqxhr, settings, exception ) {
+        if ( jqxhr.status== 401 ) {
+            //$( "div.log" ).text( "Triggered ajaxError handler." );
+            window.location = '/login';
         }
-    })
+    });
+
+    //Adding client
+	$('#submit').click(function(){
+        var client_name = $('#client_name').val();
+		if(client_name !== undefined || $.trim(client_name)){
+	        $.ajax({
+	            url: '/api/v1/clients',
+	            type: "POST",
+	            data: {client_name : client_name},
+	            success: function(data){
+	                console.log('Client inserted successfully');
+	            },
+	            error: function(xhr,err){
+	                console.log("readyState: "+xhr.readyState+"\nstatus: "+xhr.status);
+	                console.log("responseText: "+xhr.responseText);
+	            }
+	        });
+		}
+	});
 });

@@ -2,97 +2,64 @@ import os
 import sys
 import unittest
 
-from flask_testing import TestCase
-sys.path.append(os.path.abspath(os.path.dirname(__file__) + '/' + '..'))
-from app import app, bcrypt, db
+sys.path.append(os.path.abspath(os.path.dirname(__file__) + '/' + '..')) # noqa
+from app import app
+from config import config
 from app.models import User
+from app.db import session
+from app.db import create_db_tables
+from app.db import delete_db_tables
 
 
-class UserUnitTest(TestCase):
-
-    def create_app(self):
-        app.config['TESTING'] = True
-        return app
+class UserUnitTest(unittest.TestCase):
 
     def setUp(self):
-        db.create_all()
+        # LOGIN_DISABLED flag is turned on
+        app.config.from_object(config['test'])
+        app.login_manager.init_app(app)
+        app.test_mode = True
+        self.app = app.test_client()
+        create_db_tables
 
     def tearDown(self):
-        db.session.remove()
-        db.drop_all()
+        app.test_mode = False
+        delete_db_tables
 
-    def test_restricted_user_endpoints_without_auth(self):
-        user = User('username', 'username@foo.com',
-                    bcrypt.generate_password_hash('12345678'))
-        db.session.add(user)
-        db.session.commit()
-        assert user in db.session
-        response = self.client.post('/login', {'email': user.email,
-                                    'password': user.password})
-        self.assert200(response)
-        logout = self.client.get('/logout')
-        response_users = self.client.get('/users')
-        response_add_users = self.client.get('/addUser')
-        response_delete_users = self.client.get('/deleteUser')
-        self.assert200(logout)
-        self.assert401(response_users)
-        self.assert401(response_add_users)
-        self.assert401(response_delete_users)
+    def test_get_all_users(self):
+        with self.app:
+            response_all_users = self.app.get('/api/v1/users')
+            self.assertEqual(200, response_all_users.status_code)
 
-    def test_restricted_user_endpoints_with_auth(self):
-        user = User('username', 'username@foo.com',
-                    bcrypt.generate_password_hash('12345678'))
-        db.session.add(user)
-        db.session.commit()
-        assert user in db.session
-        response = self.client.post('/login', {'email': user.email,
-                                    'password': user.password})
-        self.assertTrue(user.authenticated)
-        response_users = self.client.get('/users')
-        response_add_users = self.client.get('/addUser')
-        response_delete_users = self.client.get('/deleteUser')
-        self.assert200(response)
-        self.assert200(response_users)
-        self.assert200(response_add_users)
-        self.assert200(response_delete_users)
+    def test_get_one_user(self):
+        with self.app:
+            response_user = self.app.get('/api/v1/user/1')
+            self.assertEqual(200, response_user.status_code)
+
+    def test_add_user(self):
+        with self.app:
+            response_add_user = self.app.post('/api/v1/users',
+                                              data={'username': 'user871',
+                                                    'email': 'user871@foo.com',
+                                                    'password': '12345678'})
+            self.assertEqual(201, response_add_user.status_code)
+
+    def test_edit_user(self):
+        with self.app:
+            response_edit_user = self.app.put('/api/v1/user/1',
+                                              data={'username': 'editeduser',
+                                                    'email': 'email@foo.com',
+                                                    'password': '12345678'})
+            self.assertEqual(201, response_edit_user.status_code)
+
+    def test_delete_user(self):
+        with self.app:
+            response_delete_user = self.app.delete('/api/v1/user/3')
+            self.assertEqual(204, response_delete_user.status_code)
 
     def test_unauth(self):
-        user = User('username', 'username@foo.com',
-                    bcrypt.generate_password_hash('12345678'))
-        db.session.add(user)
-        db.session.commit()
-        assert user in db.session
-        self.assertFalse(user.authenticated)
-
-    def test_login(self):
-        user = User('username', 'username@foo.com',
-                    bcrypt.generate_password_hash('12345678'))
-        db.session.add(user)
-        db.session.commit()
-        assert user in db.session
-        response = self.client.post('/login', {'email': user.email,
-                                               'password': user.password})
-        self.assert200(response)
-        self.assertEquals(user.username, 'username')
-        self.assertTrue(user.authenticated)
-
-    def test_logout(self):
-        # logging in
-        user = User('username', 'username@foo.com',
-                    bcrypt.generate_password_hash('12345678'))
-        db.session.add(user)
-        db.session.commit()
-        assert user in db.session
-        response_login = self.client.post('/login', {'email': user.email,
-                                                     'password': user.password})
-        self.assertRedirects(response_login, '/')
-        self.assertTrue(user.authenticated)
-        # logging out
-        response_logout = self.client.get('/logout')
-        # assert that logout was made
-        self.assert200(response_logout)
-        self.assertFalse(user.authenticated)
-
+        with self.app:
+            user = session.query(User).get(1)
+            self.assertFalse(user.authenticated)
 
 if __name__ == '__main__':
     unittest.main()
