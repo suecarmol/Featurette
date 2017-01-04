@@ -28,3 +28,4 @@ docker-compose up
 * JQuery - Frontend
 * Docker - Container
 * Isso - Comments section
+* MySQL - Database used
