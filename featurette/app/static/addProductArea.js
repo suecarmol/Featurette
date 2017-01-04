@@ -10,7 +10,7 @@ $(document).ready(function(){
     //Adding product area
 	$('#submit').click(function(){
         var product_area = $('#product_area_name').val();
-        if(product_area !== undefined){
+        if(product_area !== undefined || $.trim(product_area)){
 			$.ajax({
 	            url: '/api/v1/productAreas',
 	            type: "POST",

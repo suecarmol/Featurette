@@ -8,4 +8,4 @@ try:
 except:
     host = '127.0.0.1'
 
-app.run(debug=True, threaded=True, host=host)
+app.run(debug=True, host=host)

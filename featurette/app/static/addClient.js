@@ -10,7 +10,7 @@ $(document).ready(function(){
     //Adding client
 	$('#submit').click(function(){
         var client_name = $('#client_name').val();
-		if(client_name !== undefined){
+		if(client_name !== undefined || $.trim(client_name)){
 	        $.ajax({
 	            url: '/api/v1/clients',
 	            type: "POST",

@@ -139,10 +139,14 @@ class ClientResource(Resource):
     def put(self, id):
         parsed_args = parser_client.parse_args()
         client = session.query(Client).get(id)
-        client.name = parsed_args['client_name']
-        session.add(client)
-        session.commit()
-        return client, 201
+        client_name = parsed_args['client_name']
+        if not client_name:
+            return 418
+        else:
+            client.name = parsed_args['client_name']
+            session.add(client)
+            session.commit()
+            return client, 201
 
 
 class ClientListResource(Resource):
@@ -156,9 +160,13 @@ class ClientListResource(Resource):
     @marshal_with(client_fields)
     def post(self):
         parsed_args = parser_client.parse_args()
-        client = Client(name=parsed_args['client_name'])
-        session.add(client)
-        session.commit()
+        client_name = parsed_args['client_name']
+        if not client_name:
+            return 418
+        else:
+            client = Client(name=client_name)
+            session.add(client)
+            session.commit()
         return client, 201
 
 
@@ -185,10 +193,14 @@ class ProductAreaResource(Resource):
     def put(self, id):
         parsed_args = parser_product_area.parse_args()
         product_area = session.query(ProductArea).get(id)
-        product_area.name = parsed_args['product_area_name']
-        session.add(product_area)
-        session.commit()
-        return product_area, 201
+        product_area_name = parsed_args['product_area_name']
+        if not product_area_name:
+            return 418
+        else:
+            product_area.name = product_area_name
+            session.add(product_area)
+            session.commit()
+            return product_area, 201
 
 
 class ProductAreaListResource(Resource):
@@ -202,10 +214,14 @@ class ProductAreaListResource(Resource):
     @marshal_with(product_area_fields)
     def post(self):
         parsed_args = parser_product_area.parse_args()
-        product_area = ProductArea(name=parsed_args['product_area_name'])
-        session.add(product_area)
-        session.commit()
-        return product_area, 201
+        product_area_name = parsed_args['product_area_name']
+        if not product_area_name:
+            return 418
+        else:
+            product_area = ProductArea(name=product_area_name)
+            session.add(product_area)
+            session.commit()
+            return product_area, 201
 
 
 class UserResource(Resource):
@@ -235,12 +251,18 @@ class UserResource(Resource):
     def put(self, id):
         parsed_args = parser_user.parse_args()
         user = session.query(User).get(id)
-        user.username = parsed_args['username']
-        user.email = parsed_args['email']
-        user.password = parsed_args['password']
-        session.add(user)
-        session.commit()
-        return user, 201
+        username = parsed_args['username']
+        email = parsed_args['email']
+        password = bcrypt.generate_password_hash(parsed_args['password'])
+        if not username or not email or not password:
+            return 418
+        else:
+            user.username = username
+            user.email = email
+            user.password = password
+            session.add(user)
+            session.commit()
+            return user, 201
 
 
 class UserListResource(Resource):
@@ -254,12 +276,16 @@ class UserListResource(Resource):
     @marshal_with(user_fields)
     def post(self):
         parsed_args = parser_user.parse_args()
-        user = User(username=parsed_args['username'], email=parsed_args
-                    ['email'], password=bcrypt.generate_password_hash
-                    (parsed_args['password']))
-        session.add(user)
-        session.commit()
-        return user, 201
+        username = parsed_args['username']
+        email = parsed_args['email']
+        password = bcrypt.generate_password_hash(parsed_args['password'])
+        if not username or not email or not password:
+            return 418
+        else:
+            user = User(username=username, email=email, password=password)
+            session.add(user)
+            session.commit()
+            return user, 201
 
 
 class FeatureRequestResource(Resource):

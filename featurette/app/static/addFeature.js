@@ -53,21 +53,23 @@ $( document ).ready(function() {
 		var target_date = $('#target-date').val();
 		var product_area = $('#product_area').val();
 		var ticket_url = $('#ticket_url').val();
-		$.ajax({
-			url: 'http://localhost:5000/api/v1/featureRequests',
-            type: 'POST',
-			data: {title: request_title, description: request_description,
-				   client_id: client, client_priority: client_priority,
-				   target_date: target_date, product_area_id: product_area,
-			       ticket_url: ticket_url},
-			success: function(data){
-                console.log('Feature request inserted successfully');
-            },
-            error: function(xhr,err){
-                console.log("readyState: "+xhr.readyState+"\nstatus: "+xhr.status);
-                console.log("responseText: "+xhr.responseText);
-            }
+		if(client_priority > 0){
+			$.ajax({
+				url: 'http://localhost:5000/api/v1/featureRequests',
+	            type: 'POST',
+				data: {title: request_title, description: request_description,
+					   client_id: client, client_priority: client_priority,
+					   target_date: target_date, product_area_id: product_area,
+				       ticket_url: ticket_url},
+				success: function(data){
+	                console.log('Feature request inserted successfully');
+	            },
+	            error: function(xhr,err){
+	                console.log("readyState: "+xhr.readyState+"\nstatus: "+xhr.status);
+	                console.log("responseText: "+xhr.responseText);
+	            }
 
-		});
+			});
+		}
 	});
 });

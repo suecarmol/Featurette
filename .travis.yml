@@ -13,7 +13,7 @@ script:
   - webrunner tests/test_functional_login.yml
   - webrunner tests/test_functional_login_unauth.yml
   - webrunner tests/test_functional_add_client.yml
-  - travis_wait webrunner tests/test_functional_add_feature.yml
+  - webrunner tests/test_functional_add_feature.yml
   - webrunner tests/test_functional_add_product_area.yml
   - webrunner tests/test_functional_add_user.yml
   - webrunner tests/test_functional_add_client_empty.yml

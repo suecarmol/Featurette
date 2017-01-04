@@ -90,20 +90,22 @@ $(document).ready(function(){
         var ticket_url = $('#ticket_url').val();
         console.log(feature_request_id);
         console.log(title);
-        $.ajax({
-            url: '/api/v1/featureRequest/'+ feature_request_id,
-            type: 'PUT',
-            data: {title : title, description : description, client_id : client_id,
-            client_priority : client_priority, target_date : target_date, product_area_id : product_area_id,
-            ticket_url : ticket_url},
-            success: function(data){
-                console.log('Feature request updated successfully');
-            },
-            error: function(xhr,err){
-                console.log("readyState: "+xhr.readyState+"\nstatus: "+xhr.status);
-                console.log("responseText: "+xhr.responseText);
-            }
-        });
+        if(client_priority > 0){
+            $.ajax({
+                url: '/api/v1/featureRequest/'+ feature_request_id,
+                type: 'PUT',
+                data: {title : title, description : description, client_id : client_id,
+                client_priority : client_priority, target_date : target_date, product_area_id : product_area_id,
+                ticket_url : ticket_url},
+                success: function(data){
+                    console.log('Feature request updated successfully');
+                },
+                error: function(xhr,err){
+                    console.log("readyState: "+xhr.readyState+"\nstatus: "+xhr.status);
+                    console.log("responseText: "+xhr.responseText);
+                }
+            });
+        }
 	});
 
 });

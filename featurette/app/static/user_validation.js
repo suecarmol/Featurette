@@ -7,10 +7,6 @@ $(document).ready(function(){
                     {
                         type: 'empty',
                         prompt: 'Please enter a username'
-                    },
-                    {
-                        type: 'minLength[6]',
-                        prompt: 'Username must have at least 6 characters'
                     }
                 ]
             },
