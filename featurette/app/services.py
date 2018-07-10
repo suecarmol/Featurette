@@ -101,6 +101,7 @@ class LoginResource(Resource):
         if bcrypt.check_password_hash(user.password, password):
             user.authenticated = True
             session.commit()
+            print('User successfully logged in')
             login_user(user, remember=True)
             return {}, 200
 
