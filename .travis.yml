@@ -9,6 +9,7 @@ install:
   - pip install PyWebRunner
 script:
   - sleep 45 # hard wait for docker compose
+  - docker exec -it featurette_www_1 python db_create.py
   - docker exec -it featurette_www_1 python -m unittest discover -v tests
   - webrunner tests/test_functional_login.yml
   - webrunner tests/test_functional_login_unauth.yml
