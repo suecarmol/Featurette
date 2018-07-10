@@ -14,6 +14,7 @@ services:
     environment:
       - MYSQL_HOST=db
       - MYSQL_USER_PASS=featurette:br1teCor3
+      - PYTHONUNBUFFERED=1
   db:
     restart: always
     image: mysql:5.6
