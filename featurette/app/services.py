@@ -100,7 +100,10 @@ class LoginResource(Resource):
             abort(404, message="User {} doesn't exist".format(email))
         if bcrypt.check_password_hash(user.password, password):
             user.authenticated = True
-            session.commit()
+            try:
+                session.commit()
+            except:
+                session.rollback()
             print('User successfully logged in')
             login_user(user, remember=True)
             return {}, 200
@@ -112,7 +115,10 @@ class LogoutResource(Resource):
     def post(self):
         user = current_user
         user.authenticated = False
-        session.commit()
+        try:
+            session.commit()
+        except:
+            session.rollback()
         logout_user()
         return {}, 204
 
@@ -131,8 +137,11 @@ class ClientResource(Resource):
         client = session.query(Client).get(id)
         if not client:
             abort(404, message="Client {} doesn't exist".format(id))
-        session.delete(client)
-        session.commit()
+        try:
+            session.delete(client)
+            session.commit()
+        except:
+            session.rollback()
         return {}, 204
 
     @login_required
@@ -145,8 +154,11 @@ class ClientResource(Resource):
             return 418
         else:
             client.name = parsed_args['client_name']
-            session.add(client)
-            session.commit()
+            try:
+                session.add(client)
+                session.commit()
+            except:
+                session.rollback()
             return client, 201
 
 
@@ -166,8 +178,11 @@ class ClientListResource(Resource):
             return 418
         else:
             client = Client(name=client_name)
-            session.add(client)
-            session.commit()
+            try:
+                session.add(client)
+                session.commit()
+            except:
+                session.rollback()
         return client, 201
 
 
@@ -185,8 +200,11 @@ class ProductAreaResource(Resource):
         product_area = session.query(ProductArea).get(id)
         if not product_area:
             abort(404, message="Product Area {} doesn't exist".format(id))
-        session.delete(product_area)
-        session.commit()
+        try:
+            session.delete(product_area)
+            session.commit()
+        except:
+            session.rollback()
         return {}, 204
 
     @login_required
@@ -199,8 +217,11 @@ class ProductAreaResource(Resource):
             return 418
         else:
             product_area.name = product_area_name
-            session.add(product_area)
-            session.commit()
+            try:
+                session.add(product_area)
+                session.commit()
+            except:
+                session.rollback()
             return product_area, 201
 
 
@@ -220,8 +241,11 @@ class ProductAreaListResource(Resource):
             return 418
         else:
             product_area = ProductArea(name=product_area_name)
-            session.add(product_area)
-            session.commit()
+            try:
+                session.add(product_area)
+                session.commit()
+            except:
+                session.rollback()
             return product_area, 201
 
 
@@ -243,8 +267,11 @@ class UserResource(Resource):
         if current_user.is_authenticated:
             if user.id == current_user.id:
                 abort(403, message="You cannot delete yourself")
-        session.delete(user)
-        session.commit()
+        try:
+            session.delete(user)
+            session.commit()
+        except:
+            session.rollback()
         return {}, 204
 
     @login_required
@@ -261,8 +288,11 @@ class UserResource(Resource):
             user.username = username
             user.email = email
             user.password = password
-            session.add(user)
-            session.commit()
+            try:
+                session.add(user)
+                session.commit()
+            except:
+                session.rollback()
             return user, 201
 
 
@@ -284,8 +314,11 @@ class UserListResource(Resource):
             return 418
         else:
             user = User(username=username, email=email, password=password)
-            session.add(user)
-            session.commit()
+            try:
+                session.add(user)
+                session.commit()
+            except:
+                session.rollback()
             return user, 201
 
 
@@ -303,8 +336,11 @@ class FeatureRequestResource(Resource):
         feature_request = session.query(FeatureRequest).get(id)
         if not feature_request:
             abort(404, message="Feature request {} doesn't exist".format(id))
-        session.delete(feature_request)
-        session.commit()
+        try:
+            session.delete(feature_request)
+            session.commit()
+        except:
+            session.rollback()
         return {}, 204
 
     @login_required
@@ -330,8 +366,11 @@ class FeatureRequestResource(Resource):
         feature_request.date_finished = None
         # priority algorithm
         self.checkPriorities(client_id, client_priority, title)
-        session.add(feature_request)
-        session.commit()
+        try:
+            session.add(feature_request)
+            session.commit()
+        except:
+            session.rollback()
         return feature_request, 201
 
     def checkPriorities(self, client_id, new_client_priority, new_title):
@@ -370,7 +409,10 @@ class FinishFeatureResource(Resource):
             abort(404, message="Feature request {} doesn't exist".format(id))
         feature_request.date_finished = str(datetime.now())
         feature_request.client_priority = 0
-        session.commit()
+        try:
+            session.commit()
+        except:
+            session.rollback()
 
 
 class FeatureRequestListResource(Resource):
@@ -404,8 +446,11 @@ class FeatureRequestListResource(Resource):
                                          target_date=parsed_args['target_date'], # noqa
                                          ticket_url=parsed_args['ticket_url'],
                                          date_finished=None)
-        session.add(feature_request)
-        session.commit()
+        try:
+            session.add(feature_request)
+            session.commit()
+        except:
+            session.rollback()
         return feature_request, 201
 
     def checkPriorities(self, client_id, new_client_priority, new_title):
@@ -435,5 +480,8 @@ class FeatureRequestListResource(Resource):
             feature_request = session.query(FeatureRequest).filter(FeatureRequest.title == old_title).filter(FeatureRequest.client_priority == new_client_priority).filter(FeatureRequest.client_id == client_id).first() # noqa
 
             feature_request.client_priority = int(old_key)
-            session.add(feature_request)
-            session.commit()
+            try:
+                session.add(feature_request)
+                session.commit()
+            except:
+                session.rollback()
