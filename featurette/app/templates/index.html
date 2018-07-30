@@ -38,8 +38,18 @@
                     <th>Actions</th>
                 </tr>
             </thead>
-            <tbody id="featuresTable">
-
+            <tbody id="featuresTable" data-bind="foreach:features">
+                <tr>
+                    <td data-bind="value: title"> </td>
+                    <td data-bind="value: description"> </td>
+                    <td data-bind="value: client_id"> </td>
+                    <td data-bind="value: client_priority"> </td>
+                    <td data-bind="value: product_area_id"> </td>
+                    <td data-bind="value: user_id"> </td>
+                    <td data-bind="value: target_date"> </td>
+                    <td data-bind="value: ticket_url"> </td>
+                    <td data-bind="value: view_date_finished"> </td>
+                </tr>
             </tbody>
             <tfoot class="full-width">
                 <tr>
@@ -53,8 +63,8 @@
                 </tr>
             </tfoot>
         </table>
-        <script data-isso="//localhost:8080/"  data-vote-levels=""
+        <!-- <script data-isso="//localhost:8080/"  data-vote-levels=""
             data-isso-max-comments-top="10" data-isso-max-comments-nested="5"
             src="//localhost:8080/js/embed.min.js"></script>
-        <section id="isso-thread"></section>
+        <section id="isso-thread"></section> -->
     {% endblock %}

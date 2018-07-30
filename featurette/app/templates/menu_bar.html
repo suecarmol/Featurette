@@ -8,6 +8,8 @@
         <link rel="stylesheet" type="text/css" href="static/semantic.min.css">
         <script src="static/jquery-3.1.1.min.js"></script>
         <script src="static/semantic.min.js"></script>
+        <script src="static/knockout-3.4.2.js"></script>
+        <script src="static/knockout-plugin-2.4.1.js"></script>
         <link rel="icon" type="image/png" sizes="16x16"
             href="/static/images/tv-screen.png">
         <script src="static/logout.js"> </script>
@@ -31,7 +33,7 @@
                 Product Areas
             </a>
             <div class="right menu">
-            <a id="logout" class="ui item" href="/login">
+            <a id="logout" class="ui item" href="/login" data-bind="clickLink: logMeOut">
                 Logout
             </a>
         </div>

@@ -1,77 +1,48 @@
-$(document).ready(function(){
-    $('.message .close').on('click', function() {
-        $(this).closest('.message').transition('fade');
-    });
+$(document).ready(function() {
 
     $('.ui.secondary.pointing.menu')
-    .on('click', '.item', function() {
-      if(!$(this).hasClass('dropdown')) {
-        $(this)
-          .addClass('active')
-          .siblings('.item')
-            .removeClass('active');
-      }
-    });
-
-    $( document ).ajaxError(function( event, jqxhr, settings, exception ) {
-        if ( jqxhr.status== 401 ) {
-            //$( "div.log" ).text( "Triggered ajaxError handler." );
-            window.location = '/login';
-        }
-    });
-
-    $.getJSON({
-        url: '/api/v1/productAreas',
-        dataType: 'json',
-        success: function(data){
-            $.each(data, function(index, element) {
-                //getting the table body
-                var tbody = document.getElementById('productAreasTable');
-
-                //td information
-                var tr = document.createElement('tr');
-                var td = document.createElement('td');
-                td.textContent= element.name;
-
-                //td actions
-                var td_actions = document.createElement('td');
-                td_actions.setAttribute('class', 'single line');
-
-                // var form = document.createElement('form');+
-                // form.setAttribute('action', '/editProductArea');
-                // form.setAttribute('method', 'GET');
-
-                var editButton = document.createElement('a');
-                editButton.setAttribute('class', 'edit ui icon violet button');
-                editButton.setAttribute('value', element.id);
-
-                var editIcon = document.createElement('i');
-                editIcon.setAttribute('class', 'edit icon');
-                editButton.appendChild(editIcon);
-                // form.appendChild(editButton);
-
-                var deleteButton = document.createElement('a');
-                deleteButton.setAttribute('class', 'delete ui icon red button');
-                deleteButton.setAttribute('value', element.id);
-
-                var deleteIcon = document.createElement('i');
-                deleteIcon.setAttribute('class', 'delete icon');
-                deleteButton.appendChild(deleteIcon);
-
-                td_actions.appendChild(editButton);
-                td_actions.appendChild(deleteButton);
+        .on('click', '.item', function() {
+            if(!$(this).hasClass('dropdown')) {
+                $(this)
+                .addClass('active')
+                .siblings('.item')
+                .removeClass('active');
+            }
+        });
 
 
-                tr.appendChild(td);
-                tr.appendChild(td_actions);
-                tbody.appendChild(tr);
+    function ProductAreaViewModel() {
+        // Data
+        var self = this;
+        self.productAreas = ko.observableArray([]);
 
-            });
-        }
-    });
+        $.ajax({
+            type: "GET",
+            dataType: "json",
+            url: "/api/v1/productAreas",
+            success: function (data) {
+                //Here you map and create a new instance of userDetailVM
+                console.log("Data: ");
+                console.log(data);
+                var observableData = ko.mapping.fromJS(data);
+                var array = observableData();
+                console.log("Array:");
+                console.log(array);
+                self.productAreas(array);
+            }
+        });
 
-    $(document).on('click', '.edit', function(event){
-        var id = $(this).attr('value');
-        window.location = '/editProductArea?id=' + id;
-    });
+        console.log("Product Areas:");
+        console.log(self.productAreas);
+
+    }
+
+    function ProductArea(data) {
+        console.log("ProductArea");
+        console.log(data.name);
+        this.name = ko.observable(data.name);
+    }
+
+    ko.applyBindings(new ProductAreaViewModel(), document.getElementById('productAreasTable'));
+
 });

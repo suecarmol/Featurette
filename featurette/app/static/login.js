@@ -35,22 +35,25 @@ $(document).ready(function() {
           $(this).closest('.message').transition('fade');
       });
 
-      //logging user in
-      $('#login').click(function(){
-          var email = $('#email').val();
-          var password = $('#password').val();
-          $.ajax({
-              url: 'http://localhost:5000/api/v1/login',
-              type: 'POST',
-              data: {email : email, password: password},
-              success: function(data){
-                  console.log('Login was successful');
-              },
-              error: function(xhr,err){
-                  console.log("readyState: "+xhr.readyState+"\nstatus: "+xhr.status);
-                  console.log("responseText: "+xhr.responseText);
-              }
+      function LoginViewModel() {
+          var me = this;
+          me.email = ko.observable('');
+          me.password = ko.observable('');
+          me.buttonEnabled = ko.computed(function() {
+              return (me.email() !== "") && (me.password() !== "");
           });
-  	});
+          me.logMeIn = function(){
+              $.ajax({
+                  url: "api/v1/login",
+                  type: "POST",
+                  data: { email: me.email(), password: me.password() },
+                  success: function (response) {
+                      console.log("Response was a success... redirecting to home");
+                      window.location.href = "/";
+                  }
+              });
+          }
+      }
+      ko.applyBindings(new LoginViewModel());
 
   });

@@ -11,6 +11,7 @@
         <link rel="stylesheet" type="text/css" href="static/semantic.min.css">
         <script src="static/jquery-3.1.1.min.js"></script>
         <script src="static/semantic.min.js"></script>
+        <script src="static/knockout-3.4.2.js"></script>
         <script src="static/login.js"> </script>
         <style type="text/css">
             body {
@@ -48,23 +49,25 @@
                             <h1 class="ui violet huge header">Featurette</h1>
                         </div>
                     </h2>
-                    <form class="ui large form" action="/" method="post">
+                    <form data-bind="submit: logMeIn" id="loginForm" class="ui large form" action="/" method="post">
                         <div class="ui stacked segment">
                             <div class="field">
                                 <div class="ui left icon input">
                                     <i class="user icon"></i>
-                                    <input id="email" type="text" name="email" placeholder="Email">
+                                    <input id="email" type="text" name="email" placeholder="Email"
+                                        data-bind="value: email">
                                 </div>
                             </div>
                             <div class="field">
                                 <div class="ui left icon input">
                                     <i class="lock icon"></i>
                                     <input id="password" type="password" name="password"
-                                        placeholder="Password">
+                                        placeholder="Password" data-bind="value: password">
                                 </div>
                             </div>
                             <div class="ui large buttons">
-                                <button id="login" class="ui violet labeled icon button">
+                                <button id="login" class="ui violet labeled icon button"
+                                        data-bind="enable: buttonEnabled">
                                     <i class="unlock alternate icon"></i>
                                     Login Featurette
                                 </button>
