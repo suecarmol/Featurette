@@ -16,40 +16,44 @@ $(document).ready(function() {
         });
 
     function FeatureRequest(data) {
-        console.log("Feature Request");
-        console.log(data);
-        this.title = ko.observable(data.title);
-        this.description = ko.observable(data.description);
-        this.client_id = ko.observable(data.client_id);
-        this.client_priority = ko.observable(data.client_priority);
-        this.product_area_id = ko.observable(data.product_area_id);
-        this.user_id = ko.observable(data.user_id);
-        this.target_date = ko.observable(data.target_date);
-        this.ticket_url = ko.observable(data.ticket_url);
-        this.date_finished = ko.observable(data.date_finished);
+
+        if(data != null){
+            // console.log("Feature Request");
+            // console.log(data);
+            this.title = ko.observable(data.title);
+            this.description = ko.observable(data.description);
+            this.client_id = ko.observable(data.client_id);
+            this.client_priority = ko.observable(data.client_priority);
+            this.product_area_id = ko.observable(data.product_area_id);
+            this.user_id = ko.observable(data.user_id);
+            this.target_date = ko.observable(data.target_date);
+            this.ticket_url = ko.observable(data.ticket_url);
+            if(data.date_finished == null){
+                // console.log("Date finished is null");
+                this.date_finished = "4000-01-01";
+            }
+            else{
+                this.date_finished = ko.observable(data.date_finished);
+            }
+
+        }
     }
 
     function FeatureRequestViewModel() {
         // Data
         var self = this;
         self.features = ko.observableArray([]);
+
         console.log("Sending requests...");
         $.getJSON("/api/v1/featureRequests", function(response) {
-            console.log("Request sent...");
-            console.log(response[0]);
-            var mappedFeatures = $.map(response[0], function(item) { return new FeatureRequest(item) });
-            console.log(mappedFeatures);
+            var mappedFeatures = $.map(response, function(item) { return new FeatureRequest(item) });
             self.features(mappedFeatures);
 
         });
 
-        self.view_date_finished = ko.computed(function() {
-        if (self.date_finished() == null)
-          return '-';
+        console.log(self.features);
 
-        return self.date_finished();
-      });
     }
-    ko.applyBindings(new FeatureRequestViewModel());
+    ko.applyBindings(new FeatureRequestViewModel(), document.getElementById("featuresTable"));
 
 });

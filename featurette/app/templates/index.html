@@ -3,8 +3,6 @@
         {{ super() }}
         <script src="static/tablesort.js"></script>
         <script src="static/index.js"></script>
-        <script src="static/deleteFeatureRequest.js"></script>
-        <script src="static/finishFeature.js"></script>
     {% endblock %}
     {% block content %}
 
@@ -38,17 +36,27 @@
                     <th>Actions</th>
                 </tr>
             </thead>
-            <tbody id="featuresTable" data-bind="foreach:features">
+            <tbody id="featuresTable" data-bind="foreach: { $data }">
                 <tr>
-                    <td data-bind="value: title"> </td>
-                    <td data-bind="value: description"> </td>
-                    <td data-bind="value: client_id"> </td>
-                    <td data-bind="value: client_priority"> </td>
-                    <td data-bind="value: product_area_id"> </td>
-                    <td data-bind="value: user_id"> </td>
-                    <td data-bind="value: target_date"> </td>
-                    <td data-bind="value: ticket_url"> </td>
-                    <td data-bind="value: view_date_finished"> </td>
+                    <td data-bind="text: $data.title"> </td>
+                    <td data-bind="text: $data.description"> </td>
+                    <td data-bind="text: $data.client_id"> </td>
+                    <td data-bind="text: $data.client_priority"> </td>
+                    <td data-bind="text: $data.product_area_id"> </td>
+                    <td data-bind="text: $data.target_date"> </td>
+                    <td data-bind="text: $data.ticket_url"> </td>
+                    <td data-bind="text: $data.user_id"> </td>
+                    <td class="single line">
+                        <a class="edit ui icon violet button" value="productArea.id">
+                            <i class="edit icon"> </i>
+                        </a>
+                        <a class="finish ui icon green button" value="productArea.id">
+                            <i class="check icon"> </i>
+                        </a>
+                        <a class="delete ui icon red button" value="productArea.id">
+                            <i class="delete icon"> </i>
+                        </a>
+                    </td>
                 </tr>
             </tbody>
             <tfoot class="full-width">

@@ -2,7 +2,6 @@
     {% block head %}
         {{ super() }}
         <script type="text/javascript" src="static/productAreas.js"></script>
-        <script type="text/javascript" src="static/deleteProductArea.js"></script>
     {% endblock %}
     {% block content %}
         {% with messages = get_flashed_messages() %}
@@ -27,8 +26,8 @@
                     <th>Actions</th>
                 </tr>
             </thead>
-            <tbody>
-                <tr id="productAreasTable" data-bind="foreach: { data: productAreas, as: 'productArea' }">
+            <tbody id="productAreasTable" data-bind="foreach: { data: productAreas, as: 'productArea' }">
+                <tr>
                     <td data-bind="text: productArea.name"> </td>
                     <td class="single line">
                         <a class="edit ui icon violet button" value="productArea.id">
