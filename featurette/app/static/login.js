@@ -39,9 +39,11 @@ $(document).ready(function() {
           var me = this;
           me.email = ko.observable('');
           me.password = ko.observable('');
+
           me.buttonEnabled = ko.computed(function() {
               return (me.email() !== "") && (me.password() !== "");
           });
+
           me.logMeIn = function(){
               $.ajax({
                   url: "api/v1/login",

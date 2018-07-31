@@ -15,34 +15,53 @@ $(document).ready(function() {
         // Data
         var self = this;
         self.productAreas = ko.observableArray([]);
+        self.product_area_name = ko.observable('');
 
         self.getProductAreas = function() {
             $.ajax({
                 type: "GET",
                 dataType: "json",
-                url: "/api/v1/productAreas",
+                url: "api/v1/productAreas",
                 success: function (data) {
                     console.log("Data: ");
                     console.log(data);
-                    // var observableData = ko.mapping.fromJS(data);
-                    // var array = observableData();
-                    // console.log("Array: ");
-                    // console.log(array);
-                    // self.productAreas(array);
+                    for(d = 0; d < data.length; d++){
+                        self.productAreas.push(data[d]);
+                    }
                 }
             });
         }
-        console.log("Product Areas:");
-        console.log(self.productAreas);
 
+        self.addProductArea = function(){
+            $.ajax({
+                url: "api/v1/productAreas",
+                type: "POST",
+                data: { product_area_name: self.product_area_name() },
+                success: function (response) {
+                    console.log("Product was added successfully... returning to product area");
+                    console.log(response)
+                    window.location.href = "/productAreas";
+                },
+                error: function (xhr, ajaxOptions, thrownError) {
+                    console.log(xhr.status);
+                    console.log(thrownError);
+                }
+            });
+        }
+
+        self.getProductAreas();
+
+        // console.log("Product Areas: ");
+        // console.log(self.productAreas);
     }
 
     function ProductArea(data) {
         console.log("ProductArea: ");
-        console.log(data.name);
-        this.name = ko.observable(data.name);
+        console.log(data.product_area_name);
+        this.product_area_name = ko.observable(data.product_area_name);
     }
 
-    ko.applyBindings(new ProductAreaViewModel(), document.getElementById('productAreasTable'));
+    ko.cleanNode($("body")[0]);
+    ko.applyBindings(new ProductAreaViewModel());
 
 });

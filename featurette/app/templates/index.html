@@ -36,24 +36,24 @@
                     <th>Actions</th>
                 </tr>
             </thead>
-            <tbody id="featuresTable" data-bind="foreach: { $data }">
+            <tbody id="featuresTable" data-bind="foreach:features">
                 <tr>
-                    <td data-bind="text: $data.title"> </td>
-                    <td data-bind="text: $data.description"> </td>
-                    <td data-bind="text: $data.client_id"> </td>
-                    <td data-bind="text: $data.client_priority"> </td>
-                    <td data-bind="text: $data.product_area_id"> </td>
-                    <td data-bind="text: $data.target_date"> </td>
-                    <td data-bind="text: $data.ticket_url"> </td>
-                    <td data-bind="text: $data.user_id"> </td>
+                    <td data-bind="text: features.title"> </td>
+                    <td data-bind="text: features.description"> </td>
+                    <td data-bind="text: features.client_id"> </td>
+                    <td data-bind="text: features.client_priority"> </td>
+                    <td data-bind="text: features.product_area_id"> </td>
+                    <td data-bind="text: features.target_date"> </td>
+                    <td data-bind="text: features.ticket_url"> </td>
+                    <td data-bind="text: features.user_id"> </td>
                     <td class="single line">
-                        <a class="edit ui icon violet button" value="productArea.id">
+                        <a class="edit ui icon violet button" value="features.id">
                             <i class="edit icon"> </i>
                         </a>
-                        <a class="finish ui icon green button" value="productArea.id">
+                        <a class="finish ui icon green button" value="features.id">
                             <i class="check icon"> </i>
                         </a>
-                        <a class="delete ui icon red button" value="productArea.id">
+                        <a class="delete ui icon red button" value="features.id">
                             <i class="delete icon"> </i>
                         </a>
                     </td>

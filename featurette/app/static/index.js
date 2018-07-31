@@ -28,32 +28,28 @@ $(document).ready(function() {
             this.user_id = ko.observable(data.user_id);
             this.target_date = ko.observable(data.target_date);
             this.ticket_url = ko.observable(data.ticket_url);
-            if(data.date_finished == null){
-                // console.log("Date finished is null");
-                this.date_finished = "4000-01-01";
-            }
-            else{
-                this.date_finished = ko.observable(data.date_finished);
-            }
-
+            this.date_finished = ko.observable(data.date_finished);
         }
     }
 
     function FeatureRequestViewModel() {
         // Data
         var self = this;
-        self.features = ko.observableArray([]);
+        self.features = ko.observableArray();
 
         console.log("Sending requests...");
         $.getJSON("/api/v1/featureRequests", function(response) {
-            var mappedFeatures = $.map(response, function(item) { return new FeatureRequest(item) });
+            var mappedFeatures = $.map(response, function(item) {
+                return new FeatureRequest(item)
+            });
             self.features(mappedFeatures);
 
         });
 
-        console.log(self.features);
-
     }
-    ko.applyBindings(new FeatureRequestViewModel(), document.getElementById("featuresTable"));
+    
+    ko.cleanNode($("body")[0]);
+    var viewModel = new FeatureRequestViewModel();
+    ko.applyBindings(viewModel);
 
 });

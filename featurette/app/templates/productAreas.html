@@ -26,14 +26,14 @@
                     <th>Actions</th>
                 </tr>
             </thead>
-            <tbody id="productAreasTable" data-bind="foreach: { data: productAreas, as: 'productArea' }">
+            <tbody id="productAreasTable" data-bind="foreach: productAreas">
                 <tr>
-                    <td data-bind="text: productArea.name"> </td>
+                    <td data-bind="text: productAreas.name()"> </td>
                     <td class="single line">
-                        <a class="edit ui icon violet button" value="productArea.id">
+                        <a class="edit ui icon violet button" value="productAreas.id()">
                             <i class="edit icon"> </i>
                         </a>
-                        <a class="delete ui icon red button" value="productArea.id">
+                        <a class="delete ui icon red button" value="productAreas.id()">
                             <i class="delete icon"> </i>
                         </a>
                     </td>
