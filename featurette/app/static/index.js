@@ -20,6 +20,7 @@ $(document).ready(function() {
         if(data != null){
             // console.log("Feature Request");
             // console.log(data);
+            this.id = ko.observable(data.id);
             this.title = ko.observable(data.title);
             this.description = ko.observable(data.description);
             this.client_id = ko.observable(data.client_id);
@@ -35,19 +36,35 @@ $(document).ready(function() {
     function FeatureRequestViewModel() {
         // Data
         var self = this;
+        self.id = ko.observable(0);
         self.features = ko.observableArray();
 
-        console.log("Sending requests...");
-        $.getJSON("/api/v1/featureRequests", function(response) {
-            var mappedFeatures = $.map(response, function(item) {
-                return new FeatureRequest(item)
+        self.getFeatures = function(){
+            console.log("Sending getFeatures...");
+            $.getJSON("/api/v1/featureRequests", function(response) {
+                var mappedFeatures = $.map(response, function(item) {
+                    return new FeatureRequest(item)
+                });
+                self.features(mappedFeatures);
             });
-            self.features(mappedFeatures);
+        }
 
-        });
+        self.deleteFeature = function(row){
+            console.log("DELETE command for id: " + row.id());
+            $.ajax({
+                url: '/api/v1/featureRequest/' + row.id(),
+                type: 'DELETE',
+                success: function(data){
+                    console.log('Feature request deleted successfully');
+                    self.features.remove(row);
+                }
+            });
+        }
 
+        self.getFeatures();
     }
-    
+
+
     ko.cleanNode($("body")[0]);
     var viewModel = new FeatureRequestViewModel();
     ko.applyBindings(viewModel);

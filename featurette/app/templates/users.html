@@ -2,7 +2,6 @@
     {% block head %}
         {{ super() }}
         <script src="static/users.js"></script>
-        <script src="static/deleteUser.js"></script>
     {% endblock %}
     {% block content %}
 
@@ -30,8 +29,19 @@
                     <th>Actions</th>
                 </tr>
             </thead>
-            <tbody id="usersTable">
-
+            <tbody id="usersTable" data-bind="foreach: users">
+                <tr>
+                    <td data-bind="text: username"> </td>
+                    <td data-bind="text: email"> </td>
+                    <td class="single line">
+                        <a class="edit ui icon violet button">
+                            <i class="edit icon"> </i>
+                        </a>
+                        <a class="delete ui icon red button" data-bind="click: $parent.deleteUser">
+                            <i class="delete icon"> </i>
+                        </a>
+                    </td>
+                </tr>
             </tbody>
             <tfoot class="full-width">
                 <tr>

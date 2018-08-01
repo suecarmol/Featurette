@@ -2,44 +2,48 @@ $(document).ready(function() {
 
     $('.ui.secondary.pointing.menu')
         .on('click', '.item', function() {
-            if(!$(this).hasClass('dropdown')) {
-                $(this)
-                .addClass('active')
-                .siblings('.item')
-                .removeClass('active');
-            }
-        });
+        if(!$(this).hasClass('dropdown')) {
+            $(this)
+            .addClass('active')
+            .siblings('.item')
+            .removeClass('active');
+        }
+    });
+
+    function ProductArea(data) {
+        // console.log("ProductArea: ");
+        // console.log(data.name);
+        this.id = ko.observable(data.id);
+        this.product_area_name = ko.observable(data.name);
+    }
 
 
     function ProductAreaViewModel() {
         // Data
         var self = this;
         self.productAreas = ko.observableArray([]);
+        self.id = ko.observable(0);
         self.product_area_name = ko.observable('');
 
         self.getProductAreas = function() {
-            $.ajax({
-                type: "GET",
-                dataType: "json",
-                url: "api/v1/productAreas",
-                success: function (data) {
-                    console.log("Data: ");
-                    console.log(data);
-                    for(d = 0; d < data.length; d++){
-                        self.productAreas.push(data[d]);
-                    }
-                }
+            $.getJSON("/api/v1/productAreas", function(response) {
+                var mappedProducts = $.map(response, function(item) {
+                    return new ProductArea(item)
+                });
+
+            self.productAreas(mappedProducts);
+
             });
         }
 
         self.addProductArea = function(){
             $.ajax({
-                url: "api/v1/productAreas",
+                url: "/api/v1/productAreas",
                 type: "POST",
                 data: { product_area_name: self.product_area_name() },
                 success: function (response) {
-                    console.log("Product was added successfully... returning to product area");
-                    console.log(response)
+                    console.log("Product was added successfully... returning to product areas");
+                    // console.log(response)
                     window.location.href = "/productAreas";
                 },
                 error: function (xhr, ajaxOptions, thrownError) {
@@ -49,16 +53,22 @@ $(document).ready(function() {
             });
         }
 
+        self.deleteProductArea = function(row){
+            console.log("DELETE command for id: " + row.id());
+            $.ajax({
+                url: '/api/v1/productArea/' + row.id(),
+                type: 'DELETE',
+                success: function(data){
+                    console.log('Product area deleted successfully');
+                    self.productAreas.remove(row);
+                }
+            });
+        }
+
         self.getProductAreas();
 
         // console.log("Product Areas: ");
         // console.log(self.productAreas);
-    }
-
-    function ProductArea(data) {
-        console.log("ProductArea: ");
-        console.log(data.product_area_name);
-        this.product_area_name = ko.observable(data.product_area_name);
     }
 
     ko.cleanNode($("body")[0]);

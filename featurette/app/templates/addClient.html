@@ -1,15 +1,16 @@
 {% extends "menu_bar.html" %}
     {% block head %}
         {{ super() }}
-        <script type="text/javascript" src="static/client_validation.js"></script>
-        <script src="static/addClient.js"></script>
+        <script src="static/client_validation.js"></script>
+        <script src="static/clients.js"></script>
     {% endblock %}
     {% block content %}
-        <form class="ui form segment" action="/clients" method="POST">
+        <form data-bind="submit: addClient" class="ui form segment" action="/clients" method="POST">
             <h3 class="ui dividing header">Client</h3>
             <div class="field">
                 <label>Name</label>
-                <input id="client_name" type="text" name="client_name" placeholder="Name">
+                <input id="client_name" type="text" name="client_name" placeholder="Name"
+                        data-bind="value: client_name" required>
             </div>
             <button id="submit" class="ui violet button">
                 Create Client

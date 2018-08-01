@@ -38,22 +38,22 @@
             </thead>
             <tbody id="featuresTable" data-bind="foreach:features">
                 <tr>
-                    <td data-bind="text: features.title"> </td>
-                    <td data-bind="text: features.description"> </td>
-                    <td data-bind="text: features.client_id"> </td>
-                    <td data-bind="text: features.client_priority"> </td>
-                    <td data-bind="text: features.product_area_id"> </td>
-                    <td data-bind="text: features.target_date"> </td>
-                    <td data-bind="text: features.ticket_url"> </td>
-                    <td data-bind="text: features.user_id"> </td>
+                    <td data-bind="text: title"> </td>
+                    <td data-bind="text: description"> </td>
+                    <td data-bind="text: client_id"> </td>
+                    <td data-bind="text: client_priority"> </td>
+                    <td data-bind="text: product_area_id"> </td>
+                    <td data-bind="text: target_date"> </td>
+                    <td data-bind="text: ticket_url"> </td>
+                    <td data-bind="text: user_id"> </td>
                     <td class="single line">
-                        <a class="edit ui icon violet button" value="features.id">
+                        <a class="edit ui icon violet button">
                             <i class="edit icon"> </i>
                         </a>
-                        <a class="finish ui icon green button" value="features.id">
+                        <a class="finish ui icon green button">
                             <i class="check icon"> </i>
                         </a>
-                        <a class="delete ui icon red button" value="features.id">
+                        <a class="delete ui icon red button" data-bind="click: $parent.deleteFeature">
                             <i class="delete icon"> </i>
                         </a>
                     </td>

@@ -28,12 +28,12 @@
             </thead>
             <tbody id="productAreasTable" data-bind="foreach: productAreas">
                 <tr>
-                    <td data-bind="text: productAreas.name()"> </td>
+                    <td data-bind="text: product_area_name"> </td>
                     <td class="single line">
-                        <a class="edit ui icon violet button" value="productAreas.id()">
+                        <a class="edit ui icon violet button">
                             <i class="edit icon"> </i>
                         </a>
-                        <a class="delete ui icon red button" value="productAreas.id()">
+                        <a class="delete ui icon red button" data-bind="click: $parent.deleteProductArea">
                             <i class="delete icon"> </i>
                         </a>
                     </td>

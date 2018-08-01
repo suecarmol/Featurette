@@ -2,7 +2,6 @@
     {% block head %}
         {{ super() }}
         <script src="static/clients.js"></script>
-        <script src="static/deleteClient.js"></script>
     {% endblock %}
     {% block content %}
         {% with messages = get_flashed_messages() %}
@@ -27,8 +26,18 @@
                     <th>Actions</th>
                 </tr>
             </thead>
-            <tbody id="clientTable">
-
+            <tbody id="clientTable" data-bind="foreach: clients">
+                <tr>
+                    <td data-bind="text: client_name"> </td>
+                    <td class="single line">
+                        <a class="edit ui icon violet button">
+                            <i class="edit icon"> </i>
+                        </a>
+                        <a class="delete ui icon red button" data-bind="click: $parent.deleteClient">
+                            <i class="delete icon"> </i>
+                        </a>
+                    </td>
+                </tr>
             </tbody>
             <tfoot class="full-width">
                 <tr>
