@@ -42,6 +42,8 @@ $(document).ready(function() {
         self.getFeatures = function(){
             console.log("Sending getFeatures...");
             $.getJSON("/api/v1/featureRequests", function(response) {
+                var res = JSON.stringify(response);
+                console.log(res);
                 var mappedFeatures = $.map(response, function(item) {
                     return new FeatureRequest(item)
                 });
