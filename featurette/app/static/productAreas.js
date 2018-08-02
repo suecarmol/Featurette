@@ -36,6 +36,17 @@ $(document).ready(function() {
             });
         }
 
+        self.getProductArea = function(){
+            $.ajax({
+                url: '/api/v1/productArea/' + id,
+                type: 'GET',
+                success(data){
+                    var name = document.getElementById('product_area_name').value = data.name;
+                    var id = document.getElementById('product_area_id').value = data.id;
+                }
+            });
+        }
+
         self.addProductArea = function(){
             $.ajax({
                 url: "/api/v1/productAreas",
@@ -61,6 +72,22 @@ $(document).ready(function() {
                 success: function(data){
                     console.log('Product area deleted successfully');
                     self.productAreas.remove(row);
+                }
+            });
+        }
+
+        self.updateProductArea = function(){
+            console.log("Updating " + product_area_id);
+            $.ajax({
+                url: '/api/v1/productArea/'+ product_area_id,
+                type: 'PUT',
+                data: {product_area_name : product_area},
+                success: function(data){
+                    console.log('Product Area updated successfully');
+                },
+                error: function(xhr,err){
+                    console.log("readyState: "+xhr.readyState+"\nstatus: "+xhr.status);
+                    console.log("responseText: "+xhr.responseText);
                 }
             });
         }
