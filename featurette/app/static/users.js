@@ -60,17 +60,22 @@ $(document).ready(function() {
 
         self.deleteUser = function(row){
             console.log("DELETE command for id: " + row.id());
-            $.ajax({
-                url: '/api/v1/user/' + row.id(),
-                type: 'DELETE',
-                success: function(data){
-                    console.log('User deleted successfully');
-                    self.users.remove(row);
-                }
-            });
+
+            if (confirm("Are you sure you want to delete this user?")) {
+                $.ajax({
+                    url: '/api/v1/user/' + row.id(),
+                    type: 'DELETE',
+                    success: function(data){
+                        console.log('User deleted successfully');
+                        self.users.remove(row);
+                    }
+                });
+            }
         }
 
-        self.getUsers();
+        if (window.location.pathname == '/users'){
+            self.getUsers();
+        }
 
         // console.log("Users: ");
         // console.log(self.users);

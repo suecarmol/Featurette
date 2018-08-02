@@ -44,6 +44,19 @@ feature_request_fields = {
     'date_finished': fields.DateTime
 }
 
+feature_request_fields_user_friendly = {
+    'id': fields.Integer,
+    'title': fields.String,
+    'description': fields.String,
+    'client_name': fields.String,
+    'client_priority': fields.Integer,
+    'product_area_name': fields.String,
+    'username': fields.String,
+    'target_date': fields.DateTime,
+    'ticket_url': fields.String,
+    'date_finished': fields.DateTime
+}
+
 parser_login = reqparse.RequestParser()
 parser_login.add_argument('email', type=str, required=True)
 parser_login.add_argument('password', type=str, required=True)
@@ -418,28 +431,27 @@ class FinishFeatureResource(Resource):
 
 class FeatureRequestListResource(Resource):
     @login_required
-    @marshal_with(feature_request_fields)
+    @marshal_with(feature_request_fields_user_friendly)
     def get(self):
         feature_requests = session.query(FeatureRequest).all()
         format_feature_requests = []
         for feature_request in feature_requests:
             tmp_feature_request = {}
-            tmp_feature_request['id'] = feature_request.id
-            tmp_feature_request['title'] = feature_request.title
-            tmp_feature_request['description'] = feature_request.description
-            tmp_feature_request['client_id'] = feature_request.client.name
-            tmp_feature_request['client_priority'] = feature_request.client_priority
-            tmp_feature_request['product_area_id'] = feature_request.product_area.name
-            tmp_feature_request['user_id'] = feature_request.user.username
-            tmp_feature_request['target_date'] = feature_request.target_date.strftime("%Y-%m-%d %H:%M:%S")
-            tmp_feature_request['ticket_url'] = feature_request.ticket_url
+            tmp_feature_request['id'] = int(feature_request.id)
+            tmp_feature_request['title'] = str(feature_request.title)
+            tmp_feature_request['description'] = str(feature_request.description)
+            tmp_feature_request['client_name'] = str(feature_request.client.name)
+            tmp_feature_request['client_priority'] = str(feature_request.client_priority)
+            tmp_feature_request['product_area_name'] = str(feature_request.product_area.name)
+            tmp_feature_request['username'] = str(feature_request.user.username)
+            tmp_feature_request['target_date'] = feature_request.target_date
+            tmp_feature_request['ticket_url'] = str(feature_request.ticket_url)
             tmp_feature_request['date_finished'] = feature_request.date_finished
             format_feature_requests.append(tmp_feature_request)
 
-        json_feature_requests = json.dumps(format_feature_requests)
-        print(json_feature_requests)
+        # print(format_feature_requests)
 
-        return json_feature_requests
+        return format_feature_requests
 
     @login_required
     @marshal_with(feature_request_fields)

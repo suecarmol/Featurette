@@ -55,18 +55,22 @@ $(document).ready(function() {
 
         self.deleteClient = function(row){
             console.log("DELETE command for id: " + row.id());
-            $.ajax({
-                url: '/api/v1/client/' + row.id(),
-                type: 'DELETE',
-                success: function(data){
-                    console.log('Client deleted successfully');
-                    self.clients.remove(row);
-                }
-            });
+
+            if (confirm("Are you sure you want to delete this client?")) {
+                $.ajax({
+                    url: '/api/v1/client/' + row.id(),
+                    type: 'DELETE',
+                    success: function(data){
+                        console.log('Client deleted successfully');
+                        self.clients.remove(row);
+                    }
+                });
+            }
         }
 
-
-        self.getClients();
+        if (window.location.pathname == '/clients'){
+            self.getClients();
+        }
 
         // console.log("Clients: ");
         // console.log(self.clients);

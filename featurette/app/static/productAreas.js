@@ -66,14 +66,17 @@ $(document).ready(function() {
 
         self.deleteProductArea = function(row){
             console.log("DELETE command for id: " + row.id());
-            $.ajax({
-                url: '/api/v1/productArea/' + row.id(),
-                type: 'DELETE',
-                success: function(data){
-                    console.log('Product area deleted successfully');
-                    self.productAreas.remove(row);
-                }
-            });
+
+            if (confirm("Are you sure you want to delete this product area?")) {
+                $.ajax({
+                    url: '/api/v1/productArea/' + row.id(),
+                    type: 'DELETE',
+                    success: function(data){
+                        console.log('Product area deleted successfully');
+                        self.productAreas.remove(row);
+                    }
+                });
+            }
         }
 
         self.updateProductArea = function(){
@@ -92,7 +95,9 @@ $(document).ready(function() {
             });
         }
 
-        self.getProductAreas();
+        if (window.location.pathname == '/productAreas'){
+            self.getProductAreas();
+        }
 
         // console.log("Product Areas: ");
         // console.log(self.productAreas);
