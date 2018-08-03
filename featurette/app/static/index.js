@@ -35,13 +35,17 @@ $(document).ready(function() {
             this.id = ko.observable(data.id);
             this.title = ko.observable(data.title);
             this.description = ko.observable(data.description);
-            this.client_id = ko.observable(data.client_name);
+            this.client_id = ko.observable(data.client_id);
+            this.client_name = ko.observable(data.client_name);
             this.client_priority = ko.observable(data.client_priority);
-            this.product_area_id = ko.observable(data.product_area_name);
-            this.user_id = ko.observable(data.username);
+            this.product_area_id = ko.observable(data.product_area_id);
+            this.product_area_name = ko.observable(data.product_area_name);
+            this.user_id = ko.observable(data.user_id);
+            this.username = ko.observable(data.username);
             this.target_date = ko.observable(data.target_date);
             this.ticket_url = ko.observable(data.ticket_url);
             this.date_finished = ko.observable(data.date_finished);
+            this.is_finished = ko.observable(data.is_finished);
         }
     }
 
@@ -66,6 +70,13 @@ $(document).ready(function() {
         self.features = ko.observableArray();
         self.productAreas = ko.observableArray();
         self.clients = ko.observableArray();
+        self.title = ko.observable("");
+        self.description = ko.observable("");
+        self.client_id = ko.observable(0);
+        self.client_priority = ko.observable(0);
+        self.product_area_id = ko.observable(0);
+        self.target_date = ko.observable("");
+        self.ticket_url = ko.observable("");
 
         self.getFeatures = function(){
             console.log("Sending getFeatures...");
@@ -76,6 +87,8 @@ $(document).ready(function() {
                 });
                 self.features(mappedFeatures);
             });
+
+            // console.log(self.features);
         }
 
         self.getProductAreas = function(){
@@ -87,6 +100,8 @@ $(document).ready(function() {
                 });
                 self.productAreas(mappedProducts);
             });
+
+            // console.log(self.productAreas);
         }
 
         self.getClients = function(){
@@ -98,17 +113,19 @@ $(document).ready(function() {
                 });
                 self.clients(mappedClients);
             });
+
+            // console.log(self.clients);
         }
 
         self.addFeature = function(){
+            console.log("client_id: " + self.client_id() + ", product_area_id: " + self.product_area_id())
             $.ajax({
                 url: "/api/v1/featureRequests",
                 type: "POST",
                 data: { title: self.title(), description: self.description(),
                         client_id: self.client_id(), client_priority: self.client_priority(),
-                        product_area_id: self.product_area_id(), user_id: self.user_id(),
-                        target_date: self.target_date(), ticket_url: self.ticket_url()
-                    },
+                        product_area_id: self.product_area_id(), target_date: self.target_date(),
+                        ticket_url: self.ticket_url() },
                 success: function (response) {
                     console.log("Feature request was added successfully... returning to features view");
                     // console.log(response);

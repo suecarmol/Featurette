@@ -9,19 +9,19 @@
             <h3 class="ui dividing header">Feature Request</h3>
             <div class="field">
                 <label>Title</label>
-                <input id="title" type="text" name="title" placeholder="Request Title"
+                <input id="title" type="text" name="request_title" placeholder="Request Title"
                     data-bind="value: title" required>
             </div>
             <div class="field">
                 <label>Description</label>
-                <input id="description" type="text" name="description"
+                <input id="description" type="text" name="request_description"
                     placeholder="Description"  data-bind="value: description" required>
             </div>
             <div class="field">
                 <label>Client</label>
                 <select id="client" class="ui fluid dropdown" name="client"
-                    data-bind="options: clients, optionsText: 'name', optionsValue: 'id',
-                    optionsCaption: 'Select a client …'">
+                    data-bind="options: clients, optionsText: 'client_name', optionsValue: 'id',
+                    optionsCaption: 'Select a client …', value: client_id">
                 </select>
             </div>
             <div class="field">
@@ -38,8 +38,8 @@
             <div class="field">
                 <label>Product Area</label>
                 <select id="product_area" class="ui fluid dropdown" name="product_area"
-                    data-bind="options: productAreas, optionsText: 'name', optionsValue: 'id',
-                    optionsCaption: 'Select a product area…'">
+                    data-bind="options: productAreas, optionsText: 'product_area_name', optionsValue: 'id',
+                    optionsCaption: 'Select a product area…', value: product_area_id">
                 </select>
             </div>
             <div class="field">

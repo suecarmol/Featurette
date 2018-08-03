@@ -1,5 +1,4 @@
 from datetime import datetime
-import json
 from app import bcrypt, login_manager
 from db import session
 from config import Config
@@ -41,7 +40,8 @@ feature_request_fields = {
     'user_id': fields.Integer,
     'target_date': fields.DateTime,
     'ticket_url': fields.String,
-    'date_finished': fields.DateTime
+    'date_finished': fields.DateTime,
+    'is_finished': fields.Boolean
 }
 
 feature_request_fields_user_friendly = {
@@ -54,7 +54,8 @@ feature_request_fields_user_friendly = {
     'username': fields.String,
     'target_date': fields.DateTime,
     'ticket_url': fields.String,
-    'date_finished': fields.DateTime
+    'date_finished': fields.DateTime,
+    'is_finished': fields.Boolean
 }
 
 parser_login = reqparse.RequestParser()
@@ -364,6 +365,8 @@ class FeatureRequestResource(Resource):
         title = parsed_args['title']
         client_id = parsed_args['client_id']
         client_priority = parsed_args['client_priority']
+        conv_target_date = datetime.strptime(parsed_args['target_date'],
+                                             "%Y-%m-%d %H:%M")
         feature_request = session.query(FeatureRequest).get(id)
         feature_request.title = title
         feature_request.description = parsed_args['description']
@@ -375,7 +378,7 @@ class FeatureRequestResource(Resource):
             feature_request.user_id = current_user.id
         else:
             feature_request.user_id = 1
-        feature_request.target_date = parsed_args['target_date']
+        feature_request.target_date = conv_target_date
         feature_request.ticket_url = parsed_args['ticket_url']
         feature_request.date_finished = None
         # priority algorithm
@@ -423,6 +426,7 @@ class FinishFeatureResource(Resource):
             abort(404, message="Feature request {} doesn't exist".format(id))
         feature_request.date_finished = str(datetime.now())
         feature_request.client_priority = 0
+        feature_request.is_finished = True
         try:
             session.commit()
         except:
@@ -447,6 +451,7 @@ class FeatureRequestListResource(Resource):
             tmp_feature_request['target_date'] = feature_request.target_date
             tmp_feature_request['ticket_url'] = str(feature_request.ticket_url)
             tmp_feature_request['date_finished'] = feature_request.date_finished
+            tmp_feature_request['is_finished'] = feature_request.is_finished
             format_feature_requests.append(tmp_feature_request)
 
         # print(format_feature_requests)
@@ -461,6 +466,8 @@ class FeatureRequestListResource(Resource):
         title = parsed_args['title']
         client_id = parsed_args['client_id']
         client_priority = parsed_args['client_priority']
+        conv_target_date = datetime.strptime(parsed_args['target_date'],
+                                             "%Y-%m-%d %H:%M")
         # current_user is not enabled during unit tests
         if current_user.is_authenticated:
             user_id = current_user.id
@@ -474,14 +481,18 @@ class FeatureRequestListResource(Resource):
                                          client_priority=client_priority,
                                          product_area_id=parsed_args['product_area_id'], # noqa
                                          user_id=user_id,
-                                         target_date=parsed_args['target_date'], # noqa
+                                         target_date=conv_target_date,
                                          ticket_url=parsed_args['ticket_url'],
-                                         date_finished=None)
+                                         date_finished=None,
+                                         is_finished=False)
+
         try:
             session.add(feature_request)
             session.commit()
+            print("Session committed")
         except:
             session.rollback()
+            print("Session rolled back")
         return feature_request, 201
 
     def checkPriorities(self, client_id, new_client_priority, new_title):

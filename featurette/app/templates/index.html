@@ -40,20 +40,20 @@
                 <tr>
                     <td data-bind="text: title"> </td>
                     <td data-bind="text: description"> </td>
-                    <td data-bind="text: client_id"> </td>
+                    <td data-bind="text: client_name"> </td>
                     <td data-bind="text: client_priority"> </td>
-                    <td data-bind="text: product_area_id"> </td>
+                    <td data-bind="text: product_area_name"> </td>
                     <td data-bind="text: target_date"> </td>
                     <td data-bind="text: ticket_url"> </td>
-                    <td data-bind="text: user_id"> </td>
+                    <td data-bind="text: username"> </td>
                     <td class="single line">
-                        <a class="edit ui icon violet button">
+                        <a class="edit ui icon violet button" data-bind="disable: is_finished">
                             <i class="edit icon"> </i>
                         </a>
-                        <a class="finish ui icon green button" data-bind="click: $parent.finishFeature">
+                        <a class="finish ui icon green button" data-bind="click: $parent.finishFeature, disable: is_finished">
                             <i class="check icon"> </i>
                         </a>
-                        <a class="delete ui icon red button" data-bind="click: $parent.deleteFeature">
+                        <a class="delete ui icon red button" data-bind="click: $parent.deleteFeature, disable: is_finished">
                             <i class="delete icon"> </i>
                         </a>
                     </td>

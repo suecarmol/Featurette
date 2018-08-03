@@ -101,6 +101,7 @@ class FeatureRequest(Base):
     target_date = Column(DateTime(timezone=True))
     ticket_url = Column(String(100))
     date_finished = Column(DateTime(timezone=True))
+    is_finished = Column(Boolean, default=False)
     created_at = Column(DateTime(timezone=True), default=datetime.now(),
                         server_default=text('NOW()'))
     updated_at = Column(DateTime(timezone=True), onupdate=datetime.now(),
@@ -111,7 +112,7 @@ class FeatureRequest(Base):
 
     def __init__(self, title, description, client_id, client_priority,
                  product_area_id, user_id, target_date, ticket_url,
-                 date_finished):
+                 date_finished, is_finished):
         self.title = title
         self.description = description
         self.client_id = client_id
@@ -121,3 +122,4 @@ class FeatureRequest(Base):
         self.target_date = target_date
         self.ticket_url = ticket_url
         self.date_finished = date_finished
+        self.is_finished = is_finished
