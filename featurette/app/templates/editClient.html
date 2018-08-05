@@ -1,17 +1,18 @@
 {% extends "menu_bar.html" %}
     {% block head %}
         {{ super() }}
-        <script type="text/javascript" src="static/client_validation.js"></script>
-        <script src="static/editClient.js"></script>
+        <script src="static/clients.js"></script>
     {% endblock %}
     {% block content %}
-        <form class="ui form segment" action="/clients" method="POST">
+        <form data-bind="submit: updateClient" class="ui form segment" action="/clients" method="POST">
             <h3 class="ui dividing header">Edit Client</h3>
             <div class="field">
                 <label>Name</label>
-                <input id="client_name" type="text" name="client_name">
+                <input id="client_name" type="text" name="client_name" required
+                    data-bind="value: client_name">
             </div>
-            <input id="client_id" hidden="true" name="client_id">
+            <input id="client_id" hidden="true" name="client_id"
+                data-bind="value: id">
             <button id="submit" class="ui violet button">
                 Save Changes
             </button>

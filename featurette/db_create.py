@@ -45,10 +45,13 @@ db.session.add(reports)
 
 feat_req = FeatureRequest('This is a title',
                           'This is not the description you are looking for',
-                          1, 1, 1, 1, '2019-06-01', 'www.wired.com', None)
+                          1, 1, 1, 1, '2019-06-01', 'www.wired.com', None, False)
 feat_req2 = FeatureRequest('This is another title', 'Another description',
-                           1, 2, 1, 1, '2019-06-01', 'www.google.com', None)
+                           1, 2, 1, 1, '2019-06-01', 'www.google.com', None, False)
+feat_req3 = FeatureRequest('Great title', 'Greater description',
+                          1, 3, 1, 1, '2019-06-01', 'www.nytimes.com', None, False)
 db.session.add(feat_req)
 db.session.add(feat_req2)
+db.session.add(feat_req3)
 
 db.session.commit()

@@ -1,5 +1,13 @@
 $(document).ready(function() {
 
+    //redirect to login when a 401 forbidden error is triggered
+    $( document ).ajaxError(function( event, jqxhr, settings, exception ) {
+        if ( jqxhr.status== 401 ) {
+            //$( "div.log" ).text( "Triggered ajaxError handler." );
+            window.location = '/login';
+        }
+    });
+
     $('.ui.secondary.pointing.menu')
         .on('click', '.item', function() {
         if(!$(this).hasClass('dropdown')) {

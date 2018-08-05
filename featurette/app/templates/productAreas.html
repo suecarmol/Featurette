@@ -30,7 +30,7 @@
                 <tr>
                     <td data-bind="text: product_area_name"> </td>
                     <td class="single line">
-                        <a class="edit ui icon violet button">
+                        <a class="edit ui icon violet button" data-bind="click: $parent.editProductArea">
                             <i class="edit icon"> </i>
                         </a>
                         <a class="delete ui icon red button" data-bind="click: $parent.deleteProductArea">

@@ -1,5 +1,13 @@
 $(document).ready(function() {
 
+    //redirect to login when a 401 forbidden error is triggered
+    $( document ).ajaxError(function( event, jqxhr, settings, exception ) {
+        if ( jqxhr.status== 401 ) {
+            //$( "div.log" ).text( "Triggered ajaxError handler." );
+            window.location = '/login';
+        }
+    });
+
     $('.ui.secondary.pointing.menu')
         .on('click', '.item', function() {
         if(!$(this).hasClass('dropdown')) {
@@ -36,17 +44,6 @@ $(document).ready(function() {
             });
         }
 
-        self.getProductArea = function(){
-            $.ajax({
-                url: '/api/v1/productArea/' + id,
-                type: 'GET',
-                success(data){
-                    var name = document.getElementById('product_area_name').value = data.name;
-                    var id = document.getElementById('product_area_id').value = data.id;
-                }
-            });
-        }
-
         self.addProductArea = function(){
             $.ajax({
                 url: "/api/v1/productAreas",
@@ -79,14 +76,27 @@ $(document).ready(function() {
             }
         }
 
+        self.editProductArea = function(row){
+            console.log("Editing " + row.id());
+            window.location = '/editProductArea?id=' + row.id();
+        }
+
+        self.getProductArea = function(id){
+            $.getJSON("/api/v1/productArea/" + id, function(response) {
+                self.product_area_name(response.name)
+                self.id(response.id)
+            });
+        }
+
         self.updateProductArea = function(){
-            console.log("Updating " + product_area_id);
+            console.log("Updating: " + self.id());
             $.ajax({
-                url: '/api/v1/productArea/'+ product_area_id,
+                url: '/api/v1/productArea/'+ self.id(),
                 type: 'PUT',
-                data: {product_area_name : product_area},
+                data: {product_area_name: self.product_area_name()},
                 success: function(data){
                     console.log('Product Area updated successfully');
+                    window.location.href = "/productAreas";
                 },
                 error: function(xhr,err){
                     console.log("readyState: "+xhr.readyState+"\nstatus: "+xhr.status);
@@ -99,8 +109,29 @@ $(document).ready(function() {
             self.getProductAreas();
         }
 
-        // console.log("Product Areas: ");
-        // console.log(self.productAreas);
+        if(window.location.pathname == '/editProductArea'){
+            var getUrlParameter = function getUrlParameter(sParam) {
+                var sPageURL = decodeURIComponent(window.location.search.substring(1)),
+                    sURLVariables = sPageURL.split('&'),
+                    sParameterName,
+                    i;
+
+                for (i = 0; i < sURLVariables.length; i++) {
+                    sParameterName = sURLVariables[i].split('=');
+
+                    if (sParameterName[0] === sParam) {
+                        return sParameterName[1] === undefined ? true : sParameterName[1];
+                    }
+                }
+            };
+
+            var id = getUrlParameter('id');
+
+            console.log("Id transfered from Product Areas: " + id);
+
+            self.getProductArea(id);
+        }
+        
     }
 
     ko.cleanNode($("body")[0]);

@@ -1,5 +1,13 @@
 $(document).ready(function() {
 
+    //redirect to login when a 401 forbidden error is triggered
+    $( document ).ajaxError(function( event, jqxhr, settings, exception ) {
+        if ( jqxhr.status== 401 ) {
+            //$( "div.log" ).text( "Triggered ajaxError handler." );
+            window.location = '/login';
+        }
+    });
+
     //this is to activate the table sort only on /
     if (window.location.pathname == '/'){
         $('table').tablesort();
@@ -77,6 +85,7 @@ $(document).ready(function() {
         self.product_area_id = ko.observable(0);
         self.target_date = ko.observable("");
         self.ticket_url = ko.observable("");
+        self.is_finished = ko.observable(false);
 
         self.getFeatures = function(){
             console.log("Sending getFeatures...");
@@ -151,6 +160,10 @@ $(document).ready(function() {
             }
         }
 
+        self.isFeatureFinished = function(){
+            return self.is_finished();
+        }
+
         self.deleteFeature = function(row){
             console.log("DELETE command for id: " + row.id());
 
@@ -165,6 +178,7 @@ $(document).ready(function() {
                 });
             }
         }
+
 
         if (window.location.pathname == '/addFeature'){
             self.getProductAreas();

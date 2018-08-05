@@ -47,13 +47,13 @@
                     <td data-bind="text: ticket_url"> </td>
                     <td data-bind="text: username"> </td>
                     <td class="single line">
-                        <a class="edit ui icon violet button" data-bind="disable: is_finished">
+                        <a class="edit ui icon violet button" data-bind="disable: $parent.isFeatureFinished">
                             <i class="edit icon"> </i>
                         </a>
-                        <a class="finish ui icon green button" data-bind="click: $parent.finishFeature, disable: is_finished">
+                        <a class="finish ui icon green button" data-bind="click: $parent.finishFeature, disable: $parent.isFeatureFinished">
                             <i class="check icon"> </i>
                         </a>
-                        <a class="delete ui icon red button" data-bind="click: $parent.deleteFeature, disable: is_finished">
+                        <a class="delete ui icon red button" data-bind="click: $parent.deleteFeature">
                             <i class="delete icon"> </i>
                         </a>
                     </td>
