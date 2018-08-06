@@ -6,21 +6,15 @@
     {% endblock %}
     {% block content %}
 
-        {% with messages = get_flashed_messages() %}
-            {% if messages %}
-                <div class="ui violet message">
-                    <i class="close icon"></i>
-                    <div class="header">
-                        Featurette
-                    </div>
-                    {%for message in messages%}
-                        <p>{{ message }}</p>
-                    {% endfor %}
-                </div>
-            {% endif %}
-        {% endwith %}
-
         <h2> Feature Requests </h2>
+
+        <div class="ui violet message">
+            <i class="close icon"></i>
+            <div class="header">
+                Notification
+            </div>
+            <p id="messageSpace"></p>
+        </div>
 
         <table class="ui sortable celled padded violet table">
             <thead>
@@ -47,7 +41,7 @@
                     <td data-bind="text: ticket_url"> </td>
                     <td data-bind="text: username"> </td>
                     <td class="single line">
-                        <a class="edit ui icon violet button" data-bind="disable: $parent.isFeatureFinished">
+                        <a class="edit ui icon violet button" data-bind="click: $parent.editFeature, disable: $parent.isFeatureFinished">
                             <i class="edit icon"> </i>
                         </a>
                         <a class="finish ui icon green button" data-bind="click: $parent.finishFeature, disable: $parent.isFeatureFinished">

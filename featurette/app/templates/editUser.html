@@ -1,29 +1,32 @@
 {% extends "menu_bar.html" %}
     {% block head %}
         {{ super() }}
-        <script src="static/user_validation.js"></script>
-        <script src="static/editUser.js"></script>
+        <script src="static/users.js"></script>
     {% endblock %}
     {% block content %}
-        <form class="ui form segment" action="/users" method="POST">
+        <form data-bind="submit: updateUser" class="ui form segment" action="/users" method="POST">
             <h3 class="ui dividing header">Edit User</h3>
             <div class="field">
                 <label>Username</label>
-                <input id="username" type="text" name="username">
+                <input id="username" type="text" name="username" data-bind="value: username"
+                    required>
             </div>
             <div class="field">
                 <label>Email</label>
-                <input id="email" type="email" name="email">
+                <input id="email" type="email" name="email" data-bind="value: email"
+                    required>
             </div>
             <div class="field">
                 <label>Password</label>
-                <input id="password" type="password" name="password">
+                <input id="password" type="password" name="password"
+                    data-bind="value: password" required>
             </div>
             <div class="field">
                 <label>Repeat Password</label>
-                <input type="password" name="repeat_password" placeholder="Password">
+                <input type="password" name="repeat_password" placeholder="Password" required>
             </div>
-            <input id="user_id" hidden="true" name="user_id">
+            <input id="id" hidden="true" name="id"
+                data-bind="value: id">
             <button id="submit" class="ui violet button">
                 Save Changes
             </button>

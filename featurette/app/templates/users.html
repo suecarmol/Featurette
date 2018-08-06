@@ -4,22 +4,15 @@
         <script src="static/users.js"></script>
     {% endblock %}
     {% block content %}
-
-        {% with messages = get_flashed_messages() %}
-            {% if messages %}
-                <div class="ui violet message">
-                    <i class="close icon"></i>
-                    <div class="header">
-                        Featurette
-                    </div>
-                    {%for message in messages%}
-                        <p>{{ message }}</p>
-                    {% endfor %}
-                </div>
-            {% endif %}
-        {% endwith %}
-
         <h2> Users </h2>
+
+        <div class="ui violet message">
+            <i class="close icon"></i>
+            <div class="header">
+                Notification
+            </div>
+            <p id="messageSpace"></p>
+        </div>
 
         <table class="ui sortable celled padded violet table">
             <thead>
@@ -34,7 +27,7 @@
                     <td data-bind="text: username"> </td>
                     <td data-bind="text: email"> </td>
                     <td class="single line">
-                        <a class="edit ui icon violet button">
+                        <a class="edit ui icon violet button" data-bind="click: $parent.editUser">
                             <i class="edit icon"> </i>
                         </a>
                         <a class="delete ui icon red button" data-bind="click: $parent.deleteUser">

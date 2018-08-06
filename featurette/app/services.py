@@ -48,9 +48,12 @@ feature_request_fields_user_friendly = {
     'id': fields.Integer,
     'title': fields.String,
     'description': fields.String,
+    'client_id': fields.Integer,
     'client_name': fields.String,
     'client_priority': fields.Integer,
+    'product_area_id': fields.Integer,
     'product_area_name': fields.String,
+    'user_id': fields.Integer,
     'username': fields.String,
     'target_date': fields.DateTime,
     'ticket_url': fields.String,
@@ -339,12 +342,28 @@ class UserListResource(Resource):
 
 class FeatureRequestResource(Resource):
     @login_required
-    @marshal_with(feature_request_fields)
+    @marshal_with(feature_request_fields_user_friendly)
     def get(self, id):
         feature_request = session.query(FeatureRequest).get(id)
         if not feature_request:
             abort(404, message="Feature request {} doesn't exist".format(id))
-        return feature_request
+        feature_request_user_friendly = {}
+        feature_request_user_friendly['id'] = int(feature_request.id)
+        feature_request_user_friendly['title'] = str(feature_request.title)
+        feature_request_user_friendly['description'] = str(feature_request.description)
+        feature_request_user_friendly['client_id'] = feature_request.client_id
+        feature_request_user_friendly['client_name'] = str(feature_request.client.name)
+        feature_request_user_friendly['client_priority'] = str(feature_request.client_priority)
+        feature_request_user_friendly['product_area_id'] = feature_request.product_area_id
+        feature_request_user_friendly['product_area_name'] = str(feature_request.product_area.name)
+        feature_request_user_friendly['user_id'] = feature_request.user_id
+        feature_request_user_friendly['username'] = str(feature_request.user.username)
+        feature_request_user_friendly['target_date'] = feature_request.target_date
+        feature_request_user_friendly['ticket_url'] = str(feature_request.ticket_url)
+        feature_request_user_friendly['date_finished'] = feature_request.date_finished
+        feature_request_user_friendly['is_finished'] = feature_request.is_finished
+
+        return feature_request_user_friendly
 
     @login_required
     def delete(self, id):
@@ -444,9 +463,12 @@ class FeatureRequestListResource(Resource):
             tmp_feature_request['id'] = int(feature_request.id)
             tmp_feature_request['title'] = str(feature_request.title)
             tmp_feature_request['description'] = str(feature_request.description)
+            tmp_feature_request['client_id'] = feature_request.client_id
             tmp_feature_request['client_name'] = str(feature_request.client.name)
             tmp_feature_request['client_priority'] = str(feature_request.client_priority)
+            tmp_feature_request['product_area_id'] = feature_request.product_area_id
             tmp_feature_request['product_area_name'] = str(feature_request.product_area.name)
+            tmp_feature_request['user_id'] = feature_request.user_id
             tmp_feature_request['username'] = str(feature_request.user.username)
             tmp_feature_request['target_date'] = feature_request.target_date
             tmp_feature_request['ticket_url'] = str(feature_request.ticket_url)

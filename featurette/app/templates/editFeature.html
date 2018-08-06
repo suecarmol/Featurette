@@ -2,50 +2,52 @@
     {% block head %}
         <link rel="stylesheet" type="text/css" href="static/flatpickr.min.css">
         <script src="static/flatpickr.min.js"></script>
-        <script src="static/feature_request_validation.js"></script>
-        <script src="static/editFeature.js"></script>
+        <script src="static/index.js"></script>
     {% endblock %}
     {% block content %}
-        <form class="ui form segment" action="/" method="POST">
+        <form data-bind="submit: updateFeature" class="ui form segment" action="/" method="POST">
             <h3 class="ui dividing header">Edit Feature Request</h3>
             <div class="field">
                 <label>Title</label>
-                <input id="request_title" type="text" name="request_title">
+                <input id="title" type="text" name="title"
+                    data-bind="value: title" required>
             </div>
             <div class="field">
                 <label>Description</label>
-                <input id="request_description" type="text" name="request_description">
+                <input id="description" type="text" name="description"
+                    data-bind="value: description" required>
             </div>
             <div class="field">
                 <label>Client</label>
-                <select id="client" class="ui fluid dropdown" name="client">
-                    <option id="current_client">
-
-                    </option>
+                <select id="client" class="ui fluid dropdown" name="client"
+                    data-bind="options: clients, optionsText: 'client_name', optionsValue: 'id',
+                    optionsCaption: 'Select a client …', value: client_id">
                 </select>
             </div>
             <div class="field">
                 <label>Priority</label>
-                <input id="client_priority" type="number" name="client_priority">
+                <input id="client_priority" type="number" name="client_priority"
+                    data-bind="value: client_priority" required>
             </div>
             <div class="field">
                 <label>Target Date</label>
-                <input id="target-date" type="text" class="flatpickr"
-                    data-enable-time="false" name="target_date">
+                <input id="target_date" type="text" class="flatpickr"
+                    data-enable-time="false" name="target_date"
+                    data-bind="value: target_date" required>
             </div>
             <div class="field">
                 <label>Product Area</label>
-                <select id="product_area" class="ui fluid dropdown" name="product_area">
-                    <option id="current_product_area">
-
-                    </option>
+                <select id="product_area" class="ui fluid dropdown" name="product_area"
+                    data-bind="options: productAreas, optionsText: 'product_area_name', optionsValue: 'id',
+                    optionsCaption: 'Select a product area…', value: product_area_id">
                 </select>
             </div>
             <div class="field">
                 <label>URL</label>
-                <input id="ticket_url" type="text" name="ticket_url">
+                <input id="ticket_url" type="text" name="ticket_url"
+                    data-bind="value: ticket_url" required>
             </div>
-            <input id="feature_request_id" hidden="true" name="feature_request_id">
+            <input id="id" hidden="true" name="id" data-bind="value: id">
             <button id="submit" class="ui violet button">
                 Submit Feature Request
             </button>

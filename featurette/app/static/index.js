@@ -1,25 +1,31 @@
-$(document).ready(function() {
+ $(document).ready(function() {
 
     //redirect to login when a 401 forbidden error is triggered
     $( document ).ajaxError(function( event, jqxhr, settings, exception ) {
         if ( jqxhr.status== 401 ) {
-            //$( "div.log" ).text( "Triggered ajaxError handler." );
-            window.location = '/login';
+            window.location = '/login?message=Please log in before you can access the information';
         }
     });
+
+    var calendar = null;
 
     //this is to activate the table sort only on /
     if (window.location.pathname == '/'){
         $('table').tablesort();
     }
     else{
-        document.getElementById("target_date").flatpickr({
-    		minDate: "today",
-    		maxDate: "2050-12-31",
-    		enableTime: false,
-    		altInput: true
-        });
+        calendar = new Flatpickr(document.getElementById("target_date"))
+    	calendar.config.minDate = "today";
+    	calendar.config.maxDate = "2050-12-31";
+    	calendar.config.enableTime = false;
+    	calendar.config.altInput = true;
+        calendar.config.altFormat = "F j, Y";
+        calendar.config.dateFormat = "Y-m-d H:i";
     }
+
+    var message = null;
+
+    $('.message').hide();
 
     $('.message .close').on('click', function() {
         $(this).closest('.message').transition('fade');
@@ -97,7 +103,6 @@ $(document).ready(function() {
                 self.features(mappedFeatures);
             });
 
-            // console.log(self.features);
         }
 
         self.getProductAreas = function(){
@@ -110,7 +115,6 @@ $(document).ready(function() {
                 self.productAreas(mappedProducts);
             });
 
-            // console.log(self.productAreas);
         }
 
         self.getClients = function(){
@@ -123,7 +127,6 @@ $(document).ready(function() {
                 self.clients(mappedClients);
             });
 
-            // console.log(self.clients);
         }
 
         self.addFeature = function(){
@@ -138,7 +141,7 @@ $(document).ready(function() {
                 success: function (response) {
                     console.log("Feature request was added successfully... returning to features view");
                     // console.log(response);
-                    window.location.href = "/";
+                    window.location.href = "/?message=Feature request was added successfully";
                 },
                 error: function (xhr, ajaxOptions, thrownError) {
                     console.log(xhr.status);
@@ -155,6 +158,15 @@ $(document).ready(function() {
                     type: 'POST',
                     success: function(data){
                         console.log('Feature request marked as finished');
+                        message = "Feature request marked as finished";
+                        $('.message').show();
+                        $('#messageSpace').text(message);
+                        $('.message .close')
+                        .on('click', function() {
+                            $(this)
+                            .closest('.message')
+                            .transition('fade');
+                        });
                     }
                 });
             }
@@ -174,9 +186,59 @@ $(document).ready(function() {
                     success: function(data){
                         console.log('Feature request deleted successfully');
                         self.features.remove(row);
+                        message = "Feature request deleted successfully";
+                        $('.message').show();
+                        $('#messageSpace').text(message);
+                        $('.message .close')
+                        .on('click', function() {
+                            $(this)
+                            .closest('.message')
+                            .transition('fade');
+                        });
                     }
                 });
             }
+        }
+
+        self.editFeature = function(row){
+            console.log("Editing " + row.id());
+            window.location = '/editFeature?id=' + row.id();
+        }
+
+        self.getFeature = function(id){
+            $.getJSON("/api/v1/featureRequest/" + id, function(response) {
+                console.log(response);
+                self.title(response.title)
+                self.description(response.description)
+                self.client_id(response.client_id)
+                self.client_priority(response.client_priority)
+                self.product_area_id(response.product_area_id)
+                self.target_date(response.target_date)
+                self.ticket_url(response.ticket_url)
+                self.id(response.id)
+                calendar.setDate(self.target_date(), 'Y-m-d h:i')
+            });
+        }
+
+        self.updateFeature = function(){
+            console.log("Updating: " + self.id());
+            console.log(self.target_date());
+            $.ajax({
+                url: '/api/v1/featureRequest/'+ self.id(),
+                type: 'PUT',
+                data: {title: self.title(), description: self.description(),
+                        client_id: self.client_id(), client_priority: self.client_priority(),
+                        product_area_id: self.product_area_id(), target_date: self.target_date(),
+                        ticket_url: self.ticket_url()},
+                success: function(data){
+                    console.log('Feature request updated successfully');
+                    window.location.href = "/?message=Feature request was updated successfully";
+                },
+                error: function(xhr,err){
+                    console.log("readyState: "+xhr.readyState+"\nstatus: "+xhr.status);
+                    console.log("responseText: "+xhr.responseText);
+                }
+            });
         }
 
 
@@ -184,11 +246,44 @@ $(document).ready(function() {
             self.getProductAreas();
             self.getClients();
         }
+        else if (window.location.pathname == '/editFeature'){
+            self.getProductAreas();
+            self.getClients();
+            var id = getUrlParameter('id');
+            console.log("Id transfered from Feature requests: " + id);
+            self.getFeature(id);
+        }
         else{
             self.getFeatures();
+            message = getUrlParameter('message');
+
+            if(message != null){
+                $('.message').show();
+                $('#messageSpace').text(message);
+                $('.message .close')
+                .on('click', function() {
+                    $(this)
+                    .closest('.message')
+                    .transition('fade');
+                });
+            }
         }
     }
 
+    function getUrlParameter(sParam) {
+        var sPageURL = decodeURIComponent(window.location.search.substring(1)),
+            sURLVariables = sPageURL.split('&'),
+            sParameterName,
+            i;
+
+        for (i = 0; i < sURLVariables.length; i++) {
+            sParameterName = sURLVariables[i].split('=');
+
+            if (sParameterName[0] === sParam) {
+                return sParameterName[1] === undefined ? true : sParameterName[1];
+            }
+        }
+    }
 
     ko.cleanNode($("body")[0]);
     var viewModel = new FeatureRequestViewModel();

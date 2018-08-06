@@ -4,20 +4,15 @@
         <script type="text/javascript" src="static/productAreas.js"></script>
     {% endblock %}
     {% block content %}
-        {% with messages = get_flashed_messages() %}
-            {% if messages %}
-                <div class="ui violet message">
-                    <i class="close icon"></i>
-                    <div class="header">
-                        Featurette
-                    </div>
-                    {%for message in messages%}
-                        <p>{{ message }}</p>
-                    {% endfor %}
-                </div>
-            {% endif %}
-        {% endwith %}
         <h2> Product Areas </h2>
+
+        <div class="ui violet message">
+            <i class="close icon"></i>
+            <div class="header">
+                Notification
+            </div>
+            <p id="messageSpace"></p>
+        </div>
 
         <table class="ui sortable celled padded violet table">
             <thead>

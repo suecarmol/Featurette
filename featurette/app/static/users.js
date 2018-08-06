@@ -4,9 +4,13 @@ $(document).ready(function() {
     $( document ).ajaxError(function( event, jqxhr, settings, exception ) {
         if ( jqxhr.status== 401 ) {
             //$( "div.log" ).text( "Triggered ajaxError handler." );
-            window.location = '/login';
+            window.location = '/login?message=Please log in before you can access the information';
         }
     });
+
+    var message = null;
+
+    $('.message').hide();
 
     $('.ui.secondary.pointing.menu')
         .on('click', '.item', function() {
@@ -57,7 +61,7 @@ $(document).ready(function() {
                 success: function (response) {
                     console.log("User was added successfully... returning to users view");
                     // console.log(response);
-                    window.location.href = "/users";
+                    window.location.href = "/users?message=User was added successfully";
                 },
                 error: function (xhr, ajaxOptions, thrownError) {
                     console.log(xhr.status);
@@ -76,13 +80,87 @@ $(document).ready(function() {
                     success: function(data){
                         console.log('User deleted successfully');
                         self.users.remove(row);
+                        message = "User deleted successfully";
+                        $('.message').show();
+                        $('#messageSpace').text(message);
+                        $('.message .close')
+                        .on('click', function() {
+                            $(this)
+                            .closest('.message')
+                            .transition('fade');
+                        });
                     }
                 });
             }
         }
 
+        self.editUser = function(row){
+            console.log("Editing " + row.id());
+            window.location = '/editUser?id=' + row.id();
+        }
+
+        self.getUser = function(id){
+            $.getJSON("/api/v1/user/" + id, function(response) {
+                self.username(response.username)
+                self.email(response.email)
+                self.password(response.password)
+                self.id(response.id)
+            });
+        }
+
+        self.updateUser = function(){
+            console.log("Updating: " + self.id());
+            $.ajax({
+                url: '/api/v1/user/'+ self.id(),
+                type: 'PUT',
+                data: {username: self.username(), email: self.email(), password: self.password()},
+                success: function(data){
+                    console.log('User updated successfully');
+                    window.location.href = "/users?message=User updated successfully";
+                },
+                error: function(xhr,err){
+                    console.log("readyState: "+xhr.readyState+"\nstatus: "+xhr.status);
+                    console.log("responseText: "+xhr.responseText);
+                }
+            });
+        }
+
+        if(window.location.pathname == '/editUser'){
+
+            var id = getUrlParameter('id');
+            console.log("Id transfered from Users: " + id);
+            self.getUser(id);
+        }
+
         if (window.location.pathname == '/users'){
             self.getUsers();
+            message = getUrlParameter('message');
+
+            if(message != null){
+                $('.message').show();
+                $('#messageSpace').text(message);
+                $('.message .close')
+                .on('click', function() {
+                    $(this)
+                    .closest('.message')
+                    .transition('fade');
+                });
+            }
+        }
+
+        function getUrlParameter(sParam) {
+            var sPageURL = decodeURIComponent(window.location.search.substring(1)),
+                sURLVariables = sPageURL.split('&'),
+                sParameterName,
+                i;
+
+            for (i = 0; i < sURLVariables.length; i++) {
+                sParameterName = sURLVariables[i].split('=');
+
+                if (sParameterName[0] === sParam) {
+                    return sParameterName[1] === undefined ? true : sParameterName[1];
+                }
+            }
         }
 
         // console.log("Users: ");

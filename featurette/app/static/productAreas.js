@@ -4,9 +4,13 @@ $(document).ready(function() {
     $( document ).ajaxError(function( event, jqxhr, settings, exception ) {
         if ( jqxhr.status== 401 ) {
             //$( "div.log" ).text( "Triggered ajaxError handler." );
-            window.location = '/login';
+            window.location = '/login?message=Please log in before you can access the information';
         }
     });
+
+    var message = null;
+
+    $('.message').hide();
 
     $('.ui.secondary.pointing.menu')
         .on('click', '.item', function() {
@@ -52,7 +56,7 @@ $(document).ready(function() {
                 success: function (response) {
                     console.log("Product was added successfully... returning to product areas");
                     // console.log(response)
-                    window.location.href = "/productAreas";
+                    window.location.href = "/productAreas?message=Product area was added successfully";
                 },
                 error: function (xhr, ajaxOptions, thrownError) {
                     console.log(xhr.status);
@@ -71,6 +75,15 @@ $(document).ready(function() {
                     success: function(data){
                         console.log('Product area deleted successfully');
                         self.productAreas.remove(row);
+                        message = "Product area deleted successfully";
+                        $('.message').show();
+                        $('#messageSpace').text(message);
+                        $('.message .close')
+                        .on('click', function() {
+                            $(this)
+                            .closest('.message')
+                            .transition('fade');
+                        });
                     }
                 });
             }
@@ -96,7 +109,7 @@ $(document).ready(function() {
                 data: {product_area_name: self.product_area_name()},
                 success: function(data){
                     console.log('Product Area updated successfully');
-                    window.location.href = "/productAreas";
+                    window.location.href = "/productAreas?message=Product area was updated successfully";
                 },
                 error: function(xhr,err){
                     console.log("readyState: "+xhr.readyState+"\nstatus: "+xhr.status);
@@ -107,31 +120,42 @@ $(document).ready(function() {
 
         if (window.location.pathname == '/productAreas'){
             self.getProductAreas();
+            message = getUrlParameter('message');
+
+            if(message != null){
+                $('.message').show();
+                $('#messageSpace').text(message);
+                $('.message .close')
+                .on('click', function() {
+                    $(this)
+                    .closest('.message')
+                    .transition('fade');
+                });
+            }
         }
 
         if(window.location.pathname == '/editProductArea'){
-            var getUrlParameter = function getUrlParameter(sParam) {
-                var sPageURL = decodeURIComponent(window.location.search.substring(1)),
-                    sURLVariables = sPageURL.split('&'),
-                    sParameterName,
-                    i;
-
-                for (i = 0; i < sURLVariables.length; i++) {
-                    sParameterName = sURLVariables[i].split('=');
-
-                    if (sParameterName[0] === sParam) {
-                        return sParameterName[1] === undefined ? true : sParameterName[1];
-                    }
-                }
-            };
 
             var id = getUrlParameter('id');
-
             console.log("Id transfered from Product Areas: " + id);
-
             self.getProductArea(id);
         }
-        
+
+        function getUrlParameter(sParam) {
+            var sPageURL = decodeURIComponent(window.location.search.substring(1)),
+                sURLVariables = sPageURL.split('&'),
+                sParameterName,
+                i;
+
+            for (i = 0; i < sURLVariables.length; i++) {
+                sParameterName = sURLVariables[i].split('=');
+
+                if (sParameterName[0] === sParam) {
+                    return sParameterName[1] === undefined ? true : sParameterName[1];
+                }
+            }
+        }
+
     }
 
     ko.cleanNode($("body")[0]);

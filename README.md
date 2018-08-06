@@ -15,8 +15,23 @@ cd Featurette
 ```
 
 ```shell
+docker-compose build
+```
+
+```shell
 docker-compose up
 ```
+
+```shell
+docker exec -it featurette_www_1 python db_create.py
+```
+
+## Testing
+
+```shell
+docker exec -it featurette_www_1 python -m unittest discover -v tests
+```
+
 ## Tools Used
 
 * Semantic UI - UI Framework
@@ -26,6 +41,6 @@ docker-compose up
     * Flask-Bcrypt
     * Flask-SQLAlchemy
 * JQuery - Frontend
+* Knockout JS - Frontend
 * Docker - Container
-* Isso - Comments section
 * MySQL - Database used
