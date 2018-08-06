@@ -21,6 +21,7 @@
     	calendar.config.altInput = true;
         calendar.config.altFormat = "F j, Y";
         calendar.config.dateFormat = "Y-m-d H:i";
+
     }
 
     var message = null;
@@ -130,46 +131,60 @@
         }
 
         self.addFeature = function(){
-            console.log("client_id: " + self.client_id() + ", product_area_id: " + self.product_area_id())
-            $.ajax({
-                url: "/api/v1/featureRequests",
-                type: "POST",
-                data: { title: self.title(), description: self.description(),
-                        client_id: self.client_id(), client_priority: self.client_priority(),
-                        product_area_id: self.product_area_id(), target_date: self.target_date(),
-                        ticket_url: self.ticket_url() },
-                success: function (response) {
-                    console.log("Feature request was added successfully... returning to features view");
-                    // console.log(response);
-                    window.location.href = "/?message=Feature request was added successfully";
-                },
-                error: function (xhr, ajaxOptions, thrownError) {
-                    console.log(xhr.status);
-                    console.log(thrownError);
-                }
-            });
+            if( $('.ui.form').form('is valid')) {
+                $.ajax({
+                    url: "/api/v1/featureRequests",
+                    type: "POST",
+                    data: { title: self.title(), description: self.description(),
+                            client_id: self.client_id(), client_priority: self.client_priority(),
+                            product_area_id: self.product_area_id(), target_date: self.target_date(),
+                            ticket_url: self.ticket_url() },
+                    success: function (response) {
+                        console.log("Feature request was added successfully... returning to features view");
+                        // console.log(response);
+                        window.location.href = "/?message=Feature request was added successfully";
+                    },
+                    error: function (xhr, ajaxOptions, thrownError) {
+                        console.log(xhr.status);
+                        console.log(thrownError);
+                    }
+                });
+            }
+            else{
+                console.log("Form is not valid");
+            }
         }
 
         self.finishFeature = function(row){
             console.log("Finishing feature request for id: " + row.id());
-            if (confirm("Are you sure you want to mark this request as finished?")) {
-                $.ajax({
-                    url: '/api/v1/finishFeature/' + row.id(),
-                    type: 'POST',
-                    success: function(data){
-                        console.log('Feature request marked as finished');
-                        message = "Feature request marked as finished";
-                        $('.message').show();
-                        $('#messageSpace').text(message);
-                        $('.message .close')
-                        .on('click', function() {
-                            $(this)
-                            .closest('.message')
-                            .transition('fade');
-                        });
-                    }
-                });
-            }
+
+            $('#finishModal').modal({
+                onHide: function(){
+                    console.log('hidden');
+                },
+                onShow: function(){
+                    console.log('shown');
+                },
+                onApprove: function() {
+                    console.log('Approve');
+                    $.ajax({
+                        url: '/api/v1/finishFeature/' + row.id(),
+                        type: 'POST',
+                        success: function(data){
+                            console.log('Feature request marked as finished');
+                            message = "Feature request marked as finished";
+                            $('.message').show();
+                            $('#messageSpace').text(message);
+                            $('.message .close')
+                            .on('click', function() {
+                                $(this)
+                                .closest('.message')
+                                .transition('fade');
+                            });
+                        }
+                    });
+                }
+            }).modal('show');
         }
 
         self.isFeatureFinished = function(){
@@ -179,25 +194,35 @@
         self.deleteFeature = function(row){
             console.log("DELETE command for id: " + row.id());
 
-            if (confirm("Are you sure you want to delete this feature request?")) {
-                $.ajax({
-                    url: '/api/v1/featureRequest/' + row.id(),
-                    type: 'DELETE',
-                    success: function(data){
-                        console.log('Feature request deleted successfully');
-                        self.features.remove(row);
-                        message = "Feature request deleted successfully";
-                        $('.message').show();
-                        $('#messageSpace').text(message);
-                        $('.message .close')
-                        .on('click', function() {
-                            $(this)
-                            .closest('.message')
-                            .transition('fade');
-                        });
-                    }
-                });
-            }
+            $('#deleteModal').modal({
+                onHide: function(){
+                    console.log('hidden');
+                },
+                onShow: function(){
+                    console.log('shown');
+                },
+                onApprove: function() {
+                    console.log('Approve');
+                    $.ajax({
+                        url: '/api/v1/featureRequest/' + row.id(),
+                        type: 'DELETE',
+                        success: function(data){
+                            console.log('Feature request deleted successfully');
+                            self.features.remove(row);
+                            message = "Feature request deleted successfully";
+                            $('.message').show();
+                            $('#messageSpace').text(message);
+                            $('.message .close')
+                            .on('click', function() {
+                                $(this)
+                                .closest('.message')
+                                .transition('fade');
+                            });
+                        }
+                    });
+                }
+            }).modal('show');
+
         }
 
         self.editFeature = function(row){
@@ -207,7 +232,7 @@
 
         self.getFeature = function(id){
             $.getJSON("/api/v1/featureRequest/" + id, function(response) {
-                console.log(response);
+                // console.log(response);
                 self.title(response.title)
                 self.description(response.description)
                 self.client_id(response.client_id)
@@ -221,24 +246,28 @@
         }
 
         self.updateFeature = function(){
-            console.log("Updating: " + self.id());
-            console.log(self.target_date());
-            $.ajax({
-                url: '/api/v1/featureRequest/'+ self.id(),
-                type: 'PUT',
-                data: {title: self.title(), description: self.description(),
-                        client_id: self.client_id(), client_priority: self.client_priority(),
-                        product_area_id: self.product_area_id(), target_date: self.target_date(),
-                        ticket_url: self.ticket_url()},
-                success: function(data){
-                    console.log('Feature request updated successfully');
-                    window.location.href = "/?message=Feature request was updated successfully";
-                },
-                error: function(xhr,err){
-                    console.log("readyState: "+xhr.readyState+"\nstatus: "+xhr.status);
-                    console.log("responseText: "+xhr.responseText);
-                }
-            });
+            if( $('.ui.form').form('is valid')) {
+                console.log("Updating: " + self.id());
+                $.ajax({
+                    url: '/api/v1/featureRequest/'+ self.id(),
+                    type: 'PUT',
+                    data: {title: self.title(), description: self.description(),
+                            client_id: self.client_id(), client_priority: self.client_priority(),
+                            product_area_id: self.product_area_id(), target_date: self.target_date(),
+                            ticket_url: self.ticket_url()},
+                    success: function(data){
+                        console.log('Feature request updated successfully');
+                        window.location.href = "/?message=Feature request was updated successfully";
+                    },
+                    error: function(xhr,err){
+                        console.log("readyState: "+xhr.readyState+"\nstatus: "+xhr.status);
+                        console.log("responseText: "+xhr.responseText);
+                    }
+                });
+            }
+            else{
+                console.log("Form is not valid");
+            }
         }
 
 
@@ -269,6 +298,87 @@
             }
         }
     }
+
+    $('.ui.form').form({
+        inline: true,
+        fields: {
+            title: {
+                identifier: 'title',
+                rules: [
+                    {
+                        type   : 'empty',
+                        prompt : 'Please enter the title of the feature request'
+                    }
+                ]
+            },
+            description: {
+                identifier: 'description',
+                rules: [
+                    {
+                        type: 'empty',
+                        prompt: 'Please enter the description of the feature request'
+                    },
+                    {
+                        type: 'minLength[10]',
+                        prompt: 'Your description has to have at least 10 characters'
+                    }
+                ]
+            },
+            client_priority: {
+                identifier: 'client_priority',
+                rules: [
+                    {
+                        type: 'empty',
+                        prompt: 'Please enter a priority'
+                    },
+                    {
+                        type: 'integer[1..100000000]',
+                        prompt: 'Number must be a positive integer'
+                    }
+                ]
+            },
+            target_date: {
+                identifier: 'target_date',
+                rules: [
+                    {
+                        type: 'empty',
+                        prompt: 'Please enter a date'
+                    }
+                ]
+            },
+            ticket_url: {
+                identifier: 'ticket_url',
+                rules: [
+                    {
+                        type: 'empty',
+                        prompt: 'Please enter a URL'
+                    },
+                    {
+                        type: 'url',
+                        prompt: 'The content must be a valid URL'
+                    }
+                ]
+            },
+            client: {
+                identifier: 'client',
+                rules: [
+                    {
+                        type:'empty',
+                        prompt: 'Please select a client'
+                    }
+                ]
+            },
+            product_area: {
+                identifier: 'product_area',
+                rules: [
+                    {
+                        type: 'empty',
+                        prompt: 'Please select a product area'
+                    }
+                ]
+            }
+        }
+    });
 
     function getUrlParameter(sParam) {
         var sPageURL = decodeURIComponent(window.location.search.substring(1)),

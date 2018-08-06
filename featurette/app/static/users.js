@@ -36,10 +36,10 @@ $(document).ready(function() {
         var self = this;
         self.users = ko.observableArray([]);
         self.id = ko.observable(0);
-        self.username = ko.observable('').extend({ required: { params: true, message: 'The username is required.' }});
-        self.email = ko.observable('').extend({ email: true, required: { params: true, message: 'This field is required.' } });
-        self.password = ko.observable('').extend({ required: { params: true, message: 'The password is required.' }});
-        self.repeat_password = ko.observable('').extend({ equal: self.password });
+        self.username = ko.observable('');
+        self.email = ko.observable('');
+        self.password = ko.observable('');
+        self.repeat_password = ko.observable('');
 
         self.getUsers = function() {
             $.getJSON("/api/v1/users", function(response) {
@@ -54,44 +54,58 @@ $(document).ready(function() {
 
 
         self.addUser = function(){
-            $.ajax({
-                url: "/api/v1/users",
-                type: "POST",
-                data: { username: self.username(), email: self.email(), password: self.password() },
-                success: function (response) {
-                    console.log("User was added successfully... returning to users view");
-                    // console.log(response);
-                    window.location.href = "/users?message=User was added successfully";
-                },
-                error: function (xhr, ajaxOptions, thrownError) {
-                    console.log(xhr.status);
-                    console.log(thrownError);
-                }
-            });
+            if( $('.ui.form').form('is valid')) {
+                $.ajax({
+                    url: "/api/v1/users",
+                    type: "POST",
+                    data: { username: self.username(), email: self.email(), password: self.password() },
+                    success: function (response) {
+                        console.log("User was added successfully... returning to users view");
+                        // console.log(response);
+                        window.location.href = "/users?message=User was added successfully";
+                    },
+                    error: function (xhr, ajaxOptions, thrownError) {
+                        console.log(xhr.status);
+                        console.log(thrownError);
+                    }
+                });
+            }
+            else{
+                console.log("Form is not valid");
+            }
         }
 
         self.deleteUser = function(row){
             console.log("DELETE command for id: " + row.id());
 
-            if (confirm("Are you sure you want to delete this user?")) {
-                $.ajax({
-                    url: '/api/v1/user/' + row.id(),
-                    type: 'DELETE',
-                    success: function(data){
-                        console.log('User deleted successfully');
-                        self.users.remove(row);
-                        message = "User deleted successfully";
-                        $('.message').show();
-                        $('#messageSpace').text(message);
-                        $('.message .close')
-                        .on('click', function() {
-                            $(this)
-                            .closest('.message')
-                            .transition('fade');
-                        });
-                    }
-                });
-            }
+            $('.mini.modal').modal({
+                onHide: function(){
+                    console.log('hidden');
+                },
+                onShow: function(){
+                    console.log('shown');
+                },
+                onApprove: function() {
+                    console.log('Approve');
+                    $.ajax({
+                        url: '/api/v1/user/' + row.id(),
+                        type: 'DELETE',
+                        success: function(data){
+                            console.log('User deleted successfully');
+                            self.users.remove(row);
+                            message = "User deleted successfully";
+                            $('.message').show();
+                            $('#messageSpace').text(message);
+                            $('.message .close')
+                            .on('click', function() {
+                                $(this)
+                                .closest('.message')
+                                .transition('fade');
+                            });
+                        }
+                    });
+                }
+            }).modal('show');
         }
 
         self.editUser = function(row){
@@ -109,20 +123,25 @@ $(document).ready(function() {
         }
 
         self.updateUser = function(){
-            console.log("Updating: " + self.id());
-            $.ajax({
-                url: '/api/v1/user/'+ self.id(),
-                type: 'PUT',
-                data: {username: self.username(), email: self.email(), password: self.password()},
-                success: function(data){
-                    console.log('User updated successfully');
-                    window.location.href = "/users?message=User updated successfully";
-                },
-                error: function(xhr,err){
-                    console.log("readyState: "+xhr.readyState+"\nstatus: "+xhr.status);
-                    console.log("responseText: "+xhr.responseText);
-                }
-            });
+            if( $('.ui.form').form('is valid')) {
+                console.log("Updating: " + self.id());
+                $.ajax({
+                    url: '/api/v1/user/'+ self.id(),
+                    type: 'PUT',
+                    data: {username: self.username(), email: self.email(), password: self.password()},
+                    success: function(data){
+                        console.log('User updated successfully');
+                        window.location.href = "/users?message=User updated successfully";
+                    },
+                    error: function(xhr,err){
+                        console.log("readyState: "+xhr.readyState+"\nstatus: "+xhr.status);
+                        console.log("responseText: "+xhr.responseText);
+                    }
+                });
+            }
+            else{
+                console.log("Form is not valid");
+            }
         }
 
         if(window.location.pathname == '/editUser'){
@@ -147,6 +166,61 @@ $(document).ready(function() {
                 });
             }
         }
+        
+        $('.ui.form').form({
+            inline: true,
+            fields: {
+                username: {
+                    identifier: 'username',
+                    rules: [
+                        {
+                            type: 'empty',
+                            prompt: 'Please enter a username'
+                        }
+                    ]
+                },
+                email: {
+                    identifier: 'email',
+                    rules: [
+                        {
+                            type: 'empty',
+                            prompt: 'Please enter an email'
+                        },
+                        {
+                            type: 'email',
+                            prompt: 'Email must ve a valid email'
+                        }
+                    ]
+                },
+                password: {
+                    identifier: 'password',
+                    rules: [
+                        {
+                            type: 'empty',
+                            prompt: 'Please enter a password'
+                        },
+                        {
+                            type: 'minLength[8]',
+                            prompt: 'Password must have at least 8 characters'
+                        }
+
+                    ]
+                },
+                repeat_password: {
+                    identifier: 'repeat_password',
+                    rules: [
+                        {
+                            type: 'empty',
+                            prompt: 'Please re-enter your password'
+                        },
+                        {
+                            type: 'match[password]',
+                            prompt: 'The passwords do not match'
+                        }
+                    ]
+                }
+            }
+        });
 
         function getUrlParameter(sParam) {
             var sPageURL = decodeURIComponent(window.location.search.substring(1)),

@@ -49,43 +49,58 @@ $(document).ready(function() {
         }
 
         self.addClient = function(){
-            $.ajax({
-                url: "/api/v1/clients",
-                type: "POST",
-                data: { client_name: self.client_name() },
-                success: function (response) {
-                    console.log("Client was added successfully... returning to clients view");
-                    window.location.href = "/clients?message=Client was added successfully";
-                },
-                error: function (xhr, ajaxOptions, thrownError) {
-                    console.log(xhr.status);
-                    console.log(thrownError);
-                }
-            });
+            if( $('.ui.form').form('is valid')) {
+                $.ajax({
+                    url: "/api/v1/clients",
+                    type: "POST",
+                    data: { client_name: self.client_name() },
+                    success: function (response) {
+                        console.log("Client was added successfully... returning to clients view");
+                        window.location.href = "/clients?message=Client was added successfully";
+                    },
+                    error: function (xhr, ajaxOptions, thrownError) {
+                        console.log(xhr.status);
+                        console.log(thrownError);
+                    }
+                });
+            }
+            else{
+                console.log("Form is not valid");
+            }
         }
 
         self.deleteClient = function(row){
             console.log("DELETE command for id: " + row.id());
 
-            if (confirm("Are you sure you want to delete this client?")) {
-                $.ajax({
-                    url: '/api/v1/client/' + row.id(),
-                    type: 'DELETE',
-                    success: function(data){
-                        console.log('Client deleted successfully');
-                        self.clients.remove(row);
-                        message = "Client deleted successfully";
-                        $('.message').show();
-                        $('#messageSpace').text(message);
-                        $('.message .close')
-                        .on('click', function() {
-                            $(this)
-                            .closest('.message')
-                            .transition('fade');
-                        });
-                    }
-                });
-            }
+            $('.mini.modal').modal({
+                onHide: function(){
+                    console.log('hidden');
+                },
+                onShow: function(){
+                    console.log('shown');
+                },
+                onApprove: function() {
+                    console.log('Approve');
+                    $.ajax({
+                        url: '/api/v1/client/' + row.id(),
+                        type: 'DELETE',
+                        success: function(data){
+                            console.log('Client deleted successfully');
+                            self.clients.remove(row);
+                            message = "Client deleted successfully";
+                            $('.message').show();
+                            $('#messageSpace').text(message);
+                            $('.message .close')
+                            .on('click', function() {
+                                $(this)
+                                .closest('.message')
+                                .transition('fade');
+                            });
+                        }
+                    });
+                }
+            }).modal('show');
+
         }
 
         self.editClient = function(row){
@@ -101,20 +116,25 @@ $(document).ready(function() {
         }
 
         self.updateClient = function(){
-            console.log("Updating: " + self.id());
-            $.ajax({
-                url: '/api/v1/client/'+ self.id(),
-                type: 'PUT',
-                data: {client_name: self.client_name()},
-                success: function(data){
-                    console.log('Client updated successfully');
-                    window.location.href = "/clients?message=Client updated successfully";
-                },
-                error: function(xhr,err){
-                    console.log("readyState: "+xhr.readyState+"\nstatus: "+xhr.status);
-                    console.log("responseText: "+xhr.responseText);
-                }
-            });
+            if( $('.ui.form').form('is valid')) {
+                console.log("Updating: " + self.id());
+                $.ajax({
+                    url: '/api/v1/client/'+ self.id(),
+                    type: 'PUT',
+                    data: {client_name: self.client_name()},
+                    success: function(data){
+                        console.log('Client updated successfully');
+                        window.location.href = "/clients?message=Client updated successfully";
+                    },
+                    error: function(xhr,err){
+                        console.log("readyState: "+xhr.readyState+"\nstatus: "+xhr.status);
+                        console.log("responseText: "+xhr.responseText);
+                    }
+                });
+            }
+            else{
+                console.log("Form is not valid");
+            }
         }
 
         if (window.location.pathname == '/clients'){
@@ -139,6 +159,21 @@ $(document).ready(function() {
             console.log("Id transfered from Clients: " + id);
             self.getClient(id);
         }
+
+        $('.ui.form').form({
+            inline: true,
+            fields: {
+                client_name: {
+                    identifier: 'client_name',
+                    rules: [
+                        {
+                            type: 'empty',
+                            prompt: 'Please enter a client'
+                        }
+                    ]
+                }
+            }
+        });
 
         function getUrlParameter(sParam) {
             var sPageURL = decodeURIComponent(window.location.search.substring(1)),

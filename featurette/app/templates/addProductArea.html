@@ -4,21 +4,18 @@
         <script src="static/productAreas.js"></script>
     {% endblock %}
     {% block content %}
-        <form data-bind="submit: addProductArea" class="ui form segment" action="/productAreas" method="POST">
+        <form data-bind="submit: addProductArea" class="ui form error segment" action="/productAreas" method="POST">
             <h3 class="ui dividing header">Product Area</h3>
             <div class="field">
                 <label>Name</label>
                 <input id="product_area_name" type="text" name="product_area_name"
-                    placeholder="Name" data-bind="value: product_area_name"
-                    required>
+                    placeholder="Name" data-bind="value: product_area_name">
             </div>
-            <button id="submit" class="ui violet button">
+            <button id="submit" class="ui violet submit button">
                 Create Product Area
             </button>
             <a href="/productAreas" class="ui red button">
                 Cancel
             </a>
-            <div class="ui error message">
-            </div>
         </form>
     {% endblock %}

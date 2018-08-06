@@ -49,44 +49,58 @@ $(document).ready(function() {
         }
 
         self.addProductArea = function(){
-            $.ajax({
-                url: "/api/v1/productAreas",
-                type: "POST",
-                data: { product_area_name: self.product_area_name() },
-                success: function (response) {
-                    console.log("Product was added successfully... returning to product areas");
-                    // console.log(response)
-                    window.location.href = "/productAreas?message=Product area was added successfully";
-                },
-                error: function (xhr, ajaxOptions, thrownError) {
-                    console.log(xhr.status);
-                    console.log(thrownError);
-                }
-            });
+            if( $('.ui.form').form('is valid')) {
+                $.ajax({
+                    url: "/api/v1/productAreas",
+                    type: "POST",
+                    data: { product_area_name: self.product_area_name() },
+                    success: function (response) {
+                        console.log("Product was added successfully... returning to product areas");
+                        // console.log(response)
+                        window.location.href = "/productAreas?message=Product area was added successfully";
+                    },
+                    error: function (xhr, ajaxOptions, thrownError) {
+                        console.log(xhr.status);
+                        console.log(thrownError);
+                    }
+                });
+            }
+            else{
+                console.log("Form is not valid");
+            }
         }
 
         self.deleteProductArea = function(row){
             console.log("DELETE command for id: " + row.id());
 
-            if (confirm("Are you sure you want to delete this product area?")) {
-                $.ajax({
-                    url: '/api/v1/productArea/' + row.id(),
-                    type: 'DELETE',
-                    success: function(data){
-                        console.log('Product area deleted successfully');
-                        self.productAreas.remove(row);
-                        message = "Product area deleted successfully";
-                        $('.message').show();
-                        $('#messageSpace').text(message);
-                        $('.message .close')
-                        .on('click', function() {
-                            $(this)
-                            .closest('.message')
-                            .transition('fade');
-                        });
-                    }
-                });
-            }
+            $('.mini.modal').modal({
+                onHide: function(){
+                    console.log('hidden');
+                },
+                onShow: function(){
+                    console.log('shown');
+                },
+                onApprove: function() {
+                    console.log('Approve');
+                    $.ajax({
+                        url: '/api/v1/productArea/' + row.id(),
+                        type: 'DELETE',
+                        success: function(data){
+                            console.log('Product area deleted successfully');
+                            self.productAreas.remove(row);
+                            message = "Product area deleted successfully";
+                            $('.message').show();
+                            $('#messageSpace').text(message);
+                            $('.message .close')
+                            .on('click', function() {
+                                $(this)
+                                .closest('.message')
+                                .transition('fade');
+                            });
+                        }
+                    });
+                }
+            }).modal('show');
         }
 
         self.editProductArea = function(row){
@@ -102,20 +116,25 @@ $(document).ready(function() {
         }
 
         self.updateProductArea = function(){
-            console.log("Updating: " + self.id());
-            $.ajax({
-                url: '/api/v1/productArea/'+ self.id(),
-                type: 'PUT',
-                data: {product_area_name: self.product_area_name()},
-                success: function(data){
-                    console.log('Product Area updated successfully');
-                    window.location.href = "/productAreas?message=Product area was updated successfully";
-                },
-                error: function(xhr,err){
-                    console.log("readyState: "+xhr.readyState+"\nstatus: "+xhr.status);
-                    console.log("responseText: "+xhr.responseText);
-                }
-            });
+            if( $('.ui.form').form('is valid')) {
+                console.log("Updating: " + self.id());
+                $.ajax({
+                    url: '/api/v1/productArea/'+ self.id(),
+                    type: 'PUT',
+                    data: {product_area_name: self.product_area_name()},
+                    success: function(data){
+                        console.log('Product Area updated successfully');
+                        window.location.href = "/productAreas?message=Product area was updated successfully";
+                    },
+                    error: function(xhr,err){
+                        console.log("readyState: "+xhr.readyState+"\nstatus: "+xhr.status);
+                        console.log("responseText: "+xhr.responseText);
+                    }
+                });
+            }
+            else{
+                console.log("Form is not valid");
+            }
         }
 
         if (window.location.pathname == '/productAreas'){
@@ -140,6 +159,25 @@ $(document).ready(function() {
             console.log("Id transfered from Product Areas: " + id);
             self.getProductArea(id);
         }
+
+        $('.ui.form').form({
+            inline: true,
+            fields: {
+                product_area_name: {
+                    identifier: 'product_area_name',
+                    rules: [
+                        {
+                            type: 'empty',
+                            prompt: 'Please enter a product area name'
+                        },
+                        {
+                            type: 'minLength[2]',
+                            prompt: 'The product area must be more than 2 characters long'
+                        }
+                    ]
+                }
+            }
+        });
 
         function getUrlParameter(sParam) {
             var sPageURL = decodeURIComponent(window.location.search.substring(1)),

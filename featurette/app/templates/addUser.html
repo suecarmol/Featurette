@@ -4,35 +4,33 @@
         <script src="static/users.js"></script>
     {% endblock %}
     {% block content %}
-        <form data-bind="submit: addUser" class="ui form segment" action="/users" method="POST">
+        <form data-bind="submit: addUser" class="ui form error segment" action="/users" method="POST">
             <h3 class="ui dividing header">User</h3>
             <div class="field">
                 <label>Username</label>
                 <input id="username" type="text" name="username" placeholder="Username"
-                        data-bind="value: username" required>
+                        data-bind="value: username">
             </div>
             <div class="field">
                 <label>Email</label>
                 <input id="email" type="email" name="email" placeholder="Email"
-                        data-bind="value: email" required>
+                        data-bind="value: email">
             </div>
             <div class="field">
                 <label>Password</label>
                 <input id="password" type="password" name="password" placeholder="Password"
-                    data-bind="value: password" required>
+                    data-bind="value: password">
             </div>
             <div class="field">
                 <label>Repeat Password</label>
                 <input id="repeat_password" type="password" name="repeat_password" placeholder="Password"
-                        required>
+                        data-bind="value: repeat_password">
             </div>
-            <button id="submit" class="ui violet button">
+            <button id="submit" class="ui violet submit button">
                 Create User
             </button>
             <a href="/users" class="ui red button">
                 Cancel
             </a>
-            <div class="ui error message">
-            </div>
         </form>
     {% endblock %}

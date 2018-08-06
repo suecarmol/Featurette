@@ -5,55 +5,58 @@
         <script src="static/index.js"></script>
     {% endblock %}
     {% block content %}
-        <form data-bind="submit: addFeature" class="ui form segment" action="/" method="POST">
+        <form data-bind="submit: addFeature" class="ui form error segment" action="/" method="POST">
             <h3 class="ui dividing header">Feature Request</h3>
             <div class="field">
                 <label>Title</label>
-                <input id="title" type="text" name="request_title" placeholder="Request Title"
+                <input id="title" type="text" name="title" placeholder="Request Title"
                     data-bind="value: title" required>
             </div>
             <div class="field">
                 <label>Description</label>
-                <input id="description" type="text" name="request_description"
-                    placeholder="Description"  data-bind="value: description" required>
+                <input id="description" type="text" name="description"
+                    placeholder="Description"  data-bind="value: description"
+                    required>
             </div>
             <div class="field">
                 <label>Client</label>
                 <select id="client" class="ui fluid dropdown" name="client"
                     data-bind="options: clients, optionsText: 'client_name', optionsValue: 'id',
-                    optionsCaption: 'Select a client …', value: client_id">
+                    optionsCaption: 'Select a client …', value: client_id" required>
                 </select>
             </div>
             <div class="field">
                 <label>Priority</label>
                 <input id="client_priority" type="number" name="client_priority"
-                    placeholder="Client Priority" data-bind="value: client_priority" required>
+                    placeholder="Client Priority" data-bind="value: client_priority"
+                    required>
             </div>
             <div class="field">
                 <label>Target Date</label>
                 <input id="target_date" type="text" class="flatpickr"
                     data-enable-time="false" name="target_date"
-                    placeholder="Target Date" data-bind="value: target_date" required>
+                    placeholder="Target Date" data-bind="value: target_date"
+                    required>
             </div>
             <div class="field">
                 <label>Product Area</label>
                 <select id="product_area" class="ui fluid dropdown" name="product_area"
                     data-bind="options: productAreas, optionsText: 'product_area_name', optionsValue: 'id',
-                    optionsCaption: 'Select a product area…', value: product_area_id">
+                    optionsCaption: 'Select a product area…', value: product_area_id"
+                    required>
                 </select>
             </div>
             <div class="field">
                 <label>URL</label>
                 <input id="ticket_url" type="text" name="ticket_url"
-                    placeholder="Ticket URL" data-bind="value: ticket_url" required>
+                    placeholder="Ticket URL" data-bind="value: ticket_url"
+                    required>
             </div>
-            <button id="submit" class="ui violet button">
+            <button id="submit" class="ui violet submit button">
                 Submit Feature Request
             </button>
             <a href="/" class="ui red button" tabindex="0">
                 Cancel
             </a>
-            <div class="ui error message">
-            </div>
         </form>
     {% endblock %}

@@ -5,23 +5,24 @@
         <script src="static/index.js"></script>
     {% endblock %}
     {% block content %}
-        <form data-bind="submit: updateFeature" class="ui form segment" action="/" method="POST">
+        <form data-bind="submit: updateFeature" class="ui form error segment" action="/" method="POST">
             <h3 class="ui dividing header">Edit Feature Request</h3>
             <div class="field">
                 <label>Title</label>
-                <input id="title" type="text" name="title"
-                    data-bind="value: title" required>
+                <input id="title" type="text" name="title" required
+                    data-bind="value: title">
             </div>
             <div class="field">
                 <label>Description</label>
-                <input id="description" type="text" name="description"
-                    data-bind="value: description" required>
+                <input id="description" type="text" name="description" required
+                    data-bind="value: description">
             </div>
             <div class="field">
                 <label>Client</label>
                 <select id="client" class="ui fluid dropdown" name="client"
                     data-bind="options: clients, optionsText: 'client_name', optionsValue: 'id',
-                    optionsCaption: 'Select a client …', value: client_id">
+                    optionsCaption: 'Select a client …', value: client_id"
+                    required>
                 </select>
             </div>
             <div class="field">
@@ -39,7 +40,8 @@
                 <label>Product Area</label>
                 <select id="product_area" class="ui fluid dropdown" name="product_area"
                     data-bind="options: productAreas, optionsText: 'product_area_name', optionsValue: 'id',
-                    optionsCaption: 'Select a product area…', value: product_area_id">
+                    optionsCaption: 'Select a product area…', value: product_area_id"
+                    required>
                 </select>
             </div>
             <div class="field">
@@ -48,13 +50,11 @@
                     data-bind="value: ticket_url" required>
             </div>
             <input id="id" hidden="true" name="id" data-bind="value: id">
-            <button id="submit" class="ui violet button">
+            <button id="submit" class="ui violet submit button">
                 Submit Feature Request
             </button>
             <a href="/" class="ui red button" tabindex="0">
                 Cancel
             </a>
-            <div class="ui error message">
-            </div>
         </form>
     {% endblock %}
