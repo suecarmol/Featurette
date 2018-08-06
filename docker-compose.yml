@@ -8,19 +8,13 @@ services:
     ports:
       - 5000:5000
     depends_on:
-        db:
-            condition: service_healthy
+        - db
     links:
       - db
     environment:
       - MYSQL_HOST=db
       - MYSQL_USER_PASS=featurette:br1teCor3
       - PYTHONUNBUFFERED=1
-    healthcheck:
-        test: ["CMD", "curl", "-f", "http://localhost:5000/login"]
-        interval: 30s
-        timeout: 10s
-        retries: 5
   db:
     restart: always
     image: mysql:5.6
